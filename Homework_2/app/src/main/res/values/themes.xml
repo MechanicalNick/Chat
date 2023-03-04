@@ -12,5 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="reactionViewStyle">@style/Theme.Homework.ReactionView</item>
+
+    <style name="Theme.Homework.ReactionView">
+        <item name="android:background">@drawable/bg_reaction_view</item>
+        <item name="android:textColor">@color/chips_text_color</item>
+        <item name="android:paddingHorizontal">9dp</item>
+        <item name="android:paddingVertical">5dp</item>
+    </style>
     </style>
 </resources>
