@@ -1,10 +1,11 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
+import com.tinkoff.homework.R
 import java.lang.Integer.max
 import kotlin.math.ceil
 

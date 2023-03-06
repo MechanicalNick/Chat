@@ -1,7 +1,8 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

@@ -1,10 +1,11 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import com.tinkoff.homework.R
 
 class CompanionMessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

@@ -1,4 +1,4 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.content.Context
 import android.view.View

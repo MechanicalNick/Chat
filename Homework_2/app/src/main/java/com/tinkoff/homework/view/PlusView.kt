@@ -1,7 +1,8 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.content.Context
 import android.util.AttributeSet
+import com.tinkoff.homework.R
 
 class PlusView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

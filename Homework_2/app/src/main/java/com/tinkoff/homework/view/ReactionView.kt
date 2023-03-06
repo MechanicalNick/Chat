@@ -1,4 +1,4 @@
-package com.tinkoff.homework
+package com.tinkoff.homework.view
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.withStyledAttributes
+import com.tinkoff.homework.R
 
 class ReactionView @JvmOverloads constructor(
     context: Context,
