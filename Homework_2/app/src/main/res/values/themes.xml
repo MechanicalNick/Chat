@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="reactionViewStyle">@style/Theme.Homework.ReactionView</item>
         <item name="plusViewStyle">@style/Theme.Homework.PlusView</item>
+        <item name="android:windowBackground">@color/default_color_background</item>
     </style>
 
     <style name="Theme.Homework.ReactionView">
@@ -28,5 +29,20 @@
         <item name="android:paddingHorizontal">9dp</item>
         <item name="android:paddingVertical">5dp</item>
         <item name="android:src">@drawable/plus</item>
+    </style>
+
+     <style name="Theme.Homework.CardView" parent="CardView">
+         <item name="cardBackgroundColor">@color/chips_background</item>
+         <item name="cardCornerRadius">20dp</item>
+     </style>
+
+    <style name="Theme.Homework.Text">
+        <item name="android:textColor">@color/default_color_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">Inter</item>
+    </style>
+
+    <style name="Theme.Homework.TextHeader" parent="Theme.Homework.Text">
+        <item name="android:textColor">@color/default_color_text_header</item>
     </style>
 </resources>
