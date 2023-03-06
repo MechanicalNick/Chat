@@ -4,4 +4,10 @@
         <attr name="reaction" format="string" />
         <attr name="count" format="integer" />
     </declare-styleable>
+    <declare-styleable name="FlexboxLayout">
+        <attr name="maxCountInRow" format="integer" />
+        <attr name="flexboxMargin" format="integer" />
+    </declare-styleable>
+    <attr format="reference" name="reactionViewStyle"/>
+    <attr format="reference" name="plusViewStyle"/>
 </resources>

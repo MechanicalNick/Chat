@@ -1,7 +1,7 @@
 package com.tinkoff.homework
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.tinkoff.homework.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -9,12 +9,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.reactionView.setOnClickListener {
-            it.isSelected = !it.isSelected
+        val flexboxFactory = FlexboxFactory(33, this)
+        flexboxFactory.create().forEach { view ->
+            binding.flexbox.addView(view)
+            view.setOnClickListener {
+                it.isSelected = !it.isSelected
+            }
         }
     }
 }

@@ -6,15 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-    <com.tinkoff.homework.ReactionView
-            android:id="@+id/reactionView"
-            android:background="@drawable/bg_reaction_view"
-            android:textColor="@color/chips_text_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="9dp"
-            android:paddingVertical="5dp"
-            app:reaction="🤪"
-            app:count="5" />
+
+     <com.tinkoff.homework.FlexboxLayout
+             app:maxCountInRow="@integer/flexbox_maxCountInRow"
+             app:flexboxMargin="@integer/flexbox_flexboxMargin"
+             android:id="@+id/flexbox"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"/>
 
 </FrameLayout>

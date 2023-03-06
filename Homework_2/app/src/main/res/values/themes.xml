@@ -13,6 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="reactionViewStyle">@style/Theme.Homework.ReactionView</item>
+        <item name="plusViewStyle">@style/Theme.Homework.PlusView</item>
+    </style>
 
     <style name="Theme.Homework.ReactionView">
         <item name="android:background">@drawable/bg_reaction_view</item>
@@ -20,5 +22,11 @@
         <item name="android:paddingHorizontal">9dp</item>
         <item name="android:paddingVertical">5dp</item>
     </style>
+
+    <style name="Theme.Homework.PlusView">
+        <item name="android:background">@drawable/bg_reaction_view</item>
+        <item name="android:paddingHorizontal">9dp</item>
+        <item name="android:paddingVertical">5dp</item>
+        <item name="android:src">@drawable/plus</item>
     </style>
 </resources>
