@@ -10,24 +10,18 @@ import com.tinkoff.homework.R
 class CompanionMessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
-    private val image: View
-    private val cardView: View
-    private val flexbox: FlexboxLayout
+    private val image: View by lazy { findViewById(R.id.image) }
+    private val cardView: View  by lazy { findViewById(R.id.cardView) }
+    private val flexbox: FlexboxLayout  by lazy { findViewById(R.id.flexbox) }
     private val marginBetweenImageAndFlexbox = 9
     private val marginBetweenCardAndFlexbox = 7
 
     init {
         inflate(context, R.layout.companion_message_layout_content, this)
-        image = findViewById(R.id.image)
-        cardView = findViewById(R.id.cardView)
-        flexbox = findViewById(R.id.flexbox)
 
         val flexboxFactory = FlexboxFactory(33, this.context)
         flexboxFactory.create().forEach { view ->
             flexbox.addView(view)
-            view.setOnClickListener {
-                it.isSelected = !it.isSelected
-            }
         }
     }
 
