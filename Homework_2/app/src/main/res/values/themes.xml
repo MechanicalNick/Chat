@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="reactionViewStyle">@style/Theme.Homework.ReactionView</item>
         <item name="plusViewStyle">@style/Theme.Homework.PlusView</item>
+        <item name="contentEditorStyle">@style/Theme.Homework.ContentEditor</item>
         <item name="android:windowBackground">@color/default_color_background</item>
     </style>
 
@@ -42,7 +43,25 @@
         <item name="android:fontFamily">Inter</item>
     </style>
 
+    <style name="Theme.Homework.EditText" parent="Theme.Homework.Text">
+        <item name="android:textColor">@color/default_color_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">Inter</item>
+        <item name="android:padding">5dip</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:hint">@string/edit_text_hint</item>
+        <item name="android:textColorHint">@color/hint_text_color</item>
+    </style>
+
     <style name="Theme.Homework.TextHeader" parent="Theme.Homework.Text">
         <item name="android:textColor">@color/default_color_text_header</item>
+    </style>
+
+    <style name="Theme.Homework.ContentEditor">
+        <item name="android:background">@color/content_editor_background_color</item>
+    </style>
+
+    <style name="Theme.Homework.ImageButton">
+        <item name="android:background">@color/transparent</item>
     </style>
 </resources>
