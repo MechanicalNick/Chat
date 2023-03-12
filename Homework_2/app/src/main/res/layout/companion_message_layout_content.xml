@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       tools:parentTag="com.tinkoff.homework.view.CompanionMessageLayout">
+
+    <ImageView
+            android:id="@+id/image"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:src="@mipmap/ic_launcher" />
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="217dp"
+            android:layout_height="87dp"
+            style="@style/Theme.Homework.CardView"
+            android:id="@+id/cardView">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textName"
+                style="@style/Theme.Homework.TextHeader"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="13dp"
+                android:text="Darrell Steward" />
+
+        <TextView
+                android:id="@+id/textMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="29dp"
+                android:layout_marginStart="13dp"
+                style="@style/Theme.Homework.Text"
+                android:text="Привет! lorem ipsum test message dalshe zabil" />
+    </androidx.cardview.widget.CardView>
+
+    <com.tinkoff.homework.view.FlexboxLayout
+            app:maxCountInRow="@integer/flexbox_maxCountInRow"
+            app:flexboxMargin="@integer/flexbox_flexboxMargin"
+            android:id="@+id/flexbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</merge>
