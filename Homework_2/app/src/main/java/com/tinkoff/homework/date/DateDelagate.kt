@@ -6,8 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.databinding.DateItemBinding
 import com.tinkoff.homework.utils.AdapterDelegate
 import com.tinkoff.homework.utils.DelegateItem
+import java.time.format.DateTimeFormatter
 
 class DateDelegate : AdapterDelegate {
+    companion object{
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         ViewHolder(
@@ -32,7 +36,7 @@ class DateDelegate : AdapterDelegate {
 
         fun bind(model: DateModel) {
             with(binding) {
-                date.text = model.date
+                date.text = model.date.format(formatter)
             }
         }
     }

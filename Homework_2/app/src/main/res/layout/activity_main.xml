@@ -16,6 +16,7 @@
             android:layout_height="0dp"/>
 
     <com.tinkoff.homework.view.ContentEditorViewGroup
+            android:id="@+id/contentEditor"
             android:layout_height="62dp"
             android:layout_width="match_parent"/>
 </LinearLayout>

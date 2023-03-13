@@ -13,8 +13,9 @@ import kotlin.math.max
 class ContentEditorViewGroup @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, R.attr.contentEditorStyle) {
-    private val editText: EditText by lazy { findViewById(R.id.editTextView) }
-    private val arrowButton: View by lazy { findViewById(R.id.arrowButton) }
+    val arrowButton: View by lazy { findViewById(R.id.arrowButton) }
+    val editText: EditText by lazy { findViewById(R.id.editTextView) }
+
     private val plusButton: View by lazy { findViewById(R.id.plusButton) }
 
     private val textViewLeftMargin = 10
