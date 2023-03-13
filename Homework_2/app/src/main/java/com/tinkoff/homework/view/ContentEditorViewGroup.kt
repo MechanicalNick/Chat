@@ -20,7 +20,6 @@ class ContentEditorViewGroup @JvmOverloads constructor(
     private val textViewLeftMargin = 10
     private val textViewTopMargin = 6
     private val textViewRightMargin = 12
-    private val textViewBottomMargin = 5
     private val buttonRightMargin = 16
 
     init {
@@ -53,7 +52,7 @@ class ContentEditorViewGroup @JvmOverloads constructor(
             textViewLeftMargin,
             textViewTopMargin,
             r - buttonMeasureWidth - (textViewLeftMargin + textViewRightMargin + buttonRightMargin),
-            b - (textViewTopMargin + textViewBottomMargin)
+            textViewTopMargin + editText.measuredHeight
         )
 
         arrowButton.layout(
