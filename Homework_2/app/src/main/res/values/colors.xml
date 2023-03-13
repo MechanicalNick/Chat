@@ -17,5 +17,6 @@
     <color name="transparent">#00000000</color>
     <color name="content_editor_background_color">#1E1E1E</color>
     <color name="edit_text_background_color">#282828</color>
-
+    <color name="date_background_color">#070707</color>
+    <color name="date_text_color">#999999</color>
 </resources>

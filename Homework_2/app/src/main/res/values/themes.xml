@@ -34,7 +34,7 @@
 
      <style name="Theme.Homework.CardView" parent="CardView">
          <item name="cardBackgroundColor">@color/chips_background</item>
-         <item name="cardCornerRadius">20dp</item>
+         <item name="cardCornerRadius">15dp</item>
      </style>
 
     <style name="Theme.Homework.Text">
@@ -63,5 +63,14 @@
 
     <style name="Theme.Homework.ImageButton">
         <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="Theme.Homework.CardView.Message" parent="Theme.Homework.CardView">
+        <item name="cardBackgroundColor">@color/default_color_text_header</item>
+    </style>
+
+    <style name="Theme.Homework.Chip">
+        <item name="chipBackgroundColor">@color/date_background_color</item>
+        <item name="android:textColor">@color/date_text_color</item>
     </style>
 </resources>
