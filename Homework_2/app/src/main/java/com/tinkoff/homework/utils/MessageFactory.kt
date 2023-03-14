@@ -1,6 +1,8 @@
 package com.tinkoff.homework.utils
 
 import android.text.Editable
+import com.tinkoff.homework.data.EmojiWrapper
+import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.date.DateDelegateItem
 import com.tinkoff.homework.date.DateModel
 import com.tinkoff.homework.message.MessageDelegateItem
@@ -42,11 +44,63 @@ class MessageFactory(private val adapter: MessageAdapter,
                 lastDate = now
             }
 
-            val item = MessageDelegateItem(id,
-                MessageModel(id, it.toString(),
-                    LocalDate.now()))
+            val item = MessageDelegateItem(
+                id,
+                MessageModel(
+                    id, it.toString(),
+                    LocalDate.now(), mutableListOf()
+                )
+            )
             items.add(item)
             adapter.submitList(items)
+        }
+    }
+
+    fun addEmoji(emojiWrapper: EmojiWrapper?) {
+        emojiWrapper?.let {w ->
+            var message = items
+                .filterIsInstance<MessageDelegateItem>()
+                .firstOrNull { message -> message.id == w.messageId }
+            message?.let { m ->
+                val model = (message.content() as MessageModel)
+                val newReactions = mutableListOf<Reaction>()
+                val curReaction = model.reactions.firstOrNull { r -> r.code == w.emojiCode }
+                if (curReaction?.owners?.contains(Const.myId) == true)
+                    return
+                newReactions.addAll(model.reactions)
+                if (curReaction == null) {
+                    newReactions.add(Reaction(w.emojiCode, mutableListOf(Const.myId)))
+                } else {
+                    curReaction.owners.add(Const.myId)
+                }
+                val position = items.indexOf(m)
+                val item = MessageDelegateItem(
+                    model.id,
+                    MessageModel(model.id, model.text, model.date, newReactions)
+                )
+                items.remove(message)
+                items.add(position, item)
+                adapter.notifyItemChanged(position)
+            }
+        }
+    }
+
+    fun removeEmoji(emojiWrapper: EmojiWrapper?) {
+        emojiWrapper?.let { w ->
+            var message = items
+                .filterIsInstance<MessageDelegateItem>()
+                .firstOrNull { message -> message.id == w.messageId }
+            message?.let { m ->
+                val model = (message.content() as MessageModel)
+                val reaction =
+                    model.reactions.first { reaction -> reaction.code == emojiWrapper.emojiCode }
+                reaction.owners.remove(Const.myId)
+                val position = items.indexOf(m)
+                if (reaction.owners.isEmpty()) {
+                    model.reactions.remove(reaction)
+                }
+                adapter.notifyItemChanged(position)
+            }
         }
     }
 
