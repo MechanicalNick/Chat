@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Homework</string>
     <string name="edit_text_hint">Написать...</string>
+    <string name="title_channels">Channels</string>
+    <string name="title_people">People</string>
+    <string name="title_profile">Profile</string>
 </resources>
