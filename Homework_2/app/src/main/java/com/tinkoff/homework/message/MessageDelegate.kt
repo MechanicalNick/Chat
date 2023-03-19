@@ -26,7 +26,7 @@ class MessageDelegate(
             parent,
             false
         )
-        return ViewHolder(messageLayoutBinding, bottomFragment, fragmentManager, viewModel)
+        return ViewHolder(messageLayoutBinding)
     }
 
     override fun onBindViewHolder(
@@ -39,12 +39,7 @@ class MessageDelegate(
 
     override fun isOfViewType(item: DelegateItem): Boolean = item is MessageDelegateItem
 
-    class ViewHolder(
-        private val binding: MessageLayoutBinding,
-        private val bottomFragment: BottomFragment,
-        private val fragmentManager: FragmentManager,
-        private val viewModel: MainViewModel
-    ) :
+    inner class ViewHolder(private val binding: MessageLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: MessageModel) {
