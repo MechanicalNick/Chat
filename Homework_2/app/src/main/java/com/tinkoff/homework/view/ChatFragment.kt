@@ -44,6 +44,9 @@ class ChatFragment private constructor(private val id: Int, private val chatName
         mainViewModel.removeEmoji.observe(viewLifecycleOwner) {
             messageFactory.removeEmoji(it)
         }
+
+        binding.header.text = "#${chatName}"
+
         return binding.root
     }
 

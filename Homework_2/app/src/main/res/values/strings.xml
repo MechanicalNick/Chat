@@ -7,4 +7,5 @@
     <string name="subscribed">Subscribed</string>
     <string name="all_stream">All streams</string>
     <string name="messages">messages</string>
+    <string name="topic">Topic:</string>
 </resources>

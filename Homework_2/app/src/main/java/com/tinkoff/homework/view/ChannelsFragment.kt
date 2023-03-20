@@ -15,7 +15,7 @@ class ChannelsFragment private constructor(): Fragment()  {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentChannelBinding.inflate(layoutInflater)
 
         val tabs: List<String> = listOf(getString(R.string.subscribed),
@@ -24,8 +24,10 @@ class ChannelsFragment private constructor(): Fragment()  {
 
         binding.fragmentViewPager.adapter = pagerAdapter
 
-        pagerAdapter.update(listOf(ChannelsListFragment.newInstance(onlySubscribed = true, "onlySubscribed"),
-            ChannelsListFragment.newInstance(onlySubscribed = false, "all")))
+        val onlySubscribed = ChannelsListFragment
+            .newInstance(onlySubscribed = true, "onlySubscribed")
+        val all =  ChannelsListFragment.newInstance(onlySubscribed = false, "all")
+        pagerAdapter.update(listOf(onlySubscribed, all))
 
         TabLayoutMediator(binding.tabLayout, binding.fragmentViewPager) { tab, position ->
             tab.text = tabs[position]
