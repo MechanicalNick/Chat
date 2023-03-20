@@ -1,7 +1,7 @@
 package com.tinkoff.homework.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import com.tinkoff.homework.view.*
+import com.tinkoff.homework.view.fragment.*
 
 object NavigationScreens {
     fun main() = FragmentScreen { MainFragment.newInstance() }
@@ -10,5 +10,5 @@ object NavigationScreens {
     fun profile(userId: Long) = FragmentScreen("Profile_$userId") {
         ProfileFragment.newInstance(userId)
     }
-    fun chat(id: Int, chatName: String) = FragmentScreen {ChatFragment.newInstance(id, chatName)}
+    fun chat(id: Int, chatName: String) = FragmentScreen { ChatFragment.newInstance(id, chatName)}
 }

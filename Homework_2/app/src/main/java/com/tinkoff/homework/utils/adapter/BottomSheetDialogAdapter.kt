@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.data.Emoji
 import com.tinkoff.homework.databinding.EmojiItemBinding
 
-class BottomSheetDialogAdapter(private val emojiList: List<Emoji>, private val callback: (input: Int) -> Unit) :
+class BottomSheetDialogAdapter(private val emojiList: List<Emoji>,
+                                private val callback: (input: Int) -> Unit) :
     RecyclerView.Adapter<BottomSheetDialogAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(EmojiItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), callback)
+        ViewHolder(EmojiItemBinding.inflate(LayoutInflater.from(parent.context),
+            parent, false), callback)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(emojiList[position])

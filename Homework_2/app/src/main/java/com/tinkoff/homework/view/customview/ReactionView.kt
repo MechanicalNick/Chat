@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.customview
 
 import android.content.Context
 import android.graphics.Canvas

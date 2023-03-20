@@ -12,7 +12,7 @@ import com.tinkoff.homework.databinding.MessageLayoutBinding
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.FlexboxFactory
 import com.tinkoff.homework.utils.adapter.AdapterDelegate
-import com.tinkoff.homework.view.BottomFragment
+import com.tinkoff.homework.view.fragment.BottomFragment
 import com.tinkoff.homework.viewmodel.MainViewModel
 
 

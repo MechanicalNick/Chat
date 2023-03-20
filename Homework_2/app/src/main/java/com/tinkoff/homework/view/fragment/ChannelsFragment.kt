@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,9 +24,9 @@ class ChannelsFragment private constructor(): Fragment()  {
 
         binding.fragmentViewPager.adapter = pagerAdapter
 
-        val onlySubscribed = ChannelsListFragment
-            .newInstance(onlySubscribed = true, "onlySubscribed")
-        val all =  ChannelsListFragment.newInstance(onlySubscribed = false, "all")
+        val onlySubscribed =
+            ChannelsListFragment.newInstance(onlySubscribed = true, "onlySubscribed")
+        val all = ChannelsListFragment.newInstance(onlySubscribed = false, "all")
         pagerAdapter.update(listOf(onlySubscribed, all))
 
         TabLayoutMediator(binding.tabLayout, binding.fragmentViewPager) { tab, position ->

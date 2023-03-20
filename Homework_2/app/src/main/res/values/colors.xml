@@ -26,4 +26,7 @@
     <color name="background_topic_color_5">#e9856a</color>
     <color name="background_topic_color_6">#6ae9c4</color>
     <color name="background_topic_color_7">#e96a8f</color>
+    <color name="description_color_text">#A1A1A1</color>
+    <color name="green">#4AB54D</color>
+    <color name="red">#FF0000</color>
 </resources>

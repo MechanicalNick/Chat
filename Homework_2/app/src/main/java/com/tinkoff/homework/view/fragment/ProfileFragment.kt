@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

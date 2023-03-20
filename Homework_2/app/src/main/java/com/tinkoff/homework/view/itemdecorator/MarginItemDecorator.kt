@@ -1,4 +1,4 @@
-package com.tinkoff.homework.itemdecorator
+package com.tinkoff.homework.view.itemdecorator
 
 import android.graphics.Rect
 import android.view.View

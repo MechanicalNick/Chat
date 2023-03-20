@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.viewgroup
 
 import android.content.Context
 import android.util.AttributeSet
@@ -12,7 +12,7 @@ class CompanionMessageLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
     private val image: View by lazy { findViewById(R.id.image) }
     private val cardView: View  by lazy { findViewById(R.id.cardView) }
-    private val flexbox: FlexboxLayout  by lazy { findViewById(R.id.flexbox) }
+    private val flexbox: FlexboxLayout by lazy { findViewById(R.id.flexbox) }
     private val marginBetweenImageAndFlexbox = 9
     private val marginBetweenCardAndFlexbox = 7
 

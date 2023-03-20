@@ -1,8 +1,8 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.view.ChannelsListFragment
+import com.tinkoff.homework.view.fragment.ChannelsListFragment
 import com.tinkoff.homework.view.MainActivity
-import com.tinkoff.homework.view.MainFragment
+import com.tinkoff.homework.view.fragment.MainFragment
 import dagger.Component
 import javax.inject.Singleton
 

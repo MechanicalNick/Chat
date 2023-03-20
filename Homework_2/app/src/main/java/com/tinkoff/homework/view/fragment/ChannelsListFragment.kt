@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.Expander
 import com.tinkoff.homework.utils.StreamFactory
 import com.tinkoff.homework.utils.ToChatRouter
-import com.tinkoff.homework.utils.adapter.ChannelAdapter
+import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegate
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.utils.adapter.topic.TopicDelegate
@@ -27,7 +27,7 @@ class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragmen
     lateinit var router: Router
     lateinit var binding: ChannelsListBinding
 
-    private val adapter: ChannelAdapter by lazy { ChannelAdapter() }
+    private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
     private val factory = StreamFactory(getFakeData(), onlySubscribed)
 
     override fun onCreate(savedInstanceState: Bundle?) {

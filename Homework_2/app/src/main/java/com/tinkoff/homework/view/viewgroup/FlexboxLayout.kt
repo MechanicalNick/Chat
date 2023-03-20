@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.viewgroup
 
 import android.content.Context
 import android.util.AttributeSet

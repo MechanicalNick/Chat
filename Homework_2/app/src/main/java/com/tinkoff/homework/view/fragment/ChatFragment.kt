@@ -1,4 +1,4 @@
-package com.tinkoff.homework.view
+package com.tinkoff.homework.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.fragment.app.viewModels
 import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
-import com.tinkoff.homework.itemdecorator.MarginItemDecorator
+import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.adapter.MessageAdapter
+import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
 import com.tinkoff.homework.utils.adapter.date.DateDelegate
 import com.tinkoff.homework.utils.adapter.message.MessageDelegate
 import com.tinkoff.homework.viewmodel.MainViewModel
@@ -25,7 +25,7 @@ class ChatFragment private constructor(private val id: Int, private val chatName
     private var _binding: ChartFragmentBinding? = null
 
     private val mainViewModel: MainViewModel by viewModels()
-    private val adapter: MessageAdapter by lazy { MessageAdapter() }
+    private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
     private val space = 32
     private val binding get() = _binding!!
 

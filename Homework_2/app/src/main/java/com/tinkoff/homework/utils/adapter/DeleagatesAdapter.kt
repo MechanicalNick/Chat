@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.utils.DelegateAdapterItemCallback
 import com.tinkoff.homework.utils.DelegateItem
 
-open class BaseAdapter :
+open class DeleagatesAdapter :
     ListAdapter<DelegateItem, RecyclerView.ViewHolder>(DelegateAdapterItemCallback()) {
     private val delegates: MutableList<AdapterDelegate> = mutableListOf()
 
