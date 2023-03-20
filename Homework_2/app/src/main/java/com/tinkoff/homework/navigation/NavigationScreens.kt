@@ -7,7 +7,7 @@ object NavigationScreens {
     fun main() = FragmentScreen { MainFragment.newInstance() }
     fun channels() = FragmentScreen { ChannelsFragment.newInstance() }
     fun peoples() = FragmentScreen { PeoplesFragment.newInstance() }
-    fun profile(userId: Long) = FragmentScreen("Profile_$userId") {
+    fun profile(userId: Int) = FragmentScreen("Profile_$userId") {
         ProfileFragment.newInstance(userId)
     }
     fun chat(id: Int, chatName: String) = FragmentScreen { ChatFragment.newInstance(id, chatName)}

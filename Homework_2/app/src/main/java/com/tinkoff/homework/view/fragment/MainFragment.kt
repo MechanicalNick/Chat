@@ -14,6 +14,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.MainFragmentBinding
 import com.tinkoff.homework.navigation.LocalCiceroneHolder
 import com.tinkoff.homework.navigation.NavigationScreens
+import com.tinkoff.homework.utils.Const
 import javax.inject.Inject
 
 class MainFragment private constructor(): Fragment() {
@@ -21,7 +22,6 @@ class MainFragment private constructor(): Fragment() {
     lateinit var ciceroneHolder: LocalCiceroneHolder
     lateinit var binding: MainFragmentBinding
 
-    private val myId = 1L
     private val navigator: Navigator by lazy {
         AppNavigator(requireActivity(), R.id.fragment_container_view, childFragmentManager)
     }
@@ -63,7 +63,7 @@ class MainFragment private constructor(): Fragment() {
                 R.id.navigation_people ->
                     cicerone.router.navigateTo(NavigationScreens.peoples())
                 R.id.navigation_profile ->
-                    cicerone.router.navigateTo(NavigationScreens.profile(myId))
+                    cicerone.router.navigateTo(NavigationScreens.profile(Const.myId))
                 else -> throw NotImplementedError("setupNavigationBar with ${item.itemId}")
             }
             true
