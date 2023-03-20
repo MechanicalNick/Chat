@@ -1,12 +1,13 @@
 package com.tinkoff.homework.utils
 
 import android.text.Editable
+import com.tinkoff.homework.data.DateModel
 import com.tinkoff.homework.data.EmojiWrapper
+import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
-import com.tinkoff.homework.date.DateDelegateItem
-import com.tinkoff.homework.date.DateModel
-import com.tinkoff.homework.message.MessageDelegateItem
-import com.tinkoff.homework.message.MessageModel
+import com.tinkoff.homework.utils.adapter.MessageAdapter
+import com.tinkoff.homework.utils.adapter.date.DateDelegateItem
+import com.tinkoff.homework.utils.adapter.message.MessageDelegateItem
 import java.time.LocalDate
 
 class MessageFactory(private val adapter: MessageAdapter,

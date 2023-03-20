@@ -10,7 +10,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.data.EmojiResources
 import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
-import com.tinkoff.homework.utils.BottomSheetDialogAdapter
+import com.tinkoff.homework.utils.adapter.BottomSheetDialogAdapter
 import com.tinkoff.homework.viewmodel.MainViewModel
 
 class BottomFragment : BottomSheetDialogFragment() {

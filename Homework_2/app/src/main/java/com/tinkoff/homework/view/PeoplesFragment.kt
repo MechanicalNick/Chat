@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.tinkoff.homework.R
 
-class PeoplesFragment: Fragment() {
+class PeoplesFragment private constructor(): Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -17,8 +17,8 @@ class PeoplesFragment: Fragment() {
 
     companion object {
         private const val ARG_MESSAGE = "people"
-        fun newInstance(): ChannelsFragment {
-            return ChannelsFragment()
+        fun newInstance(): PeoplesFragment {
+            return PeoplesFragment()
         }
     }
 }

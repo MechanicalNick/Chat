@@ -1,10 +1,12 @@
-package com.tinkoff.homework.utils
+package com.tinkoff.homework.utils.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.tinkoff.homework.utils.DelegateAdapterItemCallback
+import com.tinkoff.homework.utils.DelegateItem
 
-class MessageAdapter :
+open class BaseAdapter :
     ListAdapter<DelegateItem, RecyclerView.ViewHolder>(DelegateAdapterItemCallback()) {
     private val delegates: MutableList<AdapterDelegate> = mutableListOf()
 

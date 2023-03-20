@@ -4,4 +4,7 @@
     <string name="title_channels">Channels</string>
     <string name="title_people">People</string>
     <string name="title_profile">Profile</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="all_stream">All streams</string>
+    <string name="messages">messages</string>
 </resources>

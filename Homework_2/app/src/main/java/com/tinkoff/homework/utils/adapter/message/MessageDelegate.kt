@@ -1,4 +1,4 @@
-package com.tinkoff.homework.message
+package com.tinkoff.homework.utils.adapter.message
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.data.EmojiWrapper
+import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.MessageLayoutBinding
-import com.tinkoff.homework.utils.AdapterDelegate
 import com.tinkoff.homework.utils.DelegateItem
+import com.tinkoff.homework.utils.FlexboxFactory
+import com.tinkoff.homework.utils.adapter.AdapterDelegate
 import com.tinkoff.homework.view.BottomFragment
-import com.tinkoff.homework.view.FlexboxFactory
 import com.tinkoff.homework.viewmodel.MainViewModel
 
 

@@ -1,6 +1,5 @@
-package com.tinkoff.homework.message
+package com.tinkoff.homework.data
 
-import com.tinkoff.homework.data.Reaction
 import java.time.LocalDate
 
 data class MessageModel(

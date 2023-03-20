@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
-import com.tinkoff.homework.date.DateDelegate
 import com.tinkoff.homework.itemdecorator.MarginItemDecorator
-import com.tinkoff.homework.message.MessageDelegate
-import com.tinkoff.homework.message.MessageModel
 import com.tinkoff.homework.utils.Const
-import com.tinkoff.homework.utils.MessageAdapter
 import com.tinkoff.homework.utils.MessageFactory
+import com.tinkoff.homework.utils.adapter.MessageAdapter
+import com.tinkoff.homework.utils.adapter.date.DateDelegate
+import com.tinkoff.homework.utils.adapter.message.MessageDelegate
 import com.tinkoff.homework.viewmodel.MainViewModel
 import java.time.LocalDate
 
-class ChartFragment : Fragment() {
+class ChatFragment private constructor(private val id: Int, private val chatName: String) : Fragment() {
     private lateinit var messageFactory: MessageFactory
     private lateinit var bottomFragment: BottomFragment
 
@@ -44,7 +44,7 @@ class ChartFragment : Fragment() {
         mainViewModel.removeEmoji.observe(viewLifecycleOwner) {
             messageFactory.removeEmoji(it)
         }
-        return view
+        return binding.root
     }
 
     private fun createRecyclerView() {
@@ -67,6 +67,10 @@ class ChartFragment : Fragment() {
     }
 
     companion object {
+        private const val ARG_MESSAGE = "chat"
+        fun newInstance(id: Int, chatName: String): ChatFragment {
+            return ChatFragment(id, chatName)
+        }
 
         private val SEP_1 = LocalDate.of(2023, 9, 1)
         private val SEP_12 = LocalDate.of(2023, 9, 12)

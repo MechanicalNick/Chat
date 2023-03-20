@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.tinkoff.homework.R
 
-class ProfileFragment(userId: Long) : Fragment() {
+class ProfileFragment private constructor(userId: Long) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -17,8 +17,8 @@ class ProfileFragment(userId: Long) : Fragment() {
 
     companion object {
         private const val ARG_MESSAGE = "profile"
-        fun newInstance(): ChannelsFragment {
-            return ChannelsFragment()
+        fun newInstance(userId: Long): ProfileFragment {
+            return ProfileFragment(userId)
         }
     }
 }

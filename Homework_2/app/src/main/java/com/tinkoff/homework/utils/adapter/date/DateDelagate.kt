@@ -1,11 +1,12 @@
-package com.tinkoff.homework.date
+package com.tinkoff.homework.utils.adapter.date
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.tinkoff.homework.data.DateModel
 import com.tinkoff.homework.databinding.DateItemBinding
-import com.tinkoff.homework.utils.AdapterDelegate
 import com.tinkoff.homework.utils.DelegateItem
+import com.tinkoff.homework.utils.adapter.AdapterDelegate
 import java.time.format.DateTimeFormatter
 
 class DateDelegate : AdapterDelegate {

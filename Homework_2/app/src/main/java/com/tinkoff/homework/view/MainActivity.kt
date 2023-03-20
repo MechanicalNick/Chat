@@ -2,31 +2,35 @@ package com.tinkoff.homework.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ActivityMainBinding
 import com.tinkoff.homework.navigation.NavigationScreens
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
     lateinit var navigatorHolder: NavigatorHolder
+    @Inject
+    lateinit var router: Router
 
-    private val myId = 1L
-    private val localCicerone = Cicerone.create()
-    private val navigator = AppNavigator(this, R.id.fragment_container_view)
+    private val navigator = AppNavigator(this, R.id.main_container)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        App.INSTANCE.appComponent.inject(this)
         super.onCreate(savedInstanceState)
-        navigatorHolder = localCicerone.getNavigatorHolder()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
-        setupNavigationBar()
-        localCicerone.router.replaceScreen(NavigationScreens.channels())
+
         setContentView(binding.root)
+
+        router.replaceScreen(NavigationScreens.main())
     }
 
     override fun onResumeFragments() {
@@ -39,18 +43,10 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private fun setupNavigationBar() {
-        binding.navView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_channels ->
-                    localCicerone.router.replaceScreen(NavigationScreens.channels())
-                R.id.navigation_people ->
-                    localCicerone.router.replaceScreen(NavigationScreens.peoples())
-                R.id.navigation_profile ->
-                    localCicerone.router.replaceScreen(NavigationScreens.profile(myId))
-                else -> throw NotImplementedError("setupNavigationBar with ${item.itemId}")
-            }
-            true
-        }
+    override fun onBackPressed() {
+        router.exit()
     }
+
+
+
 }

@@ -1,7 +1,8 @@
-package com.tinkoff.homework.utils
+package com.tinkoff.homework.utils.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.tinkoff.homework.utils.DelegateItem
 
 interface AdapterDelegate {
     fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
