@@ -70,6 +70,7 @@ class ChatFragment private constructor(private val id: Int, private val chatName
         binding.contentEditor.arrowButton.setOnClickListener {
             messageFactory.addText(binding.contentEditor.editText.text)
             binding.contentEditor.editText.text.clear()
+            binding.recycler.scrollToPosition(messageFactory.getCount() - 1);
         }
     }
 

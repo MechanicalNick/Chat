@@ -36,7 +36,8 @@ class MessageFactory(private val adapter: DeleagatesAdapter,
 
     fun addText(text: Editable?){
         text.let {
-            val id = items.count() + 1
+            val count = items.count()
+            val id = count + 1
             val now = LocalDate.now()
 
             if(lastDate != now){
@@ -53,7 +54,7 @@ class MessageFactory(private val adapter: DeleagatesAdapter,
                 )
             )
             items.add(item)
-            adapter.submitList(items)
+            adapter.notifyItemInserted(count)
         }
     }
 
@@ -104,5 +105,5 @@ class MessageFactory(private val adapter: DeleagatesAdapter,
             }
         }
     }
-
+    fun getCount() : Int = items.count()
 }
