@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.tinkoff.homework.R
+import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
@@ -15,16 +18,17 @@ import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
 import com.tinkoff.homework.utils.adapter.date.DateDelegate
 import com.tinkoff.homework.utils.adapter.message.MessageDelegate
-import com.tinkoff.homework.viewmodel.MainViewModel
+import com.tinkoff.homework.viewmodel.ChatViewModel
 import java.time.LocalDate
 
-class ChatFragment private constructor(private val id: Int, private val chatName: String) : Fragment() {
+class ChatFragment private constructor(private val id: Int, private val chatName: String) : Fragment(),
+    ChatFragmentCallback {
     private lateinit var messageFactory: MessageFactory
     private lateinit var bottomFragment: BottomFragment
 
     private var _binding: ChartFragmentBinding? = null
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val chatViewModel: ChatViewModel by viewModels()
     private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
     private val space = 32
     private val binding get() = _binding!!
@@ -33,19 +37,19 @@ class ChatFragment private constructor(private val id: Int, private val chatName
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         bottomFragment = BottomFragment()
         _binding = ChartFragmentBinding.inflate(inflater, container, false)
         createRecyclerView()
-        mainViewModel.addEmoji.observe(viewLifecycleOwner) {
+        chatViewModel.addEmoji.observe(viewLifecycleOwner) {
             messageFactory.addEmoji(it)
         }
-        mainViewModel.removeEmoji.observe(viewLifecycleOwner) {
+        chatViewModel.removeEmoji.observe(viewLifecycleOwner) {
             messageFactory.removeEmoji(it)
         }
 
-        binding.header.text = "#${chatName}"
+        binding.header.text = getString(R.string.sharp, chatName)
 
         return binding.root
     }
@@ -53,7 +57,7 @@ class ChatFragment private constructor(private val id: Int, private val chatName
     private fun createRecyclerView() {
         messageFactory = MessageFactory(adapter, stubMessages)
         adapter.apply {
-            addDelegate(MessageDelegate(bottomFragment, parentFragmentManager, mainViewModel))
+            addDelegate(MessageDelegate(this@ChatFragment))
             addDelegate(DateDelegate())
         }
         val itemDecoration = MarginItemDecorator(
@@ -67,6 +71,18 @@ class ChatFragment private constructor(private val id: Int, private val chatName
             messageFactory.addText(binding.contentEditor.editText.text)
             binding.contentEditor.editText.text.clear()
         }
+    }
+
+    override fun reactionRemove(reaction: Reaction, messageId: Int) {
+        chatViewModel.removeEmoji.value = EmojiWrapper(reaction.code, messageId)
+    }
+
+    override fun showBottomSheetDialog(id: Int): Boolean {
+        bottomFragment.show(childFragmentManager, null)
+        val args = Bundle()
+        args.putInt("modelId", id)
+        bottomFragment.arguments = args
+        return true
     }
 
     companion object {

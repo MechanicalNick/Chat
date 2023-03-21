@@ -1,8 +1,10 @@
 package com.tinkoff.homework.utils.adapter.stream
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.tinkoff.homework.R
 import com.tinkoff.homework.data.Stream
 import com.tinkoff.homework.databinding.StreamItemBinding
 import com.tinkoff.homework.utils.DelegateItem
@@ -17,7 +19,8 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                 parent,
                 false
             ),
-            expander
+            expander,
+            parent.context
         )
 
     override fun onBindViewHolder(
@@ -30,12 +33,15 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
 
     override fun isOfViewType(item: DelegateItem): Boolean = item is StreamDelegateItem
 
-    class ViewHolder(private val binding: StreamItemBinding,
-                     private val expander: Expander) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(
+        private val binding: StreamItemBinding,
+        private val expander: Expander,
+        private val context: Context
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Stream, item: DelegateItem) {
             with(binding) {
-                streamName.text = "#${model.name}"
+                streamName.text = context.getString(R.string.sharp, model.name)
                 expanderView.isChecked = model.isExpanded
                 expanderView.setOnClickListener {
                     if(!model.isExpanded) {
@@ -45,7 +51,6 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                         expander.collapse(item as StreamDelegateItem);
                     }
                 }
-
             }
         }
     }

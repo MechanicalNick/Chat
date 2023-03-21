@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tinkoff.homework.data.EmojiWrapper
 
-class MainViewModel : ViewModel() {
+class ChatViewModel : ViewModel() {
     val addEmoji: MutableLiveData<EmojiWrapper> = MutableLiveData()
     val removeEmoji: MutableLiveData<EmojiWrapper> = MutableLiveData()
 }

@@ -5,16 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.EmojiResources
 import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
 import com.tinkoff.homework.utils.adapter.BottomSheetDialogAdapter
-import com.tinkoff.homework.viewmodel.MainViewModel
+import com.tinkoff.homework.viewmodel.ChatViewModel
 
 class BottomFragment : BottomSheetDialogFragment() {
-    val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: ChatViewModel by viewModels(
+        ownerProducer = { this.requireParentFragment() }
+    )
 
     private lateinit var binding: BottomSheetDialogLayoutBinding
     private var messageId: Int = -1

@@ -1,26 +1,17 @@
 package com.tinkoff.homework.utils.adapter.message
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.data.MessageModel
-import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.MessageLayoutBinding
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.FlexboxFactory
 import com.tinkoff.homework.utils.adapter.AdapterDelegate
-import com.tinkoff.homework.view.fragment.BottomFragment
-import com.tinkoff.homework.viewmodel.MainViewModel
+import com.tinkoff.homework.view.fragment.ChatFragmentCallback
 
 
-class MessageDelegate(
-    private val bottomFragment: BottomFragment,
-    private val fragmentManager: FragmentManager,
-    private val viewModel: MainViewModel
-) : AdapterDelegate {
+class MessageDelegate(private val callback: ChatFragmentCallback) : AdapterDelegate {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val messageLayoutBinding = MessageLayoutBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -47,29 +38,17 @@ class MessageDelegate(
             with(binding) {
                 root.textView.text = model.text
                 root.setOnLongClickListener {
-                    showBottomSheetDialog(model.id)
+                    callback.showBottomSheetDialog(model.id)
                 }
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
-                    { reactionRemove(it, model.id) },
-                    { showBottomSheetDialog(model.id) }
+                    { callback.reactionRemove(it, model.id) },
+                    { callback.showBottomSheetDialog(model.id) }
                 ).forEach {
                     root.flexbox.addView(it)
                 }
             }
-        }
-
-        private fun reactionRemove(reaction: Reaction, messageId: Int) {
-            viewModel.removeEmoji.value = EmojiWrapper(reaction.code, messageId)
-        }
-
-        private fun showBottomSheetDialog(id: Int): Boolean {
-            bottomFragment.show(fragmentManager, null)
-            val args = Bundle()
-            args.putInt("modelId", id)
-            bottomFragment.arguments = args
-            return true
         }
     }
 }
