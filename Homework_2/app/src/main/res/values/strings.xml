@@ -12,4 +12,5 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="sharp">#%1$s</string>
+    <string name="search_tooltip">Search...</string>
 </resources>
