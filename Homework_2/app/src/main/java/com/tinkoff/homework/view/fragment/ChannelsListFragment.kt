@@ -21,14 +21,16 @@ import com.tinkoff.homework.utils.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.utils.adapter.topic.TopicDelegate
 import javax.inject.Inject
 
-class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragment(),
+class ChannelsListFragment: Fragment(),
     Expander, ToChatRouter {
+
     @Inject
     lateinit var router: Router
     lateinit var binding: ChannelsListBinding
+    private lateinit var factory: StreamFactory
 
     private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
-    private val factory = StreamFactory(getFakeData(), onlySubscribed)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
@@ -39,7 +41,9 @@ class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragmen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
+        factory = StreamFactory(getFakeData(), onlySubscribed)
 
         binding = ChannelsListBinding.inflate(layoutInflater)
 
@@ -82,9 +86,9 @@ class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragmen
     companion object {
         private const val ARG_MESSAGE = "channels"
         fun newInstance(onlySubscribed :Boolean, name: String): ChannelsListFragment {
-            return ChannelsListFragment(onlySubscribed).apply {
+            return ChannelsListFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_MESSAGE, name)
+                    putBoolean(ARG_MESSAGE, onlySubscribed)
                 }
             }
         }

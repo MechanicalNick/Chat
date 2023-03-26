@@ -14,7 +14,7 @@ import com.tinkoff.homework.databinding.FragmentPeopleBinding
 import com.tinkoff.homework.utils.adapter.PeopleAdapter
 import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 
-class PeoplesFragment private constructor(): Fragment() {
+class PeoplesFragment: Fragment() {
     lateinit var binding: FragmentPeopleBinding
 
     private val adapter: PeopleAdapter by lazy { PeopleAdapter(peoples) }

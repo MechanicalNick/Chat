@@ -21,7 +21,7 @@ import com.tinkoff.homework.utils.adapter.message.MessageDelegate
 import com.tinkoff.homework.viewmodel.ChatViewModel
 import java.time.LocalDate
 
-class ChatFragment private constructor(private val id: Int, private val chatName: String) : Fragment(),
+class ChatFragment: Fragment(),
     ChatFragmentCallback {
     private lateinit var messageFactory: MessageFactory
     private lateinit var bottomFragment: BottomFragment
@@ -38,7 +38,6 @@ class ChatFragment private constructor(private val id: Int, private val chatName
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         bottomFragment = BottomFragment()
         _binding = ChartFragmentBinding.inflate(inflater, container, false)
         createRecyclerView()
@@ -48,6 +47,8 @@ class ChatFragment private constructor(private val id: Int, private val chatName
         chatViewModel.removeEmoji.observe(viewLifecycleOwner) {
             messageFactory.removeEmoji(it)
         }
+
+        val chatName = requireArguments().getString(ARG_MESSAGE)
 
         binding.header.text = getString(R.string.sharp, chatName)
 
@@ -87,9 +88,13 @@ class ChatFragment private constructor(private val id: Int, private val chatName
     }
 
     companion object {
-        private const val ARG_MESSAGE = "chat"
+        private const val ARG_MESSAGE = "chatName"
         fun newInstance(id: Int, chatName: String): ChatFragment {
-            return ChatFragment(id, chatName)
+            val fragment = ChatFragment()
+            val arguments = Bundle()
+            arguments.putString(ARG_MESSAGE, chatName)
+            fragment.arguments = arguments
+            return fragment
         }
 
         private val SEP_1 = LocalDate.of(2023, 9, 1)

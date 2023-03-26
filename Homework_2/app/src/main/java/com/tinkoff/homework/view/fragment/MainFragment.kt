@@ -17,7 +17,7 @@ import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.Const
 import javax.inject.Inject
 
-class MainFragment private constructor(): Fragment() {
+class MainFragment: Fragment() {
     @Inject
     lateinit var ciceroneHolder: LocalCiceroneHolder
     lateinit var binding: MainFragmentBinding

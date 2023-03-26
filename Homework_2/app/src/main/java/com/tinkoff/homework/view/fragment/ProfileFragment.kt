@@ -12,13 +12,16 @@ import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.databinding.FragmentProfileBinding
 import com.tinkoff.homework.utils.Const
 
-class ProfileFragment private constructor(private val profile: Profile) : Fragment() {
+class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val profileId = requireArguments().getInt(ARG_MESSAGE)
+        val profile = getProfile(profileId)
+        
         binding = FragmentProfileBinding.inflate(inflater)
 
         val image = ResourcesCompat.getDrawable(requireContext().resources,
@@ -44,7 +47,11 @@ class ProfileFragment private constructor(private val profile: Profile) : Fragme
     companion object {
         private const val ARG_MESSAGE = "profile"
         fun newInstance(userId: Int): ProfileFragment {
-            return ProfileFragment(getProfile(userId))
+            var fragment = ProfileFragment()
+            val arguments = Bundle()
+            arguments.putInt(ARG_MESSAGE, userId)
+            fragment.arguments = arguments
+            return fragment
         }
 
         private fun getProfile(id : Int):Profile{

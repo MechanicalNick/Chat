@@ -10,7 +10,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.FragmentChannelBinding
 import com.tinkoff.homework.utils.adapter.ChannelPagerAdapter
 
-class ChannelsFragment private constructor(): Fragment()  {
+class ChannelsFragment: Fragment()  {
     private lateinit var binding: FragmentChannelBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
