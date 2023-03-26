@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Homework" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">#1E1E1E</item>
+        <item name="colorPrimaryVariant">#2A9D8F</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -16,6 +16,12 @@
         <item name="plusViewStyle">@style/Theme.Homework.PlusView</item>
         <item name="contentEditorStyle">@style/Theme.Homework.ContentEditor</item>
         <item name="android:windowBackground">@color/default_color_background</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+    <style name="Theme.Homework.NoTitle" parent="Theme.Homework">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.Homework.ReactionView">
@@ -82,5 +88,16 @@
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
     </style>
 
+    <style name="MyCustomTabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+        <item name="tabTextColor">@color/default_color_text</item>
+        <item name="tabIndicatorColor">@color/tab_indicator</item>
+        <item name="tabIndicatorFullWidth">false</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 
 </resources>

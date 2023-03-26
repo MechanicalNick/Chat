@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Homework</string>
     <string name="edit_text_hint">Написать...</string>
+    <string name="title_channels">Channels</string>
+    <string name="title_people">People</string>
+    <string name="title_profile">Profile</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="all_stream">All streams</string>
+    <string name="messages">messages</string>
+    <string name="topic">Topic:</string>
+    <string name="logout">Log out</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="sharp">#%1$s</string>
 </resources>

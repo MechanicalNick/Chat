@@ -1,15 +1,16 @@
 package com.tinkoff.homework.utils
 
 import android.text.Editable
+import com.tinkoff.homework.data.DateModel
 import com.tinkoff.homework.data.EmojiWrapper
+import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
-import com.tinkoff.homework.date.DateDelegateItem
-import com.tinkoff.homework.date.DateModel
-import com.tinkoff.homework.message.MessageDelegateItem
-import com.tinkoff.homework.message.MessageModel
+import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
+import com.tinkoff.homework.utils.adapter.date.DateDelegateItem
+import com.tinkoff.homework.utils.adapter.message.MessageDelegateItem
 import java.time.LocalDate
 
-class MessageFactory(private val adapter: MessageAdapter,
+class MessageFactory(private val adapter: DeleagatesAdapter,
                      messages: List<MessageModel>) {
     private val items: MutableList<DelegateItem> = mutableListOf()
     private var lastDate: LocalDate = LocalDate.now()
@@ -35,7 +36,8 @@ class MessageFactory(private val adapter: MessageAdapter,
 
     fun addText(text: Editable?){
         text.let {
-            val id = items.count() + 1
+            val count = items.count()
+            val id = count + 1
             val now = LocalDate.now()
 
             if(lastDate != now){
@@ -52,7 +54,7 @@ class MessageFactory(private val adapter: MessageAdapter,
                 )
             )
             items.add(item)
-            adapter.submitList(items)
+            adapter.notifyItemInserted(count)
         }
     }
 
@@ -103,5 +105,5 @@ class MessageFactory(private val adapter: MessageAdapter,
             }
         }
     }
-
+    fun getCount() : Int = items.count()
 }
