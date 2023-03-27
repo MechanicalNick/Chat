@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:navigationIcon="@drawable/arrow_back"
+        app:buttonGravity="center_vertical"
+        app:titleTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"/>
+
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

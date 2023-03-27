@@ -57,7 +57,7 @@ class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
                 topicItemLayout.background = ResourcesCompat
                     .getDrawable(binding.root.context.resources, color, null)
                 binding.root.setOnClickListener{
-                    router.goToChat(model.id, model.name)
+                    router.goToChat(model.id, model.name, model.streamName)
                 }
             }
         }

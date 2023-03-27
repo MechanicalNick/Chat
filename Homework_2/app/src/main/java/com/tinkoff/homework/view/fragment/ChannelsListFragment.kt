@@ -79,8 +79,8 @@ class ChannelsListFragment: Fragment(),
         adapter.notifyItemRangeRemoved(index+1, oldDelegates.count())
     }
 
-    override fun goToChat(id: Int, charName: String) {
-        router.navigateTo(NavigationScreens.chat(id, charName))
+    override fun goToChat(id: Int, topicName: String, streamName: String) {
+        router.navigateTo(NavigationScreens.chat(id, topicName, streamName))
     }
 
     companion object {
@@ -95,19 +95,19 @@ class ChannelsListFragment: Fragment(),
 
         fun getFakeData(): MutableList<Stream>{
             val topics1 = listOf(
-                Topic(1, "Topic1", 100),
-                Topic(2, "Topic2", 500),
-                Topic(3, "Topic3", 300),
-                Topic(4, "Topic4", 300),
-                Topic(5, "Topic5", 300),
-                Topic(6, "Topic6", 300),
-                Topic(7, "Topic7", 300),
-                Topic(8, "Topic9", 300),
-                Topic(9, "Topic9", 300),
+                Topic(1, "Topic1", 100, "Stream1"),
+                Topic(2, "Topic2", 500, "Stream1"),
+                Topic(3, "Topic3", 300, "Stream1"),
+                Topic(4, "Topic4", 300, "Stream1"),
+                Topic(5, "Topic5", 300, "Stream1"),
+                Topic(6, "Topic6", 300, "Stream1"),
+                Topic(7, "Topic7", 300, "Stream1"),
+                Topic(8, "Topic9", 300, "Stream1"),
+                Topic(9, "Topic9", 300, "Stream1"),
             )
 
             val topics3 = listOf(
-                Topic(4, "Topic4", 12345)
+                Topic(4, "Topic4", 12345, "Stream3")
             )
 
             var streams = mutableListOf(

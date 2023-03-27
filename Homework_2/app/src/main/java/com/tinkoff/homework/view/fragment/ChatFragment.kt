@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.github.terrakok.cicerone.Router
+import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
+import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
@@ -20,9 +22,12 @@ import com.tinkoff.homework.utils.adapter.date.DateDelegate
 import com.tinkoff.homework.utils.adapter.message.MessageDelegate
 import com.tinkoff.homework.viewmodel.ChatViewModel
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ChatFragment: Fragment(),
-    ChatFragmentCallback {
+class ChatFragment: Fragment(), ChatFragmentCallback {
+
+    @Inject
+    lateinit var router: Router
     private lateinit var messageFactory: MessageFactory
     private lateinit var bottomFragment: BottomFragment
 
@@ -33,6 +38,11 @@ class ChatFragment: Fragment(),
     private val space = 32
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        App.INSTANCE.appComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,6 +50,7 @@ class ChatFragment: Fragment(),
     ): View {
         bottomFragment = BottomFragment()
         _binding = ChartFragmentBinding.inflate(inflater, container, false)
+
         createRecyclerView()
         chatViewModel.addEmoji.observe(viewLifecycleOwner) {
             messageFactory.addEmoji(it)
@@ -48,9 +59,15 @@ class ChatFragment: Fragment(),
             messageFactory.removeEmoji(it)
         }
 
-        val chatName = requireArguments().getString(ARG_MESSAGE)
+        val topicName = requireArguments().getString(ARG_TOPIC)
+        binding.header.text = getString(R.string.sharp, topicName)
 
-        binding.header.text = getString(R.string.sharp, chatName)
+        val streamName = requireArguments().getString(ARG_STREAM)
+        binding.toolbar.title = streamName
+
+        binding.toolbar.setNavigationOnClickListener {
+            router.backTo(NavigationScreens.channels())
+        }
 
         return binding.root
     }
@@ -88,11 +105,14 @@ class ChatFragment: Fragment(),
     }
 
     companion object {
-        private const val ARG_MESSAGE = "chatName"
-        fun newInstance(id: Int, chatName: String): ChatFragment {
+        private const val ARG_TOPIC = "topicName"
+        private const val ARG_STREAM = "steamName"
+
+        fun newInstance(id: Int, topicName: String, streamName: String): ChatFragment {
             val fragment = ChatFragment()
             val arguments = Bundle()
-            arguments.putString(ARG_MESSAGE, chatName)
+            arguments.putString(ARG_TOPIC, topicName)
+            arguments.putString(ARG_STREAM, streamName)
             fragment.arguments = arguments
             return fragment
         }
