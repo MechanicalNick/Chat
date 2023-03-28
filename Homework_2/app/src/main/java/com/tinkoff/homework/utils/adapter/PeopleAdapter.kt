@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.People
+import com.tinkoff.homework.data.domain.People
 import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.databinding.PeopleItemBinding
 
-class PeopleAdapter(private val peoples: List<People>): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
+class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
+    val peoples: MutableList<People> = mutableListOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(PeopleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 

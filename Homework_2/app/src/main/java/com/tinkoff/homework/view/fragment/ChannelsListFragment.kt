@@ -46,7 +46,7 @@ class ChannelsListFragment : Fragment(), Expander, ToChatRouter {
         val factory = StreamViewModel.Factory(onlySubscribed)
         viewModel = ViewModelProvider(this, factory)[StreamViewModel::class.java]
 
-        viewModel.searchState.observe(this.viewLifecycleOwner) {
+        viewModel.searchState.observe(viewLifecycleOwner) {
             render(it)
         }
 

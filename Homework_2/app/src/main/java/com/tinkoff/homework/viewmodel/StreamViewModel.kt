@@ -24,7 +24,6 @@ class StreamViewModel(onlySubscribed: Boolean) : ViewModel() {
 
     private val streamRepository = StreamRepositoryImpl()
 
-
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val _searchState: MutableLiveData<UiState<List<DelegateItem>>> = MutableLiveData()
     val searchState: LiveData<UiState<List<DelegateItem>>> get() = _searchState
