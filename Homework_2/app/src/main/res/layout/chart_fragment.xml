@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shimmer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        app:navigationIcon="@drawable/arrow_back"
-        app:buttonGravity="center_vertical"
-        app:titleTextColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/arrow_back"
+            app:titleTextColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"/>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -38,16 +42,16 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp" />
 
-    <com.tinkoff.homework.view.viewgroup.ContentEditorViewGroup
-        android:id="@+id/contentEditor"
-        android:layout_height="62dp"
-        android:layout_width="match_parent"/>
-</LinearLayout>
+        <com.tinkoff.homework.view.viewgroup.ContentEditorViewGroup
+            android:id="@+id/contentEditor"
+            android:layout_width="match_parent"
+            android:layout_height="62dp" />
+    </LinearLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
