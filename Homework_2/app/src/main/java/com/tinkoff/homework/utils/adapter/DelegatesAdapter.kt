@@ -1,13 +1,18 @@
 package com.tinkoff.homework.utils.adapter
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.utils.DelegateAdapterItemCallback
 import com.tinkoff.homework.utils.DelegateItem
 
-open class DeleagatesAdapter :
-    ListAdapter<DelegateItem, RecyclerView.ViewHolder>(DelegateAdapterItemCallback()) {
+open class DelegatesAdapter :
+    ListAdapter<DelegateItem, RecyclerView.ViewHolder>(
+        AsyncDifferConfig.Builder(
+            DelegateAdapterItemCallback()
+        ).build()
+    ) {
     private val delegates: MutableList<AdapterDelegate> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

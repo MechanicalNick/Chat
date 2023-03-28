@@ -1,18 +1,18 @@
 package com.tinkoff.homework.utils
 
-import com.tinkoff.homework.data.Stream
-import com.tinkoff.homework.data.Topic
+import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.utils.adapter.topic.TopicDelegateItem
 
 
-class StreamFactory(private val streamList: List<Stream>, private val onlySubscribed: Boolean) {
+class StreamFactory(private val onlySubscribed: Boolean) {
     val delegates = mutableListOf<DelegateItem>()
 
-    fun updateDelegateItems(): List<DelegateItem>{
+    fun updateDelegateItems(streamList: List<Stream>): List<DelegateItem> {
         delegates.clear()
 
-        val filteredList = if(onlySubscribed) {
+        val filteredList = if (onlySubscribed) {
             streamList.filter { it.isSubscribed }
         } else {
             streamList

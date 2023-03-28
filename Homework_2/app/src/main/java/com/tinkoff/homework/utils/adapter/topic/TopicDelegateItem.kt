@@ -1,6 +1,6 @@
 package com.tinkoff.homework.utils.adapter.topic
 
-import com.tinkoff.homework.data.Topic
+import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.utils.DelegateItem
 
 class TopicDelegateItem(

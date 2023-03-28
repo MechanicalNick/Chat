@@ -17,7 +17,7 @@ import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
+import com.tinkoff.homework.utils.adapter.DelegatesAdapter
 import com.tinkoff.homework.utils.adapter.date.DateDelegate
 import com.tinkoff.homework.utils.adapter.message.MessageDelegate
 import com.tinkoff.homework.viewmodel.ChatViewModel
@@ -34,7 +34,7 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
     private var _binding: ChartFragmentBinding? = null
 
     private val chatViewModel: ChatViewModel by viewModels()
-    private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
+    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val space = 32
     private val binding get() = _binding!!
 

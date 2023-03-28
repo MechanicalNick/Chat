@@ -1,6 +1,6 @@
 package com.tinkoff.homework.utils.adapter.stream
 
-import com.tinkoff.homework.data.Stream
+import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.utils.DelegateItem
 
 class StreamDelegateItem(

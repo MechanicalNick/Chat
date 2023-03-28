@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.Topic
+import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.databinding.TopicItemBinding
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.ToChatRouter

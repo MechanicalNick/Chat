@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.Stream
+import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.databinding.StreamItemBinding
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.Expander

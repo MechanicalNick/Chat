@@ -1,7 +1,7 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.view.fragment.ChannelsListFragment
 import com.tinkoff.homework.view.MainActivity
+import com.tinkoff.homework.view.fragment.ChannelsListFragment
 import com.tinkoff.homework.view.fragment.ChatFragment
 import com.tinkoff.homework.view.fragment.MainFragment
 import dagger.Component
