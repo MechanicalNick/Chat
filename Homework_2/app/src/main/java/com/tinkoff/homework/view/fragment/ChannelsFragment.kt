@@ -4,13 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.FragmentChannelBinding
 import com.tinkoff.homework.utils.adapter.ChannelPagerAdapter
 
-class ChannelsFragment private constructor(): Fragment()  {
+class ChannelsFragment: Fragment()  {
     private lateinit var binding: FragmentChannelBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,11 +35,20 @@ class ChannelsFragment private constructor(): Fragment()  {
             tab.text = tabs[position]
         }.attach()
 
+        binding.search.addTextChangedListener {
+            childFragmentManager.setFragmentResult(
+                ARG_SEARCH_ACTION,
+                bundleOf(ARG_SEARCH_VALUE to it?.toString())
+            )
+        }
+
         return binding.root
     }
 
     companion object {
         private const val ARG_MESSAGE = "channels"
+        const val ARG_SEARCH_ACTION = "search_action"
+        const val ARG_SEARCH_VALUE = "search_value"
         fun newInstance(): ChannelsFragment {
             return ChannelsFragment()
         }

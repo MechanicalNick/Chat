@@ -5,30 +5,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.github.terrakok.cicerone.Router
+import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.App
-import com.tinkoff.homework.data.Stream
-import com.tinkoff.homework.data.Topic
+import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.databinding.ChannelsListBinding
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.Expander
-import com.tinkoff.homework.utils.StreamFactory
 import com.tinkoff.homework.utils.ToChatRouter
-import com.tinkoff.homework.utils.adapter.DeleagatesAdapter
+import com.tinkoff.homework.utils.UiState
+import com.tinkoff.homework.utils.adapter.DelegatesAdapter
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegate
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.utils.adapter.topic.TopicDelegate
+import com.tinkoff.homework.viewmodel.StreamViewModel
 import javax.inject.Inject
 
-class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragment(),
-    Expander, ToChatRouter {
+class ChannelsListFragment : Fragment(), Expander, ToChatRouter {
+
     @Inject
     lateinit var router: Router
     lateinit var binding: ChannelsListBinding
+    private lateinit var viewModel: StreamViewModel
 
-    private val adapter: DeleagatesAdapter by lazy { DeleagatesAdapter() }
-    private val factory = StreamFactory(getFakeData(), onlySubscribed)
+    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
@@ -39,80 +41,92 @@ class ChannelsListFragment private constructor(onlySubscribed :Boolean): Fragmen
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
+        val factory = StreamViewModel.Factory(onlySubscribed)
+        viewModel = ViewModelProvider(this, factory)[StreamViewModel::class.java]
+
+        viewModel.searchState.observe(viewLifecycleOwner) {
+            render(it)
+        }
 
         binding = ChannelsListBinding.inflate(layoutInflater)
 
         adapter.addDelegate(StreamDelegate(this))
         adapter.addDelegate(TopicDelegate(this))
 
-        adapter.submitList(factory.updateDelegateItems())
-
         binding.channelRecyclerView.adapter = adapter
 
+        parentFragmentManager.setFragmentResultListener(
+            ChannelsFragment.ARG_SEARCH_ACTION,
+            this@ChannelsListFragment
+        ) { _, bundle ->
+            val result = bundle.getString(ChannelsFragment.ARG_SEARCH_VALUE)
+            viewModel.searchQuery(result.orEmpty())
+        }
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter.submitList(viewModel.factory.delegates)
+        viewModel.init()
+    }
+
+    private fun render(state: UiState<List<DelegateItem>>) {
+        when (state) {
+            is UiState.Loading<List<DelegateItem>> -> {
+                binding.shimmer.showShimmer(true)
+            }
+            is UiState.Data<List<DelegateItem>> -> {
+                adapter.notifyDataSetChanged()
+                binding.shimmer.hideShimmer()
+            }
+            is UiState.Error<List<DelegateItem>> -> {
+                binding.shimmer.hideShimmer()
+                Snackbar.make(
+                    binding.root, state.exception.toString(),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
     override fun expand(item: StreamDelegateItem) {
-        val index = factory.delegates.indexOf(item)
+        val index = viewModel.factory.delegates.indexOf(item)
         val stream = item.content() as Stream
         stream.isExpanded = true
-        val newDelegates = stream.topics.map { factory.toDelegate(it) }
-        factory.delegates.addAll(index+1, newDelegates)
+        val newDelegates = stream.topics.map { viewModel.factory.toDelegate(it) }
+        viewModel.factory.delegates.addAll(index + 1, newDelegates)
         adapter.notifyItemChanged(index)
-        adapter.notifyItemRangeInserted(index+1, newDelegates.count())
+        adapter.notifyItemRangeInserted(index + 1, newDelegates.count())
     }
 
     override fun collapse(item: StreamDelegateItem) {
-        val index = factory.delegates.indexOf(item)
+        val index = viewModel.factory.delegates.indexOf(item)
         val stream = item.content() as Stream
         stream.isExpanded = false
         var oldDelegates = mutableListOf<DelegateItem>()
         stream.topics.forEachIndexed { i, _ ->
-            oldDelegates.add(factory.delegates[index + i + 1]) }
-        factory.delegates.removeAll(oldDelegates)
+            oldDelegates.add(viewModel.factory.delegates[index + i + 1])
+        }
+        viewModel.factory.delegates.removeAll(oldDelegates)
         adapter.notifyItemChanged(index)
-        adapter.notifyItemRangeRemoved(index+1, oldDelegates.count())
+        adapter.notifyItemRangeRemoved(index + 1, oldDelegates.count())
     }
 
-    override fun goToChat(id: Int, charName: String) {
-        router.navigateTo(NavigationScreens.chat(id, charName))
+    override fun goToChat(id: Int, topicName: String, streamName: String) {
+        router.navigateTo(NavigationScreens.chat(id, topicName, streamName))
     }
 
     companion object {
         private const val ARG_MESSAGE = "channels"
         fun newInstance(onlySubscribed :Boolean, name: String): ChannelsListFragment {
-            return ChannelsListFragment(onlySubscribed).apply {
+            return ChannelsListFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_MESSAGE, name)
+                    putBoolean(ARG_MESSAGE, onlySubscribed)
                 }
             }
-        }
-
-        fun getFakeData(): MutableList<Stream>{
-            val topics1 = listOf(
-                Topic(1, "Topic1", 100),
-                Topic(2, "Topic2", 500),
-                Topic(3, "Topic3", 300),
-                Topic(4, "Topic4", 300),
-                Topic(5, "Topic5", 300),
-                Topic(6, "Topic6", 300),
-                Topic(7, "Topic7", 300),
-                Topic(8, "Topic9", 300),
-                Topic(9, "Topic9", 300),
-            )
-
-            val topics3 = listOf(
-                Topic(4, "Topic4", 12345)
-            )
-
-            var streams = mutableListOf(
-                Stream(1, "Stream1", topics1, isSubscribed = true, isExpanded = false),
-                Stream(2, "Stream2", emptyList(), isSubscribed = false, isExpanded = false),
-                Stream(3, "Stream3", topics3, isSubscribed = false, isExpanded = false)
-            )
-
-            return streams
         }
     }
 }
