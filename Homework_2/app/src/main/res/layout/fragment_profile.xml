@@ -13,10 +13,11 @@
             android:id="@+id/profileImage"
             android:layout_width="185dp"
             android:layout_height="185dp"
-            android:layout_marginTop="126dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2" />
 
         <TextView
             android:id="@+id/profileName"
@@ -31,35 +32,15 @@
             app:layout_constraintTop_toBottomOf="@+id/profileImage" />
 
         <TextView
-            android:id="@+id/profileDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="114dp"
-            android:text="In a meeting"
-            android:textColor="#BCBCBC"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileName" />
-
-        <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="21dp"
+            android:layout_marginTop="8dp"
             android:text="online"
             android:textColor="@color/green"
             android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/profileDescription"
-            app:layout_constraintStart_toEndOf="@+id/profileDescription" />
-
-        <Button
-            android:id="@+id/profileLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="65dp"
-            android:text="@string/logout"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profileName" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

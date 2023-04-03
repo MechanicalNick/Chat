@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.tinkoff.homework.repository.StreamRepository
 import com.tinkoff.homework.repository.StreamRepositoryImpl
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.StreamFactory
@@ -17,12 +18,12 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.rx2.rxSingle
 import java.util.concurrent.TimeUnit
 
-class StreamViewModel(onlySubscribed: Boolean) : ViewModel() {
-    internal val factory = StreamFactory(onlySubscribed)
+class StreamViewModel(private val onlySubscribed: Boolean) : ViewModel() {
+    internal val factory = StreamFactory()
 
     private var allItems: MutableList<DelegateItem> = mutableListOf()
 
-    private val streamRepository = StreamRepositoryImpl()
+    private val streamRepository: StreamRepository = StreamRepositoryImpl()
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val _searchState: MutableLiveData<UiState<List<DelegateItem>>> = MutableLiveData()
@@ -79,13 +80,17 @@ class StreamViewModel(onlySubscribed: Boolean) : ViewModel() {
     }
 
     fun init() {
-        search("", true)
-            .subscribe({ state ->
-                _searchState.postValue(state)
+        _searchState.postValue(UiState.Loading())
+
+        streamRepository.getResults(onlySubscribed)
+            .subscribeOn(Schedulers.io())
+            .subscribe({ list ->
+                var newItems = factory.updateDelegateItems(list)
+                allItems.addAll(newItems)
+                _searchState.postValue(UiState.Data(newItems))
             }, { error ->
                 _searchState.postValue(UiState.Error(error))
-            }
-            )
+            })
             .addTo(compositeDisposable)
     }
 

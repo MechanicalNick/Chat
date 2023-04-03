@@ -1,5 +1,5 @@
 package com.tinkoff.homework.utils
 
 interface ToChatRouter {
-    fun goToChat(id: Int, topicName: String, streamName: String)
+    fun goToChat(topicName: String, streamName: String, streamId: Long)
 }

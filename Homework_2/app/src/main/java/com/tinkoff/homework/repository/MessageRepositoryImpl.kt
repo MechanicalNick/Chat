@@ -1,14 +1,87 @@
 package com.tinkoff.homework.repository
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.tinkoff.homework.App
 import com.tinkoff.homework.data.MessageModel
-import com.tinkoff.homework.use_cases.FakeMessage
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.dto.Narrow
+import com.tinkoff.homework.data.dto.ReactionsResponse
+import com.tinkoff.homework.utils.ZulipChatApi
+import io.reactivex.Single
+import java.time.Instant
+import java.time.LocalDateTime
+import java.util.*
+import javax.inject.Inject
 
 class MessageRepositoryImpl: MessageRepository {
-    override fun getMessages(): Observable<List<MessageModel>> =
-        Observable.fromCallable {
-            FakeMessage.getFakeData()
-        }.subscribeOn(Schedulers.io()).delay(6, TimeUnit.SECONDS)
+    @Inject
+    lateinit var api: ZulipChatApi
+
+    @Inject
+    lateinit var moshi: Moshi
+
+    init {
+        App.INSTANCE.appComponent.inject(this)
+    }
+
+    override fun getMessages(
+        anchor: String,
+        numBefore: Long,
+        numAfter: Long,
+        topic: String,
+        streamId: Long
+    ): Single<List<MessageModel>> {
+        return api.getMessages(
+            anchor,
+            numBefore,
+            numAfter,
+            narrow(topic, streamId)
+        ).map { message -> message.messages }.map { list ->
+            list.map { m ->
+                val date = LocalDateTime.ofInstant(
+                    Instant.ofEpochMilli(m.timestamp),
+                    TimeZone.getDefault().toZoneId())
+                    .toLocalDate()
+                MessageModel(
+                    m.id,
+                    m.senderId,
+                    m.senderFullName,
+                    m.content,
+                    date,
+                    m.avatarUrl,
+                    m.reactions.map { r -> Reaction(r.emojiCode, r.emojiName, r.userId) }
+                        .toMutableList()
+                )
+            }
+        }
+    }
+
+    override fun addReaction(messageId: Long, emojiName: String): Single<ReactionsResponse> {
+        return api.addReaction(messageId, emojiName)
+    }
+
+    override fun removeReaction(messageId: Long, emojiName: String): Single<ReactionsResponse> {
+        return api.removeReaction(messageId, emojiName)
+    }
+
+    private fun narrow(
+        topic: String,
+        streamId: Long
+    ): String {
+        val list = mutableListOf<Narrow>()
+
+        if (topic.isNotBlank())
+            list.add(Narrow(operator = "topic", operand = topic))
+        list.add(Narrow(operator = "stream", operand = streamId))
+
+        val type = Types.newParameterizedType(
+            List::class.java,
+            Narrow::class.java,
+        )
+        val moshi = Moshi.Builder().build()
+        var adapter = moshi.adapter<List<Narrow>>(type)
+
+        return adapter.toJson(list)
+    }
 }

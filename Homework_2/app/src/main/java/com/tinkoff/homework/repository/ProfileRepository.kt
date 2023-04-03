@@ -4,5 +4,5 @@ import com.tinkoff.homework.data.dto.ProfileDto
 import io.reactivex.Single
 
 interface ProfileRepository {
-    fun getProfile(profileId: Int): Single<ProfileDto>
+    fun getProfile(profileId: Long?): Single<ProfileDto>
 }

@@ -1,3 +1,3 @@
 package com.tinkoff.homework.data
 
-class EmojiWrapper(val emojiCode: Int, val messageId: Int)
+class EmojiWrapper(val emojiCode: String, val emojiName: String, val messageId: Long)

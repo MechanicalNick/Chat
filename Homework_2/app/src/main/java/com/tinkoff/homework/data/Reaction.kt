@@ -1,3 +1,5 @@
 package com.tinkoff.homework.data
 
-class Reaction(val code: Int, val owners: MutableList<Int>)
+import com.squareup.moshi.Json
+
+class Reaction(val emojiCode: String, val emojiName: String, val userId: Long)

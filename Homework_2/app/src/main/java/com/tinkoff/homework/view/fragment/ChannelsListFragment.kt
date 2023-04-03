@@ -96,7 +96,8 @@ class ChannelsListFragment : Fragment(), Expander, ToChatRouter {
         val index = viewModel.factory.delegates.indexOf(item)
         val stream = item.content() as Stream
         stream.isExpanded = true
-        val newDelegates = stream.topics.map { viewModel.factory.toDelegate(it) }
+        var id = index + 1L
+        val newDelegates = stream.topics.map { viewModel.factory.toDelegate(it, id++) }
         viewModel.factory.delegates.addAll(index + 1, newDelegates)
         adapter.notifyItemChanged(index)
         adapter.notifyItemRangeInserted(index + 1, newDelegates.count())
@@ -115,13 +116,13 @@ class ChannelsListFragment : Fragment(), Expander, ToChatRouter {
         adapter.notifyItemRangeRemoved(index + 1, oldDelegates.count())
     }
 
-    override fun goToChat(id: Int, topicName: String, streamName: String) {
-        router.navigateTo(NavigationScreens.chat(id, topicName, streamName))
+    override fun goToChat(topicName: String, streamName: String, streamId: Long) {
+        router.navigateTo(NavigationScreens.chat(topicName, streamName, streamId))
     }
 
     companion object {
         private const val ARG_MESSAGE = "channels"
-        fun newInstance(onlySubscribed :Boolean, name: String): ChannelsListFragment {
+        fun newInstance(onlySubscribed: Boolean, name: String): ChannelsListFragment {
             return ChannelsListFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(ARG_MESSAGE, onlySubscribed)

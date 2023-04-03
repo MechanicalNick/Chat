@@ -1,5 +1,6 @@
 package com.tinkoff.homework.utils.mapper
 
+import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.data.domain.People
 import com.tinkoff.homework.data.dto.PeopleDto
 
@@ -7,6 +8,8 @@ fun toDomainPeople(dto: List<PeopleDto>): List<People> = dto.map(PeopleDto::toDo
 
 fun PeopleDto.toDomain(): People = People(
    name = name,
-   email = email,
-   status = status
+   key = email,
+   email = delivery_email ?: email,
+   status = Status.Online,
+   avatarUrl = avatarUrl
 )
