@@ -7,10 +7,12 @@ import com.tinkoff.homework.data.EmojiWrapper
 import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.repository.MessageRepository
 import com.tinkoff.homework.repository.MessageRepositoryImpl
+import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.UiState
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import java.time.LocalDate
 
 class ChatViewModel : ViewModel() {
     val state: LiveData<UiState<List<MessageModel>>> get() = _state
@@ -20,6 +22,7 @@ class ChatViewModel : ViewModel() {
     private val repository: MessageRepository = MessageRepositoryImpl()
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val _state: MutableLiveData<UiState<List<MessageModel>>> = MutableLiveData()
+    private val messages = mutableListOf<MessageModel>()
 
     fun init(topicName: String, streamId: Long) {
         _state.postValue(UiState.Loading())
@@ -28,6 +31,8 @@ class ChatViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .subscribe({
                 _state.postValue(UiState.Data(it))
+                messages.clear()
+                messages.addAll(it)
             }, {
                 _state.postValue(UiState.Error(it))
             })
@@ -50,6 +55,27 @@ class ChatViewModel : ViewModel() {
             .subscribeOn(Schedulers.io())
             .subscribe({
                 removeEmoji.postValue(EmojiWrapper(emojiCode, emojiName, messageId))
+            }, {
+                _state.postValue(UiState.Error(it))
+            })
+            .addTo(compositeDisposable)
+    }
+
+    fun sendMessage(streamId: Long, topic: String, message: String) {
+        repository.sendMessage(streamId, topic, message)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                val message = MessageModel(
+                    it.id,
+                    Const.myId,
+                    Const.myFullName,
+                    message,
+                    LocalDate.now(),
+                    Const.myAvatar,
+                    mutableListOf()
+                )
+                messages.add(message)
+                _state.postValue(UiState.Data(messages))
             }, {
                 _state.postValue(UiState.Error(it))
             })

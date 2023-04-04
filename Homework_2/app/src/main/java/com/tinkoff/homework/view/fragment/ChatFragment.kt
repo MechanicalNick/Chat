@@ -38,6 +38,8 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val space = 32
     private val binding get() = _binding!!
+    private var streamId: Long? = null
+    private var topicName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
@@ -63,15 +65,15 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
             render(it)
         }
 
-        val topicName = requireArguments().getString(ARG_TOPIC)
+        topicName = requireArguments().getString(ARG_TOPIC)!!
         binding.header.text = getString(R.string.sharp, topicName)
 
         val streamName = requireArguments().getString(ARG_STREAM)
         binding.toolbar.title = streamName
 
-        val streamId = requireArguments().getLong(ARG_STREAM_ID)
+        streamId = requireArguments().getLong(ARG_STREAM_ID)
 
-        chatViewModel.init(topicName!!, streamId)
+        chatViewModel.init(topicName, streamId!!)
 
         binding.toolbar.setNavigationOnClickListener {
             router.backTo(NavigationScreens.channels())
@@ -114,7 +116,8 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         binding.recycler.adapter = adapter
 
         binding.contentEditor.arrowButton.setOnClickListener {
-            messageFactory.addText(binding.contentEditor.editText.text)
+            val message = binding.contentEditor.editText.text.toString()
+            chatViewModel.sendMessage(streamId!!, topicName, message)
             binding.contentEditor.editText.text.clear()
             binding.recycler.scrollToPosition(messageFactory.getCount() - 1);
         }

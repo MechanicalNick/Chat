@@ -5,8 +5,8 @@ import com.squareup.moshi.Types
 import com.tinkoff.homework.App
 import com.tinkoff.homework.data.MessageModel
 import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.Narrow
-import com.tinkoff.homework.data.dto.ReactionsResponse
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import java.time.Instant
@@ -57,12 +57,20 @@ class MessageRepositoryImpl: MessageRepository {
         }
     }
 
-    override fun addReaction(messageId: Long, emojiName: String): Single<ReactionsResponse> {
+    override fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.addReaction(messageId, emojiName)
     }
 
-    override fun removeReaction(messageId: Long, emojiName: String): Single<ReactionsResponse> {
+    override fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.removeReaction(messageId, emojiName)
+    }
+
+    override fun sendMessage(
+        streamId: Long,
+        topic: String,
+        message: String
+    ): Single<MessageResponse> {
+        return api.sendMessage(streamId, topic, message)
     }
 
     private fun narrow(

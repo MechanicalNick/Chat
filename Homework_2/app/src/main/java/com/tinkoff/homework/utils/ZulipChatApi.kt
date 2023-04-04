@@ -36,11 +36,19 @@ interface ZulipChatApi {
     fun addReaction(
         @Path("messageId") messageId: Long,
         @Query("emoji_name") emojiName: String,
-    ): Single<ReactionsResponse>
+    ): Single<MessageResponse>
 
     @DELETE("messages/{messageId}/reactions")
     fun removeReaction(
         @Path("messageId") messageId: Long,
         @Query("emoji_name") emojiName: String,
-    ): Single<ReactionsResponse>
+    ): Single<MessageResponse>
+
+    @POST("messages")
+    fun sendMessage(
+        @Query("to") streamId: Long,
+        @Query("topic") topic: String,
+        @Query("content") message: String,
+        @Query("type") type: String = "stream"
+    ): Single<MessageResponse>
 }
