@@ -2,6 +2,7 @@ package com.tinkoff.homework.utils.adapter.stream
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
@@ -43,7 +44,7 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
             with(binding) {
                 streamName.text = context.getString(R.string.sharp, model.name)
                 expanderView.isChecked = model.isExpanded
-                expanderView.setOnClickListener {
+                val listener = View.OnClickListener {
                     if(!model.isExpanded) {
                         expander.expand(item as StreamDelegateItem);
                     }
@@ -51,6 +52,8 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                         expander.collapse(item as StreamDelegateItem);
                     }
                 }
+                binding.root.setOnClickListener(listener)
+                expanderView.setOnClickListener(listener)
             }
         }
     }
