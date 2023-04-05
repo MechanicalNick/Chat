@@ -59,7 +59,8 @@ class ChannelsFragment: Fragment()  {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(SELECTED_TAB_POSITION_TAG, binding.tabLayout.selectedTabPosition)
+        if(this::binding.isInitialized)
+            outState.putInt(SELECTED_TAB_POSITION_TAG, binding.tabLayout.selectedTabPosition)
     }
 
     companion object {
