@@ -1,8 +1,8 @@
 package com.tinkoff.homework.repository
 
 import com.tinkoff.homework.App
-import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.data.dto.PresencesResponse
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single

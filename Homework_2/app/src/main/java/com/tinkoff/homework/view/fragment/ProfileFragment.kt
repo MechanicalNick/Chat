@@ -4,23 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Profile
-import com.tinkoff.homework.data.Status
-import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.FragmentProfileBinding
-import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.UiState
-import com.tinkoff.homework.viewmodel.PeoplesViewModel
 import com.tinkoff.homework.viewmodel.ProfileViewModel
-import com.tinkoff.homework.viewmodel.StreamViewModel
 
 class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding

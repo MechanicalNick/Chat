@@ -1,6 +1,6 @@
 package com.tinkoff.homework.utils.adapter.date
 
-import com.tinkoff.homework.data.DateModel
+import com.tinkoff.homework.data.domain.DateModel
 import com.tinkoff.homework.utils.DelegateItem
 
 class DateDelegateItem(

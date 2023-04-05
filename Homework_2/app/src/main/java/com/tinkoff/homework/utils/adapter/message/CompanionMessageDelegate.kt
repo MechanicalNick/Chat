@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.tinkoff.homework.data.MessageModel
+import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.FlexboxFactory

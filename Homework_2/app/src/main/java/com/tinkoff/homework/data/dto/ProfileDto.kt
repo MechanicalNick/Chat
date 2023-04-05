@@ -1,6 +1,6 @@
 package com.tinkoff.homework.data.dto
 
-import com.tinkoff.homework.data.Status
+import com.tinkoff.homework.data.domain.Status
 
 class ProfileDto(
     val id: Long,

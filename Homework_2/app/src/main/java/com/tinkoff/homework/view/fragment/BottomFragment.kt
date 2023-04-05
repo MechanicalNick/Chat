@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.EmojiResources
+import com.tinkoff.homework.data.domain.EmojiResources
 import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
 import com.tinkoff.homework.utils.adapter.BottomSheetDialogAdapter
 import com.tinkoff.homework.viewmodel.ChatViewModel

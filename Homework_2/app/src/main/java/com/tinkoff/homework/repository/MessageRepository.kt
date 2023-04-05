@@ -1,6 +1,6 @@
 package com.tinkoff.homework.repository
 
-import com.tinkoff.homework.data.MessageModel
+import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.dto.MessageResponse
 import io.reactivex.Single
 

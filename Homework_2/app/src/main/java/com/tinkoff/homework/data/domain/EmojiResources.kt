@@ -1,4 +1,4 @@
-package com.tinkoff.homework.data
+package com.tinkoff.homework.data.domain
 
 class EmojiResources {
     val emojiSet = listOf(

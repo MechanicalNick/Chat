@@ -8,5 +8,5 @@ class StreamResponse(
     @field:Json(name = "result")
     val result: String,
     @field:Json(name = "streams")
-    val streams: List<Stream>
+    val streams: List<StreamDto>
 )

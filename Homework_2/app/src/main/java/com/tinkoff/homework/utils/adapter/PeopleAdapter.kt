@@ -5,10 +5,9 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.PeopleItemBinding
 
 class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {

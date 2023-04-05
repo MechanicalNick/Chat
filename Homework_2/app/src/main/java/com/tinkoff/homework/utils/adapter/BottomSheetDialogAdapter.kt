@@ -3,7 +3,7 @@ package com.tinkoff.homework.utils.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.tinkoff.homework.data.Emoji
+import com.tinkoff.homework.data.domain.Emoji
 import com.tinkoff.homework.databinding.EmojiItemBinding
 
 class BottomSheetDialogAdapter(

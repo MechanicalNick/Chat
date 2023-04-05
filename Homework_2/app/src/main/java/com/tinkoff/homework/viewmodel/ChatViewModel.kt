@@ -3,8 +3,8 @@ package com.tinkoff.homework.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tinkoff.homework.data.EmojiWrapper
-import com.tinkoff.homework.data.MessageModel
+import com.tinkoff.homework.data.domain.EmojiWrapper
+import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.repository.MessageRepository
 import com.tinkoff.homework.repository.MessageRepositoryImpl
 import com.tinkoff.homework.utils.Const

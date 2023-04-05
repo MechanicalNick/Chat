@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class Narrow(
+class NarrowDto(
     @field:Json(name = "operator")
     val operator: String,
     @field:Json(name = "operand")

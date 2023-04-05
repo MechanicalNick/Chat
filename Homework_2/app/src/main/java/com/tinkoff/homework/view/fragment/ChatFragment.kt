@@ -10,8 +10,8 @@ import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.App
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.MessageModel
-import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.Const

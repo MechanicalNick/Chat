@@ -1,5 +1,3 @@
-package com.tinkoff.homework.data
-
-import com.squareup.moshi.Json
+package com.tinkoff.homework.data.domain
 
 class Reaction(val emojiCode: String, val emojiName: String, val userId: Long)

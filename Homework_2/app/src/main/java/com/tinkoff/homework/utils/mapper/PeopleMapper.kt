@@ -1,7 +1,7 @@
 package com.tinkoff.homework.utils.mapper
 
-import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.data.dto.PeopleDto
 
 fun toDomainPeople(dto: List<PeopleDto>): List<People> = dto.map(PeopleDto::toDomain)

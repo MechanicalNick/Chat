@@ -8,5 +8,5 @@ class SubscriptionsResponse(
     @field:Json(name = "result")
     val result: String,
     @field:Json(name = "subscriptions")
-    val streams: List<Subscription>
+    val streams: List<SubscriptionDto>
 )

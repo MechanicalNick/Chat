@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 class MessagesResponse(
     @field:Json(name = "messages")
-    val messages: List<Message>
+    val messages: List<MessageDto>
 )

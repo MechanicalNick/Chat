@@ -1,7 +1,6 @@
-package com.tinkoff.homework.data
+package com.tinkoff.homework.data.domain
 
 import java.time.LocalDate
-import java.util.*
 
 class MessageModel(
     val id: Long, val senderId: Long, val senderFullName: String, val text: String, val date: LocalDate,

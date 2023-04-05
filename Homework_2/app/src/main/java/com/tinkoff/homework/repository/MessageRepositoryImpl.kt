@@ -3,10 +3,10 @@ package com.tinkoff.homework.repository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.tinkoff.homework.App
-import com.tinkoff.homework.data.MessageModel
-import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageResponse
-import com.tinkoff.homework.data.dto.Narrow
+import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.use_cases.GetSearchResultsUseCase
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
@@ -84,22 +84,22 @@ class MessageRepositoryImpl: MessageRepository {
         streamId: Long,
         query: String
     ): String {
-        val list = mutableListOf<Narrow>()
+        val list = mutableListOf<NarrowDto>()
 
         if (topic.isNotBlank())
-            list.add(Narrow(operator = "topic", operand = topic))
+            list.add(NarrowDto(operator = "topic", operand = topic))
 
-        list.add(Narrow(operator = "stream", operand = streamId))
+        list.add(NarrowDto(operator = "stream", operand = streamId))
 
         if (query.isNotBlank())
-            list.add(Narrow(operator = "search", operand = query))
+            list.add(NarrowDto(operator = "search", operand = query))
 
         val type = Types.newParameterizedType(
             List::class.java,
-            Narrow::class.java,
+            NarrowDto::class.java,
         )
         val moshi = Moshi.Builder().build()
-        var adapter = moshi.adapter<List<Narrow>>(type)
+        var adapter = moshi.adapter<List<NarrowDto>>(type)
 
         return adapter.toJson(list)
     }

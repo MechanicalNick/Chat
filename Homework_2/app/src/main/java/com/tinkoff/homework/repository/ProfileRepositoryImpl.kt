@@ -1,12 +1,10 @@
 package com.tinkoff.homework.repository
 
 import com.tinkoff.homework.App
-import com.tinkoff.homework.data.Status
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.data.dto.ProfileDto
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ProfileRepositoryImpl: ProfileRepository {

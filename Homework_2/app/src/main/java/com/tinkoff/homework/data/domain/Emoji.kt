@@ -1,4 +1,4 @@
-package com.tinkoff.homework.data
+package com.tinkoff.homework.data.domain
 
 data class Emoji(
     val category: String,

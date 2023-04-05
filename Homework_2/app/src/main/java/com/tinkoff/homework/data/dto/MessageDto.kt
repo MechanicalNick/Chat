@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Message(
+class MessageDto(
     @field:Json(name = "avatar_url")
     val avatarUrl: String,
     @field:Json(name = "content")
@@ -12,7 +12,7 @@ data class Message(
     @field:Json(name = "id")
     val id: Long,
     @field:Json(name = "reactions")
-    val reactions: List<Reaction>,
+    val reactions: List<ReactionDto>,
     @field:Json(name = "sender_email")
     val senderEmail: String,
     @field:Json(name = "sender_full_name")

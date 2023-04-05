@@ -2,7 +2,7 @@ package com.tinkoff.homework.utils
 
 import android.content.Context
 import android.view.View
-import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.view.customview.PlusView
 import com.tinkoff.homework.view.customview.ReactionView
 

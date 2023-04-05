@@ -3,8 +3,8 @@ package com.tinkoff.homework.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tinkoff.homework.data.Status
 import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.repository.PeopleRepository
 import com.tinkoff.homework.repository.PeopleRepositoryImpl
 import com.tinkoff.homework.utils.UiState
