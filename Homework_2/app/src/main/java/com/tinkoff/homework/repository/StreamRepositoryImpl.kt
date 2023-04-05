@@ -1,9 +1,12 @@
 package com.tinkoff.homework.repository
 
 import com.tinkoff.homework.App
+import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
+import com.tinkoff.homework.data.dto.TopicDto
 import com.tinkoff.homework.utils.ZulipChatApi
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -12,6 +15,9 @@ import javax.inject.Inject
 class StreamRepositoryImpl : StreamRepository {
     @Inject
     lateinit var api: ZulipChatApi
+
+    @Inject
+    lateinit var messageRepository: MessageRepository
 
     init {
         App.INSTANCE.appComponent.inject(this)
@@ -47,9 +53,10 @@ class StreamRepositoryImpl : StreamRepository {
 
     override fun getTopics(streamId: Long, streamName: String): Single<List<Topic>> {
         return api.getAllTopics(streamId)
-            .map { response -> response.topics }
-            .map { list -> list.map { dto -> Topic(dto.name, dto.maxId, streamName, streamId) } }
+            .flatMapObservable { topic -> Observable.fromIterable(topic.topics) }
+            .flatMapSingle { topicDto -> createTopic(topicDto, streamId, streamName) }
             .subscribeOn(Schedulers.io())
+            .toList()
     }
 
     override fun getResults(isSubscribed: Boolean): Single<List<Stream>> {
@@ -66,5 +73,17 @@ class StreamRepositoryImpl : StreamRepository {
                 }
             }
             .toList()
+    }
+
+    private fun createTopic(dto: TopicDto, streamId: Long, streamName: String): Single<Topic> {
+        return getMessagesByTopic(dto.name, streamId).map { messages ->
+            val topic = Topic(dto.name, messages.count().toLong(), streamName, streamId)
+            topic
+        }
+    }
+
+    private fun getMessagesByTopic(topic: String, streamId: Long): Single<List<MessageModel>> {
+        val maxCountInRequest = 5000L
+        return messageRepository.getMessages("newest", maxCountInRequest, 0, topic, streamId, "")
     }
 }

@@ -46,13 +46,13 @@ class CompanionMessageDelegate(private val callback: ChatFragmentCallback) : Ada
                 root.textName.text = model.senderFullName
                 root.textMessage.text = model.text
                 root.setOnLongClickListener {
-                    callback.showBottomSheetDialog(model.id)
+                    callback.showBottomSheetDialog(model.id, model.senderId)
                 }
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
-                    { callback.reactionRemove(it, model.id) },
-                    { callback.showBottomSheetDialog(model.id) }
+                    { callback.reactionRemove(it, model.id, model.senderId) },
+                    { callback.showBottomSheetDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)
                 }

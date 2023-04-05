@@ -13,7 +13,6 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
-import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.UiState
@@ -115,6 +114,8 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         binding.recycler.addItemDecoration(itemDecoration)
         binding.recycler.adapter = adapter
 
+        binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+
         binding.contentEditor.arrowButton.setOnClickListener {
             val message = binding.contentEditor.editText.text.toString()
             chatViewModel.sendMessage(streamId!!, topicName, message)
@@ -123,19 +124,23 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         }
     }
 
-    override fun reactionRemove(reaction: Reaction, messageId: Long) {
-        chatViewModel.removeEmoji(messageId, reaction.emojiCode, reaction.emojiName)
+    override fun reactionRemove(reaction: Reaction, messageId: Long, senderId: Long) {
+        chatViewModel.removeEmoji(messageId, reaction.emojiCode, reaction.emojiName, senderId)
     }
 
-    override fun showBottomSheetDialog(id: Long): Boolean {
+    override fun showBottomSheetDialog(id: Long, senderId: Long): Boolean {
         bottomFragment.show(childFragmentManager, null)
         val args = Bundle()
-        args.putLong("modelId", id)
+        args.putLong(ARG_MODEL_ID, id)
+        args.putLong(ARG_SENDER_ID, senderId)
         bottomFragment.arguments = args
         return true
     }
 
     companion object {
+        const val ARG_MODEL_ID = "modelId"
+        const val ARG_SENDER_ID = "senderId"
+
         private const val ARG_TOPIC = "topicName"
         private const val ARG_STREAM = "steamName"
         private const val ARG_STREAM_ID = "steamId"

@@ -39,24 +39,23 @@ class ChatViewModel : ViewModel() {
             .addTo(compositeDisposable)
     }
 
-    fun addEmoji(messageId: Long, emojiCode: String, emojiName: String) {
+    fun addEmoji(messageId: Long, emojiCode: String, emojiName: String, senderId: Long) {
         repository.addReaction(messageId, emojiName)
             .subscribeOn(Schedulers.io())
             .subscribe({
-                addEmoji.postValue(EmojiWrapper(emojiCode, emojiName, messageId))
+                addEmoji.postValue(EmojiWrapper(emojiCode, emojiName, messageId, senderId))
             }, {
                 _state.postValue(UiState.Error(it))
             })
             .addTo(compositeDisposable)
     }
 
-    fun removeEmoji(messageId: Long, emojiCode: String, emojiName: String) {
+    fun removeEmoji(messageId: Long, emojiCode: String, emojiName: String, senderId: Long) {
         repository.removeReaction(messageId, emojiName)
             .subscribeOn(Schedulers.io())
             .subscribe({
-                removeEmoji.postValue(EmojiWrapper(emojiCode, emojiName, messageId))
+                removeEmoji.postValue(EmojiWrapper(emojiCode, emojiName, messageId, senderId))
             }, {
-                _state.postValue(UiState.Error(it))
             })
             .addTo(compositeDisposable)
     }

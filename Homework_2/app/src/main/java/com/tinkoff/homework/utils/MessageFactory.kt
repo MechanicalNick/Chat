@@ -75,9 +75,10 @@ class MessageFactory(
                 .firstOrNull { message -> message.id == w.messageId }
             message?.let { m ->
                 val model = (message.content() as MessageModel)
-                val curReaction =
-                    model.reactions.firstOrNull { r -> r.emojiCode == w.emojiCode && r.userId == Const.myId }
-                if (curReaction != null)
+                if (model.reactions.any { r ->
+                        r.emojiCode == w.emojiCode &&
+                                r.userId == Const.myId
+                    })
                     return
                 model.reactions.add(
                     Reaction(
@@ -88,12 +89,16 @@ class MessageFactory(
                 )
 
                 val position = items.indexOf(m)
-                val item = MyMessageDelegateItem(
+                val messageModel = MessageModel(
+                    model.id, model.senderId, model.senderFullName,
+                    model.text, model.date, model.avatarUrl, model.reactions
+                )
+                val item = if (model.senderId == Const.myId) MyMessageDelegateItem(
                     model.id,
-                    MessageModel(
-                        model.id, model.senderId, model.senderFullName,
-                        model.text, model.date, model.avatarUrl, model.reactions
-                    )
+                    messageModel
+                ) else CompanionMessageDelegateItem(
+                    model.id,
+                    messageModel
                 )
                 items.remove(message)
                 items.add(position, item)
@@ -110,7 +115,10 @@ class MessageFactory(
             message?.let { m ->
                 val model = (message.content() as MessageModel)
                 val reaction =
-                    model.reactions.first { reaction -> reaction.emojiCode == emojiWrapper.emojiCode }
+                    model.reactions.firstOrNull { reaction ->
+                        reaction.emojiCode == emojiWrapper.emojiCode &&
+                                reaction.userId == Const.myId
+                    } ?: return
                 model.reactions.remove(reaction)
                 val position = items.indexOf(m)
                 adapter.notifyItemChanged(position)
