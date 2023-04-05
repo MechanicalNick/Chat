@@ -39,7 +39,8 @@ class MainFragment: Fragment() {
 
         setupNavigationBar()
 
-        cicerone.router.replaceScreen(NavigationScreens.channels())
+        if(savedInstanceState == null)
+            cicerone.router.replaceScreen(NavigationScreens.channels())
 
         return binding.root
     }

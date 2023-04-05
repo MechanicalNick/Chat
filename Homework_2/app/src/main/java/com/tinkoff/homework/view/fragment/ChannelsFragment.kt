@@ -20,19 +20,13 @@ class ChannelsFragment: Fragment()  {
     ): View {
         binding = FragmentChannelBinding.inflate(layoutInflater)
 
-        val tabs: List<String> = listOf(getString(R.string.subscribed),
-            getString(R.string.all_stream))
-        val pagerAdapter = ChannelPagerAdapter(childFragmentManager, lifecycle)
+        val tabNames: List<String> = listOf(getString(R.string.subscribed), getString(R.string.all_stream))
+        val pagerAdapter = ChannelPagerAdapter(this, getTabs())
 
         binding.fragmentViewPager.adapter = pagerAdapter
 
-        val onlySubscribed =
-            ChannelsListFragment.newInstance(onlySubscribed = true, "onlySubscribed")
-        val all = ChannelsListFragment.newInstance(onlySubscribed = false, "all")
-        pagerAdapter.update(listOf(onlySubscribed, all))
-
         TabLayoutMediator(binding.tabLayout, binding.fragmentViewPager) { tab, position ->
-            tab.text = tabs[position]
+            tab.text = tabNames[position]
         }.attach()
 
         binding.search.addTextChangedListener {
@@ -42,13 +36,38 @@ class ChannelsFragment: Fragment()  {
             )
         }
 
+        if(savedInstanceState != null ){
+            binding.fragmentViewPager.currentItem = savedInstanceState.getInt(
+                SELECTED_TAB_POSITION_TAG)
+        }
+
         return binding.root
+    }
+
+    private fun getTabs(): List<Fragment> {
+        val onlySubscribed = childFragmentManager.findFragmentByTag("f0") ?: ChannelsListFragment.newInstance(
+            onlySubscribed = true,
+            "only subscribed"
+        )
+
+        val all = childFragmentManager.findFragmentByTag("f1") ?: ChannelsListFragment.newInstance(
+            onlySubscribed = false,
+            "all"
+        )
+        return listOf(onlySubscribed, all)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(SELECTED_TAB_POSITION_TAG, binding.tabLayout.selectedTabPosition)
     }
 
     companion object {
         private const val ARG_MESSAGE = "channels"
         const val ARG_SEARCH_ACTION = "search_action"
         const val ARG_SEARCH_VALUE = "search_value"
+        const val SELECTED_TAB_POSITION_TAG = "selectedTabPosition"
+
         fun newInstance(): ChannelsFragment {
             return ChannelsFragment()
         }

@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        router.replaceScreen(NavigationScreens.main())
+        if(savedInstanceState == null)
+            router.newRootScreen(NavigationScreens.main())
     }
 
     override fun onResumeFragments() {
@@ -46,7 +47,4 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         router.exit()
     }
-
-
-
 }

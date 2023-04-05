@@ -70,7 +70,8 @@ class ChannelsListFragment : Fragment(), Expander, ToChatRouter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter.submitList(viewModel.factory.delegates)
-        viewModel.init()
+        if(savedInstanceState == null)
+            viewModel.init()
     }
 
     private fun render(state: UiState<List<DelegateItem>>) {

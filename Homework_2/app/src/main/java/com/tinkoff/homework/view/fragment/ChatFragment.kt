@@ -76,7 +76,7 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         chatViewModel.init(topicName, streamId!!)
 
         binding.toolbar.setNavigationOnClickListener {
-            router.backTo(NavigationScreens.channels())
+            router.exit()
         }
 
         return binding.root
