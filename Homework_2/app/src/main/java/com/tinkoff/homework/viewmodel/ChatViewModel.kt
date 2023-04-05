@@ -27,7 +27,7 @@ class ChatViewModel : ViewModel() {
     fun init(topicName: String, streamId: Long) {
         _state.postValue(UiState.Loading())
 
-        repository.getMessages("newest", 1000, 0, topicName, streamId)
+        repository.getMessages("newest", 1000, 0, topicName, streamId, "")
             .subscribeOn(Schedulers.io())
             .subscribe({
                 _state.postValue(UiState.Data(it))
