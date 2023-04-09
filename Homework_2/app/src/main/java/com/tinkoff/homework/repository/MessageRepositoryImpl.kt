@@ -52,8 +52,11 @@ class MessageRepositoryImpl: MessageRepository {
                     m.content,
                     date,
                     m.avatarUrl,
-                    m.reactions.map { r -> Reaction(r.emojiCode, r.emojiName, r.userId) }
-                        .toMutableList()
+                    m.reactions.map { r -> Reaction(
+                        emojiCode = r.emojiCode,
+                        emojiName = r.emojiName,
+                        userId = r.userId
+                    ) }.toMutableList()
                 )
             }
         }

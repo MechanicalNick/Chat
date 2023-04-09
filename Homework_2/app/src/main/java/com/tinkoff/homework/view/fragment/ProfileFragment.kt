@@ -40,6 +40,8 @@ class ProfileFragment : Fragment() {
         binding.profileImage.let {
             Glide.with(binding.root)
                 .load(profile.avatarUrl)
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.drawable.error_placeholder)
                 .into(it)
         }
 
