@@ -1,7 +1,10 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.domain.use_cases.GetPeoplesUseCaseImpl
 import com.tinkoff.homework.domain.use_cases.GetProfileUseCaseImpl
+import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
+import com.tinkoff.homework.repository.PeopleRepository
 import com.tinkoff.homework.repository.ProfileRepository
 import dagger.Module
 import dagger.Provides
@@ -13,5 +16,11 @@ class UseCaseModule {
     @Singleton
     fun provideGetProfileUseCase(profileRepository: ProfileRepository): GetProfileUseCase {
         return GetProfileUseCaseImpl(profileRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetPeoplesUseCase(peopleRepository: PeopleRepository): GetPeoplesUseCase {
+        return GetPeoplesUseCaseImpl(peopleRepository)
     }
 }

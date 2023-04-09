@@ -12,19 +12,18 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Profile
 import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.FragmentProfileBinding
-import com.tinkoff.homework.elm.profile.ProfileStoreFactory
+import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
-import vivid.money.elmslie.android.base.ElmFragment
-import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
 import javax.inject.Inject
 
-class ProfileFragment : ElmFragment<ProfileEvent, ProfileEffect, ProfileState>() {
+class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>() {
     @Inject
-    lateinit var currentStore: ProfileStoreFactory
-    lateinit var binding: FragmentProfileBinding
+    override lateinit var factory: BaseStoreFactory<ProfileEvent, ProfileEffect, ProfileState>
     override val initEvent: ProfileEvent = ProfileEvent.Ui.LoadData
+
+    lateinit var binding: FragmentProfileBinding
 
     override fun onAttach(context: Context) {
         App.INSTANCE.appComponent.inject(this)
@@ -38,13 +37,6 @@ class ProfileFragment : ElmFragment<ProfileEvent, ProfileEffect, ProfileState>()
         binding = FragmentProfileBinding.inflate(inflater)
         return binding.root
     }
-
-    override fun onPause() {
-        currentStore.provide().stop()
-        super.onPause()
-    }
-
-    override val storeHolder = LifecycleAwareStoreHolder(lifecycle) { currentStore.provide() }
 
     override fun render(state: ProfileState) {
         if(state.isLoading)

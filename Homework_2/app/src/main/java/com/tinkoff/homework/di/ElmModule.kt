@@ -1,9 +1,19 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
+import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.people.PeopleActor
+import com.tinkoff.homework.elm.people.PeopleReducer
+import com.tinkoff.homework.elm.people.PeopleStoreFactory
+import com.tinkoff.homework.elm.people.model.PeopleEffect
+import com.tinkoff.homework.elm.people.model.PeopleEvent
+import com.tinkoff.homework.elm.people.model.PeopleState
 import com.tinkoff.homework.elm.profile.ProfileActor
 import com.tinkoff.homework.elm.profile.ProfileReducer
 import com.tinkoff.homework.elm.profile.ProfileStoreFactory
+import com.tinkoff.homework.elm.profile.model.ProfileEffect
+import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
 import dagger.Module
 import dagger.Provides
@@ -35,7 +45,35 @@ class ElmModule {
         profileState: ProfileState,
         profileReducer: ProfileReducer,
         profileActor: ProfileActor
-    ): ProfileStoreFactory {
+    ): BaseStoreFactory<ProfileEvent, ProfileEffect, ProfileState> {
         return ProfileStoreFactory(profileState, profileReducer, profileActor)
+    }
+
+    @Provides
+    @Singleton
+    fun providePeopleState(): PeopleState {
+        return PeopleState()
+    }
+
+    @Provides
+    @Singleton
+    fun providePeopleReducer(): PeopleReducer {
+        return PeopleReducer()
+    }
+
+    @Provides
+    @Singleton
+    fun providePeopleActor(getPeopleUseCase: GetPeoplesUseCase): PeopleActor {
+        return PeopleActor(getPeopleUseCase)
+    }
+
+    @Provides
+    @Singleton
+    fun providePeopleStoreFactory(
+        peopleState: PeopleState,
+        peopleReducer: PeopleReducer,
+        peopleActor: PeopleActor
+    ): BaseStoreFactory<PeopleEvent, PeopleEffect, PeopleState> {
+        return PeopleStoreFactory(peopleState, peopleReducer, peopleActor)
     }
 }
