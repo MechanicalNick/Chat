@@ -6,14 +6,18 @@
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer"
+        android:forceDarkAllowed="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channelRecyclerView"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 </FrameLayout>

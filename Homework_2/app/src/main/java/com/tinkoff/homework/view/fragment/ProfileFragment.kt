@@ -4,22 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Profile
-import com.tinkoff.homework.data.Status
-import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.FragmentProfileBinding
-import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.UiState
-import com.tinkoff.homework.viewmodel.PeoplesViewModel
 import com.tinkoff.homework.viewmodel.ProfileViewModel
-import com.tinkoff.homework.viewmodel.StreamViewModel
 
 class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
@@ -29,7 +23,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val profileId = requireArguments().getInt(ARG_MESSAGE)
+        val profileId = arguments?.getLong(ARG_MESSAGE) ?: null
         val factory = ProfileViewModel.Factory(profileId)
         viewModel = ViewModelProvider(this, factory)[ProfileViewModel::class.java]
 
@@ -42,24 +36,24 @@ class ProfileFragment : Fragment() {
 
         return binding.root
     }
-
-    private fun renderProfile(profile: Profile) {
-        val image = ResourcesCompat.getDrawable(requireContext().resources,
-            R.drawable.avatar, null)
-        binding.profileImage.setImageDrawable(image)
-
-        binding.profileDescription.text = profile.description
-        binding.profileName.text = profile.name
-
-        var triple = if(profile.status == Status.Online) {
-            Triple(R.string.online, R.color.green, View.VISIBLE)
-        } else {
-            Triple(R.string.offline, R.color.red, View.GONE)
+        private fun renderProfile(profile: Profile) {
+        binding.profileImage.let {
+            Glide.with(binding.root)
+                .load(profile.avatarUrl)
+                .into(it)
         }
 
-        binding.status.text = requireContext().resources.getText(triple.first)
-        binding.status.setTextColor(requireContext().resources.getColor(triple.second, null))
-        binding.profileLogout.visibility = triple.third
+
+        binding.profileName.text = profile.name
+
+        val pair = when(profile.status){
+            Status.Online -> Pair(R.string.online, R.color.green)
+            Status.Idle -> Pair(R.string.idle, R.color.orange)
+            Status.Offline ->  Pair(R.string.offline, R.color.red)
+        }
+
+        binding.status.text = requireContext().resources.getText(pair.first)
+        binding.status.setTextColor(requireContext().resources.getColor(pair.second, null))
     }
 
     private fun render(state: UiState<Profile>) {
@@ -83,11 +77,13 @@ class ProfileFragment : Fragment() {
 
     companion object {
         private const val ARG_MESSAGE = "profile"
-        fun newInstance(userId: Int): ProfileFragment {
+        fun newInstance(userId: Long?): ProfileFragment {
             var fragment = ProfileFragment()
             val arguments = Bundle()
-            arguments.putInt(ARG_MESSAGE, userId)
-            fragment.arguments = arguments
+            if(userId !=null) {
+                arguments.putLong(ARG_MESSAGE, userId)
+                fragment.arguments = arguments
+            }
             return fragment
         }
     }

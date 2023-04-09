@@ -8,6 +8,6 @@ fun toDomainProfile(dto: ProfileDto): Profile = dto.toDomain()
 fun ProfileDto.toDomain(): Profile = Profile(
     id = id,
     name = name,
-    description = description,
+    avatarUrl = avatarUrl,
     status = status
 )

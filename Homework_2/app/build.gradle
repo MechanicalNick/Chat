@@ -46,7 +46,12 @@ ext {
     rxVersion = '2.2.21'
     rxAndroidVersion = '2.1.1'
     rxKotlinVersion = '2.4.0'
-    coroutinesRxVersion = '1.6.4'
+    retrofitVersion = '2.9.0'
+    rxAdapterVersion = '2.9.0'
+    moshiVersion = '2.9.0'
+    moshiKotlinVersion = '1.14.0'
+    loggingInterceptorVersion = '4.2.1'
+    glideVersion = '4.11.0'
 }
 
 dependencies {
@@ -61,12 +66,21 @@ dependencies {
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
     implementation "io.reactivex.rxjava2:rxjava:$rxVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesRxVersion"
 
     implementation "com.facebook.shimmer:shimmer:$shimmerVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rxAdapterVersion"
+
+    implementation "com.squareup.retrofit2:converter-moshi:$moshiVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiKotlinVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
+
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
+
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 }

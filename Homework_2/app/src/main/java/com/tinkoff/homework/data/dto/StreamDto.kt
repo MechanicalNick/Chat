@@ -1,9 +1,14 @@
 package com.tinkoff.homework.data.dto
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 class StreamDto(
-    val id: Int,
+    @field:Json(name = "name")
     val name: String,
-    val topics: List<TopicDto>,
-    val isSubscribed: Boolean,
-    var isExpanded: Boolean
+    @field:Json(name = "description")
+    val description: String,
+    @field:Json(name = "stream_id")
+    val streamId: Long
 )

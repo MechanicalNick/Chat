@@ -7,6 +7,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
 import com.tinkoff.homework.R
 import java.lang.Integer.max
+import java.lang.Integer.min
 import kotlin.math.ceil
 
 class FlexboxLayout @JvmOverloads constructor(
@@ -52,7 +53,7 @@ class FlexboxLayout @JvmOverloads constructor(
         val rowCount = if (maxCountInRow > 0) ceil(this.childCount * 1.0 / maxCountInRow).toInt() else 0
         // Все элементы имеют одинаковую высоту
         val elementHeight = this.children.firstOrNull()?.measuredHeight ?: 0
-        val totalHeight = rowCount * elementHeight + (rowCount - 1) * margin
+        val totalHeight = max(rowCount * elementHeight + (rowCount - 1) * margin,0)
         val totalWidth = if (rowCount == 1) currentRowWidth else maxWidth
 
         setMeasuredDimension(totalWidth, totalHeight)

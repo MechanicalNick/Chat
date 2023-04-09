@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.EmojiResources
-import com.tinkoff.homework.data.EmojiWrapper
+import com.tinkoff.homework.data.domain.EmojiResources
 import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
 import com.tinkoff.homework.utils.adapter.BottomSheetDialogAdapter
+import com.tinkoff.homework.view.fragment.ChatFragment.Companion.ARG_MODEL_ID
+import com.tinkoff.homework.view.fragment.ChatFragment.Companion.ARG_SENDER_ID
 import com.tinkoff.homework.viewmodel.ChatViewModel
 
 class BottomFragment : BottomSheetDialogFragment() {
@@ -20,7 +20,8 @@ class BottomFragment : BottomSheetDialogFragment() {
     )
 
     private lateinit var binding: BottomSheetDialogLayoutBinding
-    private var messageId: Int = -1
+    private var messageId: Long = -1L
+    private var senderId: Long = -1L
     private val emojiCount = 100
 
     override fun onCreateView(
@@ -28,7 +29,9 @@ class BottomFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        messageId = requireArguments().getInt("modelId")
+        messageId = requireArguments().getLong(ARG_MODEL_ID)
+        senderId = requireArguments().getLong(ARG_SENDER_ID)
+
         binding = BottomSheetDialogLayoutBinding.bind(
             inflater.inflate(
                 R.layout.bottom_sheet_dialog_layout,
@@ -45,8 +48,8 @@ class BottomFragment : BottomSheetDialogFragment() {
 
     override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 
-    private fun applyEmoji(code: Int){
-        viewModel.addEmoji.value = EmojiWrapper(code, messageId)
+    private fun applyEmoji(emojiCode: String, emojiName: String) {
+        viewModel.addEmoji(messageId, emojiCode, emojiName, senderId)
         dismiss()
     }
 }

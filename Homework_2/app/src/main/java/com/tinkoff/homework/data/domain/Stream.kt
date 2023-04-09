@@ -1,9 +1,8 @@
 package com.tinkoff.homework.data.domain
 
 class Stream(
-    val id: Int,
+    val id: Long,
     val name: String,
-    val topics: List<Topic>,
-    val isSubscribed: Boolean,
+    val topics: MutableList<Topic>,
     var isExpanded: Boolean
 )

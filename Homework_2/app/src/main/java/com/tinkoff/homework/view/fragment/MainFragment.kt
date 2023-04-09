@@ -39,7 +39,8 @@ class MainFragment: Fragment() {
 
         setupNavigationBar()
 
-        cicerone.router.replaceScreen(NavigationScreens.channels())
+        if(savedInstanceState == null)
+            cicerone.router.replaceScreen(NavigationScreens.channels())
 
         return binding.root
     }
@@ -63,7 +64,7 @@ class MainFragment: Fragment() {
                 R.id.navigation_people ->
                     cicerone.router.navigateTo(NavigationScreens.peoples())
                 R.id.navigation_profile ->
-                    cicerone.router.navigateTo(NavigationScreens.profile(Const.myId))
+                    cicerone.router.navigateTo(NavigationScreens.profile(null))
                 else -> throw NotImplementedError("setupNavigationBar with ${item.itemId}")
             }
             true

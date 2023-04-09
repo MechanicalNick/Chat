@@ -2,20 +2,26 @@ package com.tinkoff.homework.utils
 
 import android.content.Context
 import android.view.View
-import com.tinkoff.homework.data.Reaction
+import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.view.customview.PlusView
 import com.tinkoff.homework.view.customview.ReactionView
 
 class FlexboxFactory(private val reactions: List<Reaction>, private val context: Context) {
+
     fun create(
         reactionListner: (r: Reaction) -> Unit,
         showBottomSheetDialog: () -> Boolean
     ): List<View> {
+        val map = HashMap<String, MutableList<Reaction>>()
+        for(r in reactions){
+            map.getOrPut(r.emojiCode) { mutableListOf() }.add(r)
+        }
+
         val views = mutableListOf<View>()
-        reactions.forEach { reaction ->
+        reactions.distinctBy{it.emojiCode}.forEach { reaction ->
             val reactionView = ReactionView(context)
-            reactionView.textToDraw =
-                "${String(Character.toChars(reaction.code))}${reaction.owners.count()}"
+            val emojiCode = String(Character.toChars(reaction.emojiCode.toInt(16)))
+            reactionView.textToDraw = "$emojiCode ${map[reaction.emojiCode]?.count()}"
             reactionView.setOnClickListener {
                 reactionListner(reaction)
             }

@@ -1,8 +1,12 @@
 package com.tinkoff.homework.data.dto
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 class TopicDto(
-    val id: Int,
+    @field:Json(name = "name")
     val name: String,
-    val messageCount: Long,
-    val streamName: String
+    @field:Json(name = "max_id")
+    val maxId: Long
 )

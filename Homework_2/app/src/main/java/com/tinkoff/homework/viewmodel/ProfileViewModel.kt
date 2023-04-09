@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 
-class ProfileViewModel(private val profileId: Int): ViewModel() {
+class ProfileViewModel(private val profileId: Long?): ViewModel() {
     val state: LiveData<UiState<Profile>> get() = _state
 
     private val repository: ProfileRepository = ProfileRepositoryImpl()
@@ -37,7 +37,7 @@ class ProfileViewModel(private val profileId: Int): ViewModel() {
         compositeDisposable.dispose()
     }
 
-    class Factory(private val profileId: Int) : ViewModelProvider.Factory {
+    class Factory(private val profileId: Long?) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ProfileViewModel(profileId) as T
         }

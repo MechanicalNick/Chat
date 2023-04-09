@@ -1,8 +1,10 @@
 package com.tinkoff.homework.repository
 
-import com.tinkoff.homework.data.dto.PeopleDto
-import io.reactivex.Observable
+import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.data.dto.PresencesResponse
+import io.reactivex.Single
 
 interface PeopleRepository {
-    fun getPeoples(): Observable<List<PeopleDto>>
+    fun getPeoples(): Single<List<People>>
+    fun getAllPresence(): Single<PresencesResponse>
 }

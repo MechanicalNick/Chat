@@ -1,8 +1,8 @@
-package com.tinkoff.homework.data
+package com.tinkoff.homework.data.domain
 
 import java.time.LocalDate
 
 data class DateModel(
-    val id: Int,
+    val id: Long,
     val date: LocalDate,
 )
