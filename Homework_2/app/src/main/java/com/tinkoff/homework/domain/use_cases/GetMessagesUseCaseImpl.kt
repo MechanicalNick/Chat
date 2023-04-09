@@ -1,8 +1,8 @@
-package com.tinkoff.homework.use_cases
+package com.tinkoff.homework.domain.use_cases
 
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.repository.MessageRepository
-import com.tinkoff.homework.use_cases.interfaces.GetMessagesUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import io.reactivex.Single
 
 

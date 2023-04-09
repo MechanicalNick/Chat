@@ -1,8 +1,8 @@
-package com.tinkoff.homework.use_cases
+package com.tinkoff.homework.domain.use_cases
 
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.repository.MessageRepository
-import com.tinkoff.homework.use_cases.interfaces.SendMessageUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.SendMessageUseCase
 import io.reactivex.Single
 
 class SendMessageUseCaseImpl(val repository: MessageRepository) : SendMessageUseCase {
