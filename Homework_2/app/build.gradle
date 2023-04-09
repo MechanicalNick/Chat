@@ -52,6 +52,7 @@ ext {
     moshiKotlinVersion = '1.14.0'
     loggingInterceptorVersion = '4.2.1'
     glideVersion = '4.11.0'
+    elmslieRxVersion = '2.1.1'
 }
 
 dependencies {
@@ -83,4 +84,6 @@ dependencies {
 
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    implementation "com.github.vivid-money.elmslie:elmslie-rxjava-2:$elmslieRxVersion"
 }

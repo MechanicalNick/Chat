@@ -17,5 +17,4 @@ interface MessageRepository {
     fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse>
     fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse>
     fun sendMessage(streamId: Long, topic: String, message: String): Single<MessageResponse>
-    fun search(query: String, topic: String, streamId: Long): Single<List<MessageModel>>
 }

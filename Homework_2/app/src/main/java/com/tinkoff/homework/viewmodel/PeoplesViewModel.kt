@@ -8,6 +8,7 @@ import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.repository.PeopleRepository
 import com.tinkoff.homework.repository.PeopleRepositoryImpl
 import com.tinkoff.homework.utils.UiState
+import com.tinkoff.homework.utils.mapper.toStatus
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -27,7 +28,7 @@ class PeoplesViewModel : ViewModel(){
             val res = peoples
                 .map { peopleDto ->
                     with(peopleDto) {
-                        status = getStatus(presences.presences[peopleDto.key]?.aggregated?.status)
+                        status = toStatus(presences.presences[peopleDto.key]?.aggregated?.status)
                     }
                     peopleDto
                 }
@@ -40,14 +41,6 @@ class PeoplesViewModel : ViewModel(){
                 _state.postValue(UiState.Error(it))
             })
             .addTo(compositeDisposable)
-    }
-
-    private fun getStatus(status: String?): Status {
-        return when (status) {
-            "online" -> Status.Online
-            "idle" -> Status.Idle
-            else -> Status.Offline
-        }
     }
 
     override fun onCleared() {

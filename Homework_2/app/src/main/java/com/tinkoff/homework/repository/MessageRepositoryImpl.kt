@@ -7,7 +7,6 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
-import com.tinkoff.homework.use_cases.GetSearchResultsUseCase
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import java.time.Instant
@@ -60,10 +59,6 @@ class MessageRepositoryImpl: MessageRepository {
                 )
             }
         }
-    }
-
-    override fun search(query: String, topic: String, streamId: Long): Single<List<MessageModel>> {
-        return GetSearchResultsUseCase(this).invoke(query, topic, streamId)
     }
 
     override fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
