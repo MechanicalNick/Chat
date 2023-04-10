@@ -54,6 +54,7 @@ ext {
     loggingInterceptorVersion = '4.2.1'
     glideVersion = '4.11.0'
     elmslieVersion = '2.1.1'
+    recyclerVersion = '1.2.0-alpha02'
 }
 
 dependencies {
@@ -89,4 +90,6 @@ dependencies {
     implementation "com.github.vivid-money.elmslie:elmslie-core:$elmslieVersion"
     implementation "com.github.vivid-money.elmslie:elmslie-android:$elmslieVersion"
     implementation "com.github.vivid-money.elmslie:elmslie-rxjava-2:$elmslieVersion"
+
+    implementation "androidx.recyclerview:recyclerview:$recyclerVersion"
 }
