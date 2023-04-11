@@ -59,10 +59,13 @@ class StreamRepositoryImpl : StreamRepository {
             .toList()
     }
 
-    override fun getResults(isSubscribed: Boolean): Single<List<Stream>> {
+    override fun getResults(isSubscribed: Boolean, query: String): Single<List<Stream>> {
         val collection = if (isSubscribed) getSubscriptions() else getAll()
         return collection
             .flattenAsObservable { it }
+            .filter { stream ->
+                if (query.isBlank()) true else stream.name.contains(query, ignoreCase = true)
+            }
             .flatMapSingle { stream ->
                 Single.zip(
                     Single.just(stream),

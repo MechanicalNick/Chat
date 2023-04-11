@@ -2,7 +2,12 @@ package com.tinkoff.homework.di
 
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
 import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.channels.ChannelsActor
+import com.tinkoff.homework.elm.channels.ChannelsReducer
+import com.tinkoff.homework.elm.channels.ChannelsStoreFactory
+import com.tinkoff.homework.elm.channels.model.ChannelsState
 import com.tinkoff.homework.elm.people.PeopleActor
 import com.tinkoff.homework.elm.people.PeopleReducer
 import com.tinkoff.homework.elm.people.PeopleStoreFactory
@@ -75,5 +80,33 @@ class ElmModule {
         peopleActor: PeopleActor
     ): BaseStoreFactory<PeopleEvent, PeopleEffect, PeopleState> {
         return PeopleStoreFactory(peopleState, peopleReducer, peopleActor)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelsState(): ChannelsState {
+        return ChannelsState()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelsReducer(): ChannelsReducer {
+        return ChannelsReducer()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelsActor(getStreamsUseCase: GetStreamsUseCase): ChannelsActor {
+        return ChannelsActor(getStreamsUseCase)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelsStoreFactory(
+        ChannelsState: ChannelsState,
+        ChannelsReducer: ChannelsReducer,
+        ChannelsActor: ChannelsActor
+    ): ChannelsStoreFactory {
+        return ChannelsStoreFactory(ChannelsState, ChannelsReducer, ChannelsActor)
     }
 }

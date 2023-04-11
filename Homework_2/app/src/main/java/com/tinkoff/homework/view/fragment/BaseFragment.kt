@@ -11,7 +11,7 @@ abstract class BaseFragment<Event : Any, Effect : Any, State : Any> :
     abstract val factory: BaseStoreFactory<Event, Effect, State>
 
     override val storeHolder: StoreHolder<Event, Effect, State> by lazy {
-        var store = factory.currentStore()
+        val store = factory.currentStore()
         store.stop()
         LifecycleAwareStoreHolder(lifecycle) {
             store

@@ -5,6 +5,7 @@ import io.reactivex.Single
 
 interface GetStreamsUseCase {
     fun execute(
-        isSubscribed: Boolean
+        isSubscribed: Boolean,
+        query: String
     ): Single<List<Stream>>
 }
