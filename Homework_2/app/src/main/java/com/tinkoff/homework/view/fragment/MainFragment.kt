@@ -15,12 +15,16 @@ import com.tinkoff.homework.databinding.MainFragmentBinding
 import com.tinkoff.homework.navigation.LocalCiceroneHolder
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.viewmodel.MainViewModel
 import javax.inject.Inject
 
 class MainFragment: Fragment() {
     @Inject
     lateinit var ciceroneHolder: LocalCiceroneHolder
     lateinit var binding: MainFragmentBinding
+
+    @Inject
+    lateinit var mainViewModel: MainViewModel
 
     private val navigator: Navigator by lazy {
         AppNavigator(requireActivity(), R.id.fragment_container_view, childFragmentManager)
@@ -39,8 +43,10 @@ class MainFragment: Fragment() {
 
         setupNavigationBar()
 
-        if(savedInstanceState == null)
+        if(!mainViewModel.isSavedState)
             cicerone.router.replaceScreen(NavigationScreens.channels())
+
+        mainViewModel.isSavedState = true
 
         return binding.root
     }
