@@ -5,6 +5,7 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.data.dto.TopicDto
+import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -86,7 +87,13 @@ class StreamRepositoryImpl : StreamRepository {
     }
 
     private fun getMessagesByTopic(topic: String, streamId: Long): Single<List<MessageModel>> {
-        val maxCountInRequest = 5000L
-        return messageRepository.getMessages("newest", maxCountInRequest, 0, topic, streamId, "")
+        return messageRepository.getMessages(
+            anchor = "newest",
+            numBefore = Const.MAX_MESSAGE_COUNT,
+            numAfter = 0,
+            topic = topic,
+            streamId = streamId,
+            query = ""
+        )
     }
 }

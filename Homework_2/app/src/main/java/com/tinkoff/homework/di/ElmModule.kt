@@ -1,5 +1,6 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
@@ -8,6 +9,12 @@ import com.tinkoff.homework.elm.channels.ChannelsActor
 import com.tinkoff.homework.elm.channels.ChannelsReducer
 import com.tinkoff.homework.elm.channels.ChannelsStoreFactory
 import com.tinkoff.homework.elm.channels.model.ChannelsState
+import com.tinkoff.homework.elm.chat.ChatActor
+import com.tinkoff.homework.elm.chat.ChatReducer
+import com.tinkoff.homework.elm.chat.ChatStoreFactory
+import com.tinkoff.homework.elm.chat.model.ChatEffect
+import com.tinkoff.homework.elm.chat.model.ChatEvent
+import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.elm.people.PeopleActor
 import com.tinkoff.homework.elm.people.PeopleReducer
 import com.tinkoff.homework.elm.people.PeopleStoreFactory
@@ -20,6 +27,7 @@ import com.tinkoff.homework.elm.profile.ProfileStoreFactory
 import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
+import com.tinkoff.homework.utils.MessageFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -108,5 +116,36 @@ class ElmModule {
         ChannelsActor: ChannelsActor
     ): ChannelsStoreFactory {
         return ChannelsStoreFactory(ChannelsState, ChannelsReducer, ChannelsActor)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatState(): ChatState {
+        return ChatState()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatReducer(): ChatReducer {
+        return ChatReducer()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatActor(
+        getMessagesUseCase: GetMessagesUseCase,
+        messageFactory: MessageFactory
+    ): ChatActor {
+        return ChatActor(getMessagesUseCase, messageFactory)
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatStoreFactory(
+        ChatState: ChatState,
+        ChatReducer: ChatReducer,
+        ChatActor: ChatActor
+    ): BaseStoreFactory<ChatEvent, ChatEffect, ChatState> {
+        return ChatStoreFactory(ChatState, ChatReducer, ChatActor)
     }
 }

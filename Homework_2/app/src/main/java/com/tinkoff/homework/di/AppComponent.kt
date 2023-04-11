@@ -12,7 +12,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [NavigationModule::class, LocalNavigationModule::class,
-        NetworkModule::class, RepositoryModule::class, UseCaseModule::class, ElmModule::class]
+        NetworkModule::class, RepositoryModule::class, FactoryModule::class,
+        UseCaseModule::class, ElmModule::class]
 )
 interface AppComponent {
     fun inject(activity: MainActivity)

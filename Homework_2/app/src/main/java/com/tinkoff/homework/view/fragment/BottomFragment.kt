@@ -8,13 +8,20 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.EmojiResources
+import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
+import com.tinkoff.homework.elm.chat.model.ChatEvent
+import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.adapter.BottomSheetDialogAdapter
 import com.tinkoff.homework.view.fragment.ChatFragment.Companion.ARG_MODEL_ID
 import com.tinkoff.homework.view.fragment.ChatFragment.Companion.ARG_SENDER_ID
 import com.tinkoff.homework.viewmodel.ChatViewModel
+import javax.inject.Inject
 
 class BottomFragment : BottomSheetDialogFragment() {
+    @Inject
+    lateinit var messageFactory: MessageFactory
+
     private val viewModel: ChatViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )
@@ -49,7 +56,12 @@ class BottomFragment : BottomSheetDialogFragment() {
     override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 
     private fun applyEmoji(emojiCode: String, emojiName: String) {
-        viewModel.addEmoji(messageId, emojiCode, emojiName, senderId)
+        viewModel.store.accept(
+            ChatEvent.Ui.AddReaction(
+                messageId,
+                Reaction(emojiCode, emojiName, senderId)
+            )
+        )
         dismiss()
     }
 }

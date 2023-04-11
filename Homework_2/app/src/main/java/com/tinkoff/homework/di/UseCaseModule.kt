@@ -1,11 +1,8 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.domain.use_cases.GetPeoplesUseCaseImpl
-import com.tinkoff.homework.domain.use_cases.GetProfileUseCaseImpl
-import com.tinkoff.homework.domain.use_cases.GetStreamsUseCaseImpl
-import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
-import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
-import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
+import com.tinkoff.homework.domain.use_cases.*
+import com.tinkoff.homework.domain.use_cases.interfaces.*
+import com.tinkoff.homework.repository.MessageRepository
 import com.tinkoff.homework.repository.PeopleRepository
 import com.tinkoff.homework.repository.ProfileRepository
 import com.tinkoff.homework.repository.StreamRepository
@@ -31,5 +28,29 @@ class UseCaseModule {
     @Singleton
     fun provideGetStreamsUseCase(streamRepository: StreamRepository): GetStreamsUseCase {
         return GetStreamsUseCaseImpl(streamRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddReactionUseCase(repository: MessageRepository): AddReactionUseCase {
+        return AddReactionUseCaseImpl(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoveReactionUseCase(repository: MessageRepository): RemoveReactionUseCase {
+        return RemoveReactionUseCaseImpl(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSendMessageUseCase(repository: MessageRepository): SendMessageUseCase {
+        return SendMessageUseCaseImpl(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMessagesUseCase(repository: MessageRepository): GetMessagesUseCase {
+        return GetMessagesUseCaseImpl(repository)
     }
 }
