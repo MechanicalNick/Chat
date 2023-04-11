@@ -14,11 +14,14 @@ import com.tinkoff.homework.utils.adapter.ChannelPagerAdapter
 
 class ChannelsFragment: Fragment()  {
     private lateinit var binding: FragmentChannelBinding
+    private var ignoreRotation: Boolean = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChannelBinding.inflate(layoutInflater)
+        ignoreRotation = true
 
         val tabNames: List<String> = listOf(getString(R.string.subscribed), getString(R.string.all_stream))
         val pagerAdapter = ChannelPagerAdapter(this, getTabs())
@@ -30,6 +33,11 @@ class ChannelsFragment: Fragment()  {
         }.attach()
 
         binding.search.addTextChangedListener {
+            if(ignoreRotation) {
+                ignoreRotation = false
+                return@addTextChangedListener
+            }
+
             childFragmentManager.setFragmentResult(
                 ARG_SEARCH_ACTION,
                 bundleOf(ARG_SEARCH_VALUE to it?.toString())

@@ -6,6 +6,7 @@ sealed class ChannelsEvent {
 
     sealed class Ui : ChannelsEvent() {
         object LoadData : Ui()
+        object Wait : Ui()
 
         data class Search(val query: String) : Ui()
 

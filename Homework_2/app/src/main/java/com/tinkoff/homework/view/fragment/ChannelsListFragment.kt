@@ -34,7 +34,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
 
     @Inject
     lateinit var router: Router
-    override val initEvent: ChannelsEvent = ChannelsEvent.Ui.LoadData
+    override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
     lateinit var binding: ChannelsListBinding
 
     private val streamFactory = StreamFactory()
@@ -42,6 +42,11 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.INSTANCE.appComponent.inject(this)
+
+        savedStateRegistry.registerSavedStateProvider(ARG_STATE) {
+            Bundle().apply { putParcelable(ARG_STATE, (store.currentState)) }
+        }
+
         super.onCreate(savedInstanceState)
     }
 
@@ -64,6 +69,16 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         ) { _, bundle ->
             val result = bundle.getString(ChannelsFragment.ARG_SEARCH_VALUE)
             this.store.accept(ChannelsEvent.Ui.Search(result.orEmpty()))
+        }
+
+        val savedState = savedStateRegistry
+            .consumeRestoredStateForKey(ARG_STATE)?.
+            getParcelable<ChannelsState>(ARG_STATE)
+
+        savedState?.items?.let {
+            this.store.accept(ChannelsEvent.Internal.DataLoaded(it))
+        }?: run {
+            this.store.accept(ChannelsEvent.Ui.LoadData)
         }
 
         return binding.root
@@ -123,6 +138,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
 
     companion object {
         private const val ARG_MESSAGE = "channels"
+        private const val ARG_STATE = "CHANNEL_LIST_STATE"
         fun newInstance(onlySubscribed: Boolean, name: String): ChannelsListFragment {
             return ChannelsListFragment().apply {
                 arguments = Bundle().apply {

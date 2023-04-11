@@ -25,6 +25,15 @@ class ChannelsReducer :
                     error = event.error
                 )
             }
+            is ChannelsEvent.Ui.Wait -> {
+                state {
+                    copy(
+                        isLoading = true,
+                        items = null,
+                        error = null
+                    )
+                }
+            }
             is ChannelsEvent.Ui.LoadData -> {
                 state {
                     copy(
