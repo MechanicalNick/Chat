@@ -9,7 +9,7 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import javax.inject.Inject
 
-class PeopleRepositoryImpl: PeopleRepository {
+class PeopleRepositoryImpl @Inject constructor(): PeopleRepository {
     @Inject
     lateinit var api: ZulipChatApi
 

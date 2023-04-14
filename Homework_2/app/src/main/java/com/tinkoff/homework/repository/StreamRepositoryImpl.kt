@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class StreamRepositoryImpl : StreamRepository {
+class StreamRepositoryImpl @Inject constructor() : StreamRepository {
     @Inject
     lateinit var api: ZulipChatApi
 

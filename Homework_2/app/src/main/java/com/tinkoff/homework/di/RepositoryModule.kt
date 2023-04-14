@@ -1,37 +1,32 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.repository.*
+import com.tinkoff.homework.repository.MessageRepositoryImpl
+import com.tinkoff.homework.repository.PeopleRepositoryImpl
+import com.tinkoff.homework.repository.ProfileRepositoryImpl
+import com.tinkoff.homework.repository.StreamRepositoryImpl
 import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.repository.interfaces.PeopleRepository
 import com.tinkoff.homework.repository.interfaces.ProfileRepository
 import com.tinkoff.homework.repository.interfaces.StreamRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RepositoryModule {
-    @Provides
+interface RepositoryModule {
+    @Binds
     @Singleton
-    fun provideMessageRepository(): MessageRepository {
-        return MessageRepositoryImpl()
-    }
+    fun bindsMessageRepository(impl: MessageRepositoryImpl): MessageRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideProfileRepository(): ProfileRepository {
-        return ProfileRepositoryImpl()
-    }
+    fun bindsProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun providePeopleRepository(): PeopleRepository {
-        return PeopleRepositoryImpl()
-    }
+    fun bindsPeopleRepository(impl: PeopleRepositoryImpl): PeopleRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideStreamRepository(): StreamRepository {
-        return StreamRepositoryImpl()
-    }
+    fun bindsStreamRepository(impl: StreamRepositoryImpl): StreamRepository
 }

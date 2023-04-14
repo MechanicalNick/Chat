@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
-class MessageRepositoryImpl: MessageRepository {
+class MessageRepositoryImpl @Inject constructor(): MessageRepository {
     @Inject
     lateinit var api: ZulipChatApi
 

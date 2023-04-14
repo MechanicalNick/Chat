@@ -8,7 +8,7 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import javax.inject.Inject
 
-class ProfileRepositoryImpl: ProfileRepository {
+class ProfileRepositoryImpl @Inject constructor(): ProfileRepository {
     @Inject
     lateinit var api: ZulipChatApi
 
