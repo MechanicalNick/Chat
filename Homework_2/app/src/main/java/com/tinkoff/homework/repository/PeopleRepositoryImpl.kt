@@ -4,6 +4,7 @@ import com.tinkoff.homework.App
 import com.tinkoff.homework.data.domain.People
 import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.data.dto.PresencesResponse
+import com.tinkoff.homework.repository.interfaces.PeopleRepository
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import javax.inject.Inject

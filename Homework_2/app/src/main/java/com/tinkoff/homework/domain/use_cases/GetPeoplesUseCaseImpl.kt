@@ -1,7 +1,7 @@
 package com.tinkoff.homework.domain.use_cases
 
 import com.tinkoff.homework.data.domain.People
-import com.tinkoff.homework.repository.PeopleRepository
+import com.tinkoff.homework.repository.interfaces.PeopleRepository
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.utils.mapper.toStatus
 import io.reactivex.Single

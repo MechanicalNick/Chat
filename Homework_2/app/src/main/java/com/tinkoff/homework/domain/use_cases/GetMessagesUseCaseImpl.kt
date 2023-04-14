@@ -1,7 +1,7 @@
 package com.tinkoff.homework.domain.use_cases
 
 import com.tinkoff.homework.data.domain.MessageModel
-import com.tinkoff.homework.repository.MessageRepository
+import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import io.reactivex.Single
 

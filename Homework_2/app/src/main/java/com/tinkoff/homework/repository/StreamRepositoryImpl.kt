@@ -5,6 +5,8 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.data.dto.TopicDto
+import com.tinkoff.homework.repository.interfaces.MessageRepository
+import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Observable

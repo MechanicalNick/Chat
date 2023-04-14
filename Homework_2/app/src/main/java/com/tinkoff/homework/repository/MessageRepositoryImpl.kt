@@ -7,6 +7,7 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
+import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import java.time.Instant
