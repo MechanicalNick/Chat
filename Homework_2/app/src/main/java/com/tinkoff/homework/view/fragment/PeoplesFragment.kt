@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.tinkoff.homework.App
 import com.tinkoff.homework.databinding.FragmentPeopleBinding
+import com.tinkoff.homework.di.component.DaggerPeoplesComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.people.model.PeopleEffect
 import com.tinkoff.homework.elm.people.model.PeopleEvent
 import com.tinkoff.homework.elm.people.model.PeopleState
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.utils.adapter.PeopleAdapter
 import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 import javax.inject.Inject
@@ -29,7 +30,9 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>() {
     private val adapter: PeopleAdapter by lazy { PeopleAdapter() }
 
     override fun onAttach(context: Context) {
-        App.INSTANCE.appComponent.inject(this)
+        DaggerPeoplesComponent.factory()
+            .create(context.getAppComponent())
+            .inject(this)
         super.onAttach(context)
     }
 

@@ -12,10 +12,6 @@ class ProfileRepositoryImpl @Inject constructor(): ProfileRepository {
     @Inject
     lateinit var api: ZulipChatApi
 
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
-
     override fun getProfile(profileId: Long?): Single<ProfileDto> {
         return  api.getMyInfo().map { ProfileDto(it.userId, it.name, Status.Online, it.avatarUrl) }
     }

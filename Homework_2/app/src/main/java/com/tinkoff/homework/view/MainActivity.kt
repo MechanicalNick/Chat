@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ActivityMainBinding
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
 import javax.inject.Inject
 
@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity() {
     private val navigator = AppNavigator(this, R.id.main_container)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.INSTANCE.appComponent.inject(this)
+        this.applicationContext
+            .getAppComponent()
+            .inject(this)
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)

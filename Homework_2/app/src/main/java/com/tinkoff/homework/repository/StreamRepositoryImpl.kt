@@ -22,10 +22,6 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
     @Inject
     lateinit var messageRepository: MessageRepository
 
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
-
     override fun getAll(): Single<List<Stream>> {
         return api.getAllStreams()
             .map { response -> response.streams }

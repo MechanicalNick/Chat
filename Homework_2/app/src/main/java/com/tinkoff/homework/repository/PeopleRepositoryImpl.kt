@@ -13,10 +13,6 @@ class PeopleRepositoryImpl @Inject constructor(): PeopleRepository {
     @Inject
     lateinit var api: ZulipChatApi
 
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
-
     override fun getAllPresence(): Single<PresencesResponse> {
         return api.getAllPresence()
     }

@@ -22,10 +22,6 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
     @Inject
     lateinit var moshi: Moshi
 
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
-
     override fun getMessages(
         anchor: String,
         numBefore: Long,

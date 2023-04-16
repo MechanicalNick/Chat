@@ -1,5 +1,6 @@
 package com.tinkoff.homework.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
-import com.tinkoff.homework.App
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.databinding.ChannelsListBinding
+import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.elm.channels.ChannelsStoreFactory
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
 import com.tinkoff.homework.elm.channels.model.ChannelsState
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.utils.Expander
 import com.tinkoff.homework.utils.StreamFactory
@@ -30,7 +32,7 @@ import javax.inject.Inject
 class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
     ToChatRouter {
     @Inject
-    lateinit var factory: ChannelsStoreFactory
+    lateinit var channelsStoreFactory: ChannelsStoreFactory
 
     @Inject
     lateinit var router: Router
@@ -40,9 +42,14 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     private val streamFactory = StreamFactory()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.INSTANCE.appComponent.inject(this)
+    override fun onAttach(context: Context) {
+        DaggerStreamComponent.factory()
+            .create(context.getAppComponent())
+            .inject(this)
+        super.onAttach(context)
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         savedStateRegistry.registerSavedStateProvider(ARG_STATE) {
             Bundle().apply { putParcelable(ARG_STATE, (store.currentState)) }
         }
@@ -86,7 +93,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
 
     override val storeHolder: StoreHolder<ChannelsEvent, ChannelsEffect, ChannelsState> by lazy {
         val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
-        val store = factory.provide(onlySubscribed)
+        val store = channelsStoreFactory.provide(onlySubscribed)
         store.stop()
         LifecycleAwareStoreHolder(lifecycle) {
             store

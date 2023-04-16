@@ -1,19 +1,21 @@
 package com.tinkoff.homework.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.github.terrakok.cicerone.Router
-import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
+import com.tinkoff.homework.di.component.DaggerChatComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.adapter.DelegatesAdapter
@@ -48,9 +50,12 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
     private var streamId: Long? = null
     private var topicName: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.INSTANCE.appComponent.inject(this)
-        super.onCreate(savedInstanceState)
+
+    override fun onAttach(context: Context) {
+        DaggerChatComponent.factory()
+            .create(context.getAppComponent())
+            .inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreateView(
