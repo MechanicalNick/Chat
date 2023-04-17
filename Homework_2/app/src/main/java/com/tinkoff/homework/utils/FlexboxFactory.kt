@@ -20,7 +20,7 @@ class FlexboxFactory(private val reactions: List<Reaction>, private val context:
         val views = mutableListOf<View>()
         reactions.distinctBy{it.emojiCode}.forEach { reaction ->
             val reactionView = ReactionView(context)
-            val emojiCode = String(Character.toChars(reaction.emojiCode.toInt(16)))
+            val emojiCode = emojiCodeToString(reaction.emojiCode)
             reactionView.textToDraw = "$emojiCode ${map[reaction.emojiCode]?.count()}"
             reactionView.setOnClickListener {
                 reactionListner(reaction)
@@ -38,5 +38,12 @@ class FlexboxFactory(private val reactions: List<Reaction>, private val context:
         }
 
         return views
+    }
+
+    private fun emojiCodeToString(raw: String): String {
+        var result = ""
+        for (value in raw.split('-'))
+            result += String(Character.toChars(value.toInt(16)))
+        return result
     }
 }

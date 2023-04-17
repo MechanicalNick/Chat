@@ -7,21 +7,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.App
 import com.tinkoff.homework.databinding.FragmentPeopleBinding
-import com.tinkoff.homework.utils.UiState
+import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.people.model.PeopleEffect
+import com.tinkoff.homework.elm.people.model.PeopleEvent
+import com.tinkoff.homework.elm.people.model.PeopleState
 import com.tinkoff.homework.utils.adapter.PeopleAdapter
 import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
-import com.tinkoff.homework.viewmodel.PeoplesViewModel
+import javax.inject.Inject
 
-class PeoplesFragment: Fragment() {
+class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>() {
+    @Inject
+    override lateinit var factory: BaseStoreFactory<PeopleEvent, PeopleEffect, PeopleState>
+    override val initEvent: PeopleEvent = PeopleEvent.Ui.LoadData
+
     lateinit var binding: FragmentPeopleBinding
 
-    private val viewModel: PeoplesViewModel by viewModels()
     private val adapter: PeopleAdapter by lazy { PeopleAdapter() }
+
+    override fun onAttach(context: Context) {
+        App.INSTANCE.appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,35 +46,33 @@ class PeoplesFragment: Fragment() {
         )
 
         binding.peopleRecyclerView.addItemDecoration(itemDecoration)
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.peopleRecyclerView.adapter = adapter
-
-        viewModel.state.observe(viewLifecycleOwner) {
-            render(it)
-        }
-
-        viewModel.init()
 
         return binding.root
     }
 
-    private fun render(state: UiState<List<People>>?) {
-        when (state) {
-            is UiState.Loading<List<People>> -> {
-                binding.shimmer.showShimmer(true)
-            }
-            is UiState.Data<List<People>> -> {
-                adapter.peoples.clear()
-                adapter.peoples.addAll(state.data)
-                adapter.notifyDataSetChanged()
-                binding.shimmer.hideShimmer()
-            }
-            is UiState.Error<List<People>> -> {
-                binding.shimmer.hideShimmer()
-                Snackbar.make(
-                    binding.root, state.exception.toString(),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+    override fun render(state: PeopleState) {
+        if (state.isLoading)
+            binding.shimmer.showShimmer(true)
+        else
+            binding.shimmer.hideShimmer()
+        state.error?.let { throwable ->
+            binding.errorStateContainer.errorText.text = throwable.message
+        }
+        state.item?.let {
+            adapter.peoples.clear()
+            adapter.peoples.addAll(it)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun handleEffect(effect: PeopleEffect) {
+        when (effect) {
+            is PeopleEffect.LoadError -> Snackbar.make(
+                binding.root, effect.error.toString(),
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 

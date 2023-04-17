@@ -1,6 +1,7 @@
 package com.tinkoff.homework.utils
 
 object Const {
+    const val MAX_MESSAGE_COUNT = 5000L
     const val myId = 605342L
     const val myFullName = "Nikita"
     const val myAvatar =

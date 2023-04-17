@@ -69,7 +69,7 @@ class StreamViewModel(private val onlySubscribed: Boolean) : ViewModel() {
     fun init() {
         _searchState.postValue(UiState.Loading())
 
-        streamRepository.getResults(onlySubscribed)
+        streamRepository.getResults(onlySubscribed, "")
             .subscribeOn(Schedulers.io())
             .subscribe({ list ->
                 var newItems = factory.updateDelegateItems(list)

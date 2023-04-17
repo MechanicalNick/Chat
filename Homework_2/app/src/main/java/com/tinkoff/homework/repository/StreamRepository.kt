@@ -8,5 +8,5 @@ interface StreamRepository {
     fun getAll(): Single<List<Stream>>
     fun getSubscriptions(): Single<List<Stream>>
     fun getTopics(streamId: Long, streamName: String): Single<List<Topic>>
-    fun getResults(isSubscribed: Boolean): Single<List<Stream>>
+    fun getResults(isSubscribed: Boolean, query: String): Single<List<Stream>>
 }

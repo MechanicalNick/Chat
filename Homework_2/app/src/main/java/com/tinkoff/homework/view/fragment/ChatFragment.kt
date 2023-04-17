@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.terrakok.cicerone.Router
-import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.App
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.databinding.ChartFragmentBinding
+import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.chat.model.ChatEffect
+import com.tinkoff.homework.elm.chat.model.ChatEvent
+import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.UiState
 import com.tinkoff.homework.utils.adapter.DelegatesAdapter
 import com.tinkoff.homework.utils.adapter.date.DateDelegate
 import com.tinkoff.homework.utils.adapter.message.CompanionMessageDelegate
@@ -24,11 +24,19 @@ import com.tinkoff.homework.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.viewmodel.ChatViewModel
 import javax.inject.Inject
 
-class ChatFragment: Fragment(), ChatFragmentCallback {
+class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragmentCallback {
 
     @Inject
     lateinit var router: Router
-    private lateinit var messageFactory: MessageFactory
+
+    @Inject
+    override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
+
+    @Inject
+    lateinit var messageFactory: MessageFactory
+
+    override val initEvent = ChatEvent.Ui.Init
+
     private lateinit var bottomFragment: BottomFragment
 
     private var _binding: ChartFragmentBinding? = null
@@ -53,17 +61,6 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         bottomFragment = BottomFragment()
         _binding = ChartFragmentBinding.inflate(inflater, container, false)
 
-        chatViewModel.addEmoji.observe(viewLifecycleOwner) {
-            messageFactory.addEmoji(it)
-        }
-        chatViewModel.removeEmoji.observe(viewLifecycleOwner) {
-            messageFactory.removeEmoji(it)
-        }
-
-        chatViewModel.state.observe(viewLifecycleOwner){
-            render(it)
-        }
-
         topicName = requireArguments().getString(ARG_TOPIC)!!
         binding.header.text = getString(R.string.sharp, topicName)
 
@@ -72,36 +69,32 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
 
         streamId = requireArguments().getLong(ARG_STREAM_ID)
 
-        chatViewModel.init(topicName, streamId!!)
-
         binding.toolbar.setNavigationOnClickListener {
             router.exit()
         }
 
+        createRecyclerView()
+
+        chatViewModel.store = this.store
+        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
+
         return binding.root
     }
 
-    private fun render(state: UiState<List<MessageModel>>) {
-        when (state) {
-            is UiState.Loading<List<MessageModel>> -> {
-                binding.shimmer.showShimmer(true)
-            }
-            is UiState.Data<List<MessageModel>> -> {
-                createRecyclerView(state.data)
-                binding.shimmer.hideShimmer()
-            }
-            is UiState.Error<List<MessageModel>> -> {
-                binding.shimmer.hideShimmer()
-                Snackbar.make(
-                    binding.root, state.exception.toString(),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+    override fun render(state: ChatState) {
+        if (state.isLoading)
+            binding.shimmer.showShimmer(true)
+        else
+            binding.shimmer.hideShimmer()
+
+        state.items?.let {
+            adapter.submitList(messageFactory.init(it, Const.myId))
+            adapter.notifyDataSetChanged()
+            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
 
-    private fun createRecyclerView(data: List<MessageModel>) {
-        messageFactory = MessageFactory(adapter, data, Const.myId)
+    private fun createRecyclerView() {
         adapter.apply {
             addDelegate(MyMessageDelegate(this@ChatFragment))
             addDelegate(CompanionMessageDelegate(this@ChatFragment))
@@ -114,18 +107,16 @@ class ChatFragment: Fragment(), ChatFragmentCallback {
         binding.recycler.addItemDecoration(itemDecoration)
         binding.recycler.adapter = adapter
 
-        binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
-
         binding.contentEditor.arrowButton.setOnClickListener {
             val message = binding.contentEditor.editText.text.toString()
-            chatViewModel.sendMessage(streamId!!, topicName, message)
             binding.contentEditor.editText.text.clear()
+            streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
             binding.recycler.scrollToPosition(messageFactory.getCount() - 1);
         }
     }
 
     override fun reactionRemove(reaction: Reaction, messageId: Long, senderId: Long) {
-        chatViewModel.removeEmoji(messageId, reaction.emojiCode, reaction.emojiName, senderId)
+        this.store.accept(ChatEvent.Ui.RemoveReaction(messageId, reaction))
     }
 
     override fun showBottomSheetDialog(id: Long, senderId: Long): Boolean {

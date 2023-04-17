@@ -29,6 +29,8 @@ class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
             binding.userAvatar.let {
                 Glide.with(binding.root)
                     .load(model.avatarUrl)
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.drawable.error_placeholder)
                     .into(it)
             }
             binding.userName.text = model.name

@@ -14,4 +14,6 @@
     <string name="offline">Offline</string>
     <string name="sharp">#%1$s</string>
     <string name="search_tooltip">Search...</string>
+    <string name="default_error_message">Произошла какая-то ошибка. Повторите запрос позднее</string>
+    <string name="state_error_button_retry">Повторить</string>
 </resources>

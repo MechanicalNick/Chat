@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.utils.DelegateItem
@@ -39,6 +40,8 @@ class CompanionMessageDelegate(private val callback: ChatFragmentCallback) : Ada
                 root.image.let {
                     Glide.with(binding.root)
                         .load(model.avatarUrl)
+                        .placeholder(R.mipmap.ic_launcher_round)
+                        .error(R.drawable.error_placeholder)
                         .circleCrop()
                         .into(it)
                 }

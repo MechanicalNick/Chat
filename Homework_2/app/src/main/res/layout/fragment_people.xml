@@ -4,14 +4,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <include
+        android:id="@+id/errorStateContainer"
+        layout="@layout/error_layout"
+        android:visibility="gone" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer"
         android:forceDarkAllowed="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </com.facebook.shimmer.ShimmerFrameLayout>
 
    <androidx.recyclerview.widget.RecyclerView
