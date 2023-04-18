@@ -33,19 +33,22 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     ToChatRouter {
     @Inject
     lateinit var channelsStoreFactory: ChannelsStoreFactory
-
+    @Inject
+    lateinit var streamFactories: Map<Boolean, StreamFactory>
+    lateinit var streamFactory: StreamFactory
     @Inject
     lateinit var router: Router
     override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
     lateinit var binding: ChannelsListBinding
 
-    private val streamFactory = StreamFactory()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
     override fun onAttach(context: Context) {
         DaggerStreamComponent.factory()
             .create(context.getAppComponent())
             .inject(this)
+        val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
+        streamFactory = streamFactories[onlySubscribed]!!
         super.onAttach(context)
     }
 
@@ -115,11 +118,13 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
 
     override fun expand(item: StreamDelegateItem) {
         val stream = item.content() as Stream
+        streamFactory.updateState(stream.id, true)
         this.store.accept(ChannelsEvent.Ui.ExpandStream(stream))
     }
 
     override fun collapse(item: StreamDelegateItem) {
         val stream = item.content() as Stream
+        streamFactory.updateState(stream.id, false)
         this.store.accept(ChannelsEvent.Ui.CollapseStream(stream))
     }
 
