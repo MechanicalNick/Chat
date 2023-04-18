@@ -3,6 +3,7 @@ package com.tinkoff.homework.di
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.utils.RateLimitInterceptor
 import com.tinkoff.homework.utils.ZulipChatApi
 import dagger.Module
 import dagger.Provides
@@ -13,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -48,6 +50,7 @@ class NetworkModule {
     ): OkHttpClient = OkHttpClient.Builder()
         .addNetworkInterceptor(loggingInterceptor)
         .addInterceptor(authorizationInterceptor)
+        .addInterceptor(RateLimitInterceptor())
         .build()
 
     @Singleton
