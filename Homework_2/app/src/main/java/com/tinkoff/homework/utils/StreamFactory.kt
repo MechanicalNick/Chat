@@ -8,11 +8,11 @@ import javax.inject.Inject
 
 
 class StreamFactory @Inject constructor() {
-    val delegates = mutableListOf<DelegateItem>()
+    var delegates = mutableListOf<DelegateItem>()
     val streams = mutableMapOf<Long, Stream>()
 
     fun updateDelegateItems(streamList: List<Stream>): List<DelegateItem> {
-        delegates.clear()
+        delegates = mutableListOf()
 
         var topicId = 1L
 

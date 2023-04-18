@@ -43,7 +43,7 @@ class MainFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = MainFragmentBinding.inflate(layoutInflater)
 
         setupNavigationBar()
@@ -83,7 +83,6 @@ class MainFragment: Fragment() {
     }
 
     companion object {
-        private const val ARG_MESSAGE = "main"
         fun newInstance(): MainFragment {
             return MainFragment()
         }

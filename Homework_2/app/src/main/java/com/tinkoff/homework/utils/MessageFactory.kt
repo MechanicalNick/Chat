@@ -18,7 +18,7 @@ class MessageFactory(
     private val removeReactionUseCase: RemoveReactionUseCase,
     private val sendMessageUseCase: SendMessageUseCase
 ) {
-    private val items: MutableList<DelegateItem> = mutableListOf()
+    private var items: MutableList<DelegateItem> = mutableListOf()
     private var lastDate: LocalDate = LocalDate.now()
 
 
@@ -26,7 +26,7 @@ class MessageFactory(
         messages: List<MessageModel>,
         myId: Long
     ): MutableList<DelegateItem> {
-        items.clear()
+        items = mutableListOf()
 
         if (messages.isNotEmpty()) {
             lastDate = messages
@@ -46,10 +46,8 @@ class MessageFactory(
                     items.add(item)
                 }
             }
-
-            return items
         }
-        return mutableListOf()
+        return items
     }
 
     fun getCount(): Int = items.count()

@@ -94,7 +94,6 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
 
         state.items?.let {
             adapter.submitList(messageFactory.init(it, Const.myId))
-            adapter.notifyDataSetChanged()
             binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
@@ -116,7 +115,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             val message = binding.contentEditor.editText.text.toString()
             binding.contentEditor.editText.text.clear()
             streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
-            binding.recycler.scrollToPosition(messageFactory.getCount() - 1);
+            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
 

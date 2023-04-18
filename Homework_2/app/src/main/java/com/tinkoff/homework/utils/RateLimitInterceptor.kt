@@ -23,7 +23,7 @@ class RateLimitInterceptor : Interceptor {
                     Log.e("rate limit error", "retrying $sleepMiils ms")
                     Thread.sleep(sleepMiils)
                     sleepMiils *= 2
-                } catch (e: InterruptedException) {
+                } catch (_: InterruptedException) {
                 }
                 response = chain.proceed(chain.request())
             }

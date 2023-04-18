@@ -41,7 +41,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     lateinit var channelsStoreFactory: ChannelsStoreFactory
     @Inject
     lateinit var streamFactories: Map<Boolean, StreamFactory>
-    lateinit var streamFactory: StreamFactory
+    private lateinit var streamFactory: StreamFactory
     @Inject
     lateinit var router: Router
     private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
@@ -132,7 +132,6 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         state.items?.let {
             streamFactory.updateDelegateItems(state.items)
             adapter.submitList(streamFactory.delegates)
-            adapter.notifyDataSetChanged()
         }
     }
 
@@ -176,7 +175,6 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     companion object {
         private const val ARG_MESSAGE = "channels"
         private const val ARG_STATE = "CHANNEL_LIST_STATE"
-        private const val ARG_QUERY = "QUERY"
         fun newInstance(onlySubscribed: Boolean, name: String): ChannelsListFragment {
             return ChannelsListFragment().apply {
                 arguments = Bundle().apply {

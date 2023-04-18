@@ -72,7 +72,6 @@ class ChannelsFragment: Fragment()  {
     }
 
     companion object {
-        private const val ARG_MESSAGE = "channels"
         const val ARG_SEARCH_ACTION = "search_action"
         const val ARG_SEARCH_VALUE = "search_value"
         const val SELECTED_TAB_POSITION_TAG = "selectedTabPosition"

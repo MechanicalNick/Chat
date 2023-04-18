@@ -86,7 +86,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     companion object {
         private const val ARG_MESSAGE = "profile"
         fun newInstance(userId: Long?): ProfileFragment {
-            var fragment = ProfileFragment()
+            val fragment = ProfileFragment()
             val arguments = Bundle()
             if(userId != null) {
                 arguments.putLong(ARG_MESSAGE, userId)

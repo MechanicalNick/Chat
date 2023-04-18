@@ -66,7 +66,6 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>() {
         state.item?.let {
             adapter.peoples.clear()
             adapter.peoples.addAll(it)
-            adapter.notifyDataSetChanged()
         }
     }
 
@@ -86,7 +85,6 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>() {
     )
 
     companion object {
-        private const val ARG_MESSAGE = "people"
         fun newInstance(): PeoplesFragment {
             return PeoplesFragment()
         }
