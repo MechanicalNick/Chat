@@ -66,6 +66,7 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>() {
         state.item?.let {
             adapter.peoples.clear()
             adapter.peoples.addAll(it)
+            adapter.notifyDataSetChanged()
         }
     }
 
