@@ -16,16 +16,18 @@ class StreamFactory @Inject constructor() {
 
         var topicId = 1L
 
-        streamList.forEach { stream ->
-            if(streams.contains(stream.id))
-                streams[stream.id]?.let { stream.isExpanded = it.isExpanded }
+        streamList
+            .sortedByDescending { stream -> stream.id  }
+            .forEach { stream ->
+                if(streams.contains(stream.id))
+                    streams[stream.id]?.let { stream.isExpanded = it.isExpanded }
 
-            delegates.add(toDelegate(stream))
-            if (stream.isExpanded) {
-                stream.topics.forEach { topic ->
-                    delegates.add(toDelegate(topic, topicId++))
+                delegates.add(toDelegate(stream))
+                if (stream.isExpanded) {
+                    stream.topics.forEach { topic ->
+                        delegates.add(toDelegate(topic, topicId++))
+                    }
                 }
-            }
         }
 
         streams.clear()
