@@ -12,6 +12,7 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -61,6 +62,7 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
     override fun getResults(isSubscribed: Boolean, query: String): Single<List<Stream>> {
         val collection = if (isSubscribed) getSubscriptions() else getAll()
         return collection
+            .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS)}
             .flattenAsObservable { it }
             .filter { stream ->
                 if (query.isBlank()) true else stream.name.contains(query, ignoreCase = true)
@@ -68,7 +70,8 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
             .flatMapSingle { stream ->
                 Single.zip(
                     Single.just(stream),
-                    getTopics(stream.id, stream.name),
+                    getTopics(stream.id, stream.name)
+                        .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS)},
                 ) { stream, topics ->
                     stream.topics.addAll(topics)
                     stream
