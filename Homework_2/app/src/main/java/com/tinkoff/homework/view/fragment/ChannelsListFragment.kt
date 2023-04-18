@@ -24,9 +24,15 @@ import com.tinkoff.homework.utils.adapter.DelegatesAdapter
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegate
 import com.tinkoff.homework.utils.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.utils.adapter.topic.TopicDelegate
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import vivid.money.elmslie.android.base.ElmFragment
 import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
 import vivid.money.elmslie.android.storeholder.StoreHolder
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
@@ -38,9 +44,11 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     lateinit var streamFactory: StreamFactory
     @Inject
     lateinit var router: Router
+    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
     lateinit var binding: ChannelsListBinding
-
+    private var query = ""
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
     override fun onAttach(context: Context) {
@@ -78,7 +86,8 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
             this@ChannelsListFragment
         ) { _, bundle ->
             val result = bundle.getString(ChannelsFragment.ARG_SEARCH_VALUE)
-            this.store.accept(ChannelsEvent.Ui.Search(result.orEmpty()))
+            query = result.orEmpty()
+            searchQueryPublisher.onNext(query)
         }
 
         val savedState = savedStateRegistry
@@ -90,6 +99,17 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         }?: run {
             this.store.accept(ChannelsEvent.Ui.LoadData)
         }
+
+        searchQueryPublisher
+            .distinctUntilChanged()
+            .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
+            .subscribeBy { searchQuery ->
+                this.store.accept(ChannelsEvent.Ui.Search(searchQuery))
+            }
+            .addTo(compositeDisposable)
+
+
+        searchQueryPublisher.onNext(query)
 
         return binding.root
     }
@@ -148,9 +168,15 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         this.store.accept(ChannelsEvent.Ui.GoToChat(topicName, streamName, streamId))
     }
 
+    override fun onDestroy() {
+        compositeDisposable.dispose()
+        super.onDestroy()
+    }
+
     companion object {
         private const val ARG_MESSAGE = "channels"
         private const val ARG_STATE = "CHANNEL_LIST_STATE"
+        private const val ARG_QUERY = "QUERY"
         fun newInstance(onlySubscribed: Boolean, name: String): ChannelsListFragment {
             return ChannelsListFragment().apply {
                 arguments = Bundle().apply {
