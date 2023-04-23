@@ -7,6 +7,7 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
+import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import java.time.Instant
@@ -14,16 +15,12 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
-class MessageRepositoryImpl: MessageRepository {
+class MessageRepositoryImpl @Inject constructor(): MessageRepository {
     @Inject
     lateinit var api: ZulipChatApi
 
     @Inject
     lateinit var moshi: Moshi
-
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
 
     override fun getMessages(
         anchor: String,

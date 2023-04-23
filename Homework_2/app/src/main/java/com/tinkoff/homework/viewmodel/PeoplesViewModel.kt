@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tinkoff.homework.data.domain.People
-import com.tinkoff.homework.data.domain.Status
-import com.tinkoff.homework.repository.PeopleRepository
+import com.tinkoff.homework.repository.interfaces.PeopleRepository
 import com.tinkoff.homework.repository.PeopleRepositoryImpl
 import com.tinkoff.homework.utils.UiState
 import com.tinkoff.homework.utils.mapper.toStatus

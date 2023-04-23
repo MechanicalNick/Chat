@@ -5,24 +5,23 @@ import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
 import com.tinkoff.homework.data.dto.TopicDto
+import com.tinkoff.homework.repository.interfaces.MessageRepository
+import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class StreamRepositoryImpl : StreamRepository {
+class StreamRepositoryImpl @Inject constructor() : StreamRepository {
     @Inject
     lateinit var api: ZulipChatApi
 
     @Inject
     lateinit var messageRepository: MessageRepository
-
-    init {
-        App.INSTANCE.appComponent.inject(this)
-    }
 
     override fun getAll(): Single<List<Stream>> {
         return api.getAllStreams()
@@ -63,6 +62,7 @@ class StreamRepositoryImpl : StreamRepository {
     override fun getResults(isSubscribed: Boolean, query: String): Single<List<Stream>> {
         val collection = if (isSubscribed) getSubscriptions() else getAll()
         return collection
+            .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS)}
             .flattenAsObservable { it }
             .filter { stream ->
                 if (query.isBlank()) true else stream.name.contains(query, ignoreCase = true)
@@ -70,7 +70,8 @@ class StreamRepositoryImpl : StreamRepository {
             .flatMapSingle { stream ->
                 Single.zip(
                     Single.just(stream),
-                    getTopics(stream.id, stream.name),
+                    getTopics(stream.id, stream.name)
+                        .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS)},
                 ) { stream, topics ->
                     stream.topics.addAll(topics)
                     stream

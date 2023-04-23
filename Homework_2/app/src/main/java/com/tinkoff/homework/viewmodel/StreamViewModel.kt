@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tinkoff.homework.data.domain.Stream
-import com.tinkoff.homework.repository.StreamRepository
+import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.repository.StreamRepositoryImpl
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.StreamFactory

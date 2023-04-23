@@ -1,5 +1,6 @@
 package com.tinkoff.homework.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,11 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
-import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.MainFragmentBinding
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.LocalCiceroneHolder
 import com.tinkoff.homework.navigation.NavigationScreens
-import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.viewmodel.MainViewModel
 import javax.inject.Inject
 
@@ -33,12 +33,17 @@ class MainFragment: Fragment() {
     private val cicerone: Cicerone<Router>
         get() = ciceroneHolder.getCicerone(containerName)
 
+    override fun onAttach(context: Context) {
+        context
+            .getAppComponent()
+            .inject(this)
+        super.onAttach(context)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        App.INSTANCE.appComponent.inject(this)
-
+    ): View {
         binding = MainFragmentBinding.inflate(layoutInflater)
 
         setupNavigationBar()
@@ -78,7 +83,6 @@ class MainFragment: Fragment() {
     }
 
     companion object {
-        private const val ARG_MESSAGE = "main"
         fun newInstance(): MainFragment {
             return MainFragment()
         }

@@ -15,6 +15,7 @@ class ChannelsReducer :
                 copy(
                     isLoading = false,
                     items = event.streams,
+                    flagForUpdateUi = !flagForUpdateUi,
                     error = null
                 )
             }

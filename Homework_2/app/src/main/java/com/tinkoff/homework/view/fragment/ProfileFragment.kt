@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.tinkoff.homework.App
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Profile
 import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.FragmentProfileBinding
+import com.tinkoff.homework.di.component.DaggerProfileComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
+import com.tinkoff.homework.getAppComponent
 import javax.inject.Inject
 
 class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>() {
@@ -26,7 +27,9 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     lateinit var binding: FragmentProfileBinding
 
     override fun onAttach(context: Context) {
-        App.INSTANCE.appComponent.inject(this)
+        DaggerProfileComponent.factory()
+            .create(context.getAppComponent())
+            .inject(this)
         super.onAttach(context)
     }
 
@@ -83,7 +86,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     companion object {
         private const val ARG_MESSAGE = "profile"
         fun newInstance(userId: Long?): ProfileFragment {
-            var fragment = ProfileFragment()
+            val fragment = ProfileFragment()
             val arguments = Bundle()
             if(userId != null) {
                 arguments.putLong(ARG_MESSAGE, userId)

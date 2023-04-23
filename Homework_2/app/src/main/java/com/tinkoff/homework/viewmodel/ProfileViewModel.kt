@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tinkoff.homework.data.domain.Profile
-import com.tinkoff.homework.repository.ProfileRepository
+import com.tinkoff.homework.repository.interfaces.ProfileRepository
 import com.tinkoff.homework.repository.ProfileRepositoryImpl
 import com.tinkoff.homework.utils.UiState
 import com.tinkoff.homework.utils.mapper.toDomainProfile
