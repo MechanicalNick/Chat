@@ -132,6 +132,7 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
     }
 
     private fun refreshLocalDataSource(streams: List<Stream>, isSubscribed: Boolean) {
+        streamDao.deleteStreams(isSubscribed)
         streams.map {
             if (isSubscribed) {
                 streamDao.insertStreamWithReplaceStrategy(
