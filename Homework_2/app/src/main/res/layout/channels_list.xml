@@ -20,4 +20,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
+    <include
+        android:id="@+id/errorStateContainer"
+        layout="@layout/error_layout"
+        android:visibility="gone" />
 </FrameLayout>

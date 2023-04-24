@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
@@ -97,8 +98,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         savedState?.items?.let {
             this.store.accept(ChannelsEvent.Internal.DataLoaded(it))
         }?: run {
-            this.store.accept(ChannelsEvent.Ui.LoadCashedData)
-            this.store.accept(ChannelsEvent.Ui.LoadData)
+            loadData()
         }
 
         searchQueryPublisher
@@ -125,13 +125,27 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     }
 
     override fun render(state: ChannelsState) {
-        if (state.items.isNullOrEmpty()) {
-            binding.shimmer.showShimmer(true)
+        if(state.error == null){
+            binding.errorStateContainer.errorLayout.isVisible = false
+            binding.channelRecyclerView.isVisible = true
+            binding.shimmer.isVisible = true
+            if (state.items.isNullOrEmpty()) {
+                binding.shimmer.showShimmer(true)
+            } else {
+                binding.shimmer.hideShimmer()
+                val delegates = streamFactory.updateDelegateItems(state.items)
+                adapter.submitList(delegates)
+            }
         } else {
-            binding.shimmer.hideShimmer()
-            streamFactory.updateDelegateItems(state.items)
-            adapter.submitList(streamFactory.delegates)
+            binding.errorStateContainer.errorLayout.isVisible = true
+            binding.shimmer.isVisible = false
+            binding.channelRecyclerView.isVisible = false
+            binding.errorStateContainer.errorText.text = state.error.message
+            binding.errorStateContainer.retryButton.setOnClickListener(){
+                loadData()
+            }
         }
+
     }
 
     override fun expand(item: StreamDelegateItem) {
@@ -169,6 +183,11 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     override fun onDestroy() {
         compositeDisposable.dispose()
         super.onDestroy()
+    }
+
+    private fun loadData() {
+        this.store.accept(ChannelsEvent.Ui.LoadCashedData)
+        this.store.accept(ChannelsEvent.Ui.LoadData)
     }
 
     companion object {
