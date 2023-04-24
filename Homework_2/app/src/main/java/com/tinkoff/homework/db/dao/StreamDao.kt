@@ -22,13 +22,13 @@ interface StreamDao {
     @Transaction
     fun insertStreamWithIgnoreStrategy(stream: StreamEntity, topics: List<TopicEntity>) {
         insertWithIgnoreStrategy(stream)
-        insertTopics(topics)
+        insertTopicsWithIgnoreStrategy(topics)
     }
 
     @Transaction
     fun insertStreamWithReplaceStrategy(stream: StreamEntity, topics: List<TopicEntity>) {
         insertWithReplaceStrategy(stream)
-        insertTopics(topics)
+        insertTopicsWithReplaceStrategy(topics)
     }
 
     @Query("DELETE FROM stream WHERE isSubscribed =:onlySubscribed")
@@ -44,5 +44,8 @@ interface StreamDao {
     fun insertWithReplaceStrategy(stream: StreamEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTopics(topics: List<TopicEntity>)
+    fun insertTopicsWithReplaceStrategy(topics: List<TopicEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertTopicsWithIgnoreStrategy(topics: List<TopicEntity>)
 }

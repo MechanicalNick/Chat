@@ -17,7 +17,6 @@ fun toStreamEntity(domain: Stream, isSubscribed: Boolean): StreamEntity {
 fun toTopicEntities(domain: Stream): List<TopicEntity> {
     return domain.topics.map {
         TopicEntity(
-            id = 0,
             name = it.name,
             messageCount = it.messageCount,
             streamId = it.streamId

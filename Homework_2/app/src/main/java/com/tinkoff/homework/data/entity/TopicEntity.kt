@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "topic",
+    primaryKeys = ["streamId", "name"],
     foreignKeys = [ForeignKey(
         entity = StreamEntity::class,
         parentColumns = arrayOf("streamId"),
@@ -15,7 +16,6 @@ import androidx.room.PrimaryKey
     )]
 )
 data class TopicEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "messageCount") val messageCount: Long,
     @ColumnInfo(name = "streamId") val streamId: Long

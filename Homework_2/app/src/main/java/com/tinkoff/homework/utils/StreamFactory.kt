@@ -8,11 +8,10 @@ import javax.inject.Inject
 
 
 class StreamFactory @Inject constructor() {
-    var delegates = mutableListOf<DelegateItem>()
     val streams = mutableMapOf<Long, Stream>()
 
     fun updateDelegateItems(streamList: List<Stream>): List<DelegateItem> {
-        delegates = mutableListOf()
+        val delegates = mutableListOf<DelegateItem>()
 
         var topicId = 1L
 
@@ -24,7 +23,9 @@ class StreamFactory @Inject constructor() {
 
                 delegates.add(toDelegate(stream))
                 if (stream.isExpanded) {
-                    stream.topics.forEach { topic ->
+                    stream.topics
+                        .sortedByDescending { topic -> topic.name  }
+                        .forEach { topic ->
                         delegates.add(toDelegate(topic, topicId++))
                     }
                 }

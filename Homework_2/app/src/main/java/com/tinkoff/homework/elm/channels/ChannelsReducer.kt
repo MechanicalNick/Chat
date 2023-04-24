@@ -20,7 +20,6 @@ class ChannelsReducer :
             }
             is ChannelsEvent.Internal.ErrorLoading -> state {
                 copy(
-                    items = null,
                     error = event.error
                 )
             }
@@ -33,12 +32,6 @@ class ChannelsReducer :
                 }
             }
             is ChannelsEvent.Ui.LoadCashedData -> {
-                state {
-                    copy(
-                        items = null,
-                        error = null
-                    )
-                }
                 commands { +ChannelsCommand.LoadCashedData(state.onlySubscribed) }
             }
             is ChannelsEvent.Ui.LoadData -> {

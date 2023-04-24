@@ -83,7 +83,7 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
                 Single.zip(
                     Single.just(stream),
                     api.getAllTopics(stream.id).subscribeOn(Schedulers.io()),
-                    fetchMessages() 
+                    fetchMessages()
                 ) { stream, topics, messages ->
                     val newTopics = topics.topics.map { topicDto ->
                         Topic(topicDto.name, messages.count { messageModel ->
