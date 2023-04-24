@@ -13,7 +13,6 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import com.tinkoff.homework.utils.mapper.toDomainStream
 import com.tinkoff.homework.utils.mapper.toStreamEntity
 import com.tinkoff.homework.utils.mapper.toTopicEntities
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -58,15 +57,6 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getTopics(streamId: Long, streamName: String): Single<List<Topic>> {
-        return api.getAllTopics(streamId)
-            .flatMapObservable { topic -> Observable.fromIterable(topic.topics) }
-            .flatMapSingle { topicDto -> createTopic(topicDto, streamId, streamName) }
-            .subscribeOn(Schedulers.io())
-            .toList()
-    }
-
-
     override fun fetchResults(isSubscribed: Boolean, query: String): Single<List<Stream>> {
         return loadResultsFromServer(isSubscribed)
             .flattenAsObservable { it }
@@ -92,16 +82,24 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
             .flatMapSingle { stream ->
                 Single.zip(
                     Single.just(stream),
-                    getTopics(stream.id, stream.name)
-                        .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS) },
-                ) { stream, topics ->
-                    stream.topics.addAll(topics)
+                    api.getAllTopics(stream.id).subscribeOn(Schedulers.io()),
+                    fetchMessages() 
+                ) { stream, topics, messages ->
+                    val newTopics = topics.topics.map { topicDto ->
+                        Topic(topicDto.name, messages.count { messageModel ->
+                            messageModel.subject == topicDto.name && messageModel.streamId == stream.id
+                        }.toLong(), stream.name, stream.id)
+                    }
+                    stream.topics.addAll(newTopics)
                     stream
                 }
-            }.toList()
+            }
+            .subscribeOn(Schedulers.io())
+            .toList()
 
         val subscribe = result
             .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .subscribe(
                 {
                     refreshLocalDataSource(it, isSubscribed)
@@ -120,27 +118,21 @@ class StreamRepositoryImpl @Inject constructor() : StreamRepository {
             .map { list -> list.map { streamResult -> toDomainStream(streamResult) } }
     }
 
-    private fun createTopic(dto: TopicDto, streamId: Long, streamName: String): Single<Topic> {
-        return getMessagesByTopic(dto.name, streamId).map { messages ->
-            val topic = Topic(dto.name, messages.count().toLong(), streamName, streamId)
-            topic
-        }
-    }
-
-    private fun getMessagesByTopic(topic: String, streamId: Long): Single<List<MessageModel>> {
+    private fun fetchMessages(): Single<List<MessageModel>> {
         return messageRepository.fetchMessages(
             anchor = "newest",
             numBefore = Const.MAX_MESSAGE_COUNT,
             numAfter = 0,
-            topic = topic,
-            streamId = streamId,
+            topic = "",
+            streamId = null,
             query = ""
-        )
+        ).retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS) }
+         .subscribeOn(Schedulers.io())
+         .doOnError{ Log.e("error", it.message.orEmpty()) }
     }
 
     private fun refreshLocalDataSource(streams: List<Stream>, isSubscribed: Boolean) {
         streams.map {
-            streamDao.deleteStreams(isSubscribed)
             if (isSubscribed) {
                 streamDao.insertStreamWithReplaceStrategy(
                     toStreamEntity(it, isSubscribed = true),

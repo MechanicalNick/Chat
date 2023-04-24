@@ -28,7 +28,7 @@ interface ZulipChatApi {
         @Query("anchor") anchor: String = "newest",
         @Query("num_before") numBefore: Long,
         @Query("num_after") numAfter: Long,
-        @Query("narrow") narrow: String,
+        @Query("narrow") narrow: String?,
         @Query("apply_markdown") markdown: Boolean = false,
     ): Single<MessagesResponse>
 

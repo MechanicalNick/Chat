@@ -10,7 +10,7 @@ interface MessageRepository {
         numBefore: Long,
         numAfter: Long,
         topic: String,
-        streamId: Long,
+        streamId: Long?,
         query: String
     ): Single<List<MessageModel>>
 

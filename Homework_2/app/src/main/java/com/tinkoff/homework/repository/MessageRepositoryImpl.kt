@@ -32,7 +32,7 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         numBefore: Long,
         numAfter: Long,
         topic: String,
-        streamId: Long,
+        streamId: Long?,
         query: String
     ): Single<List<MessageModel>> {
         return loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
@@ -63,7 +63,7 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         numBefore: Long,
         numAfter: Long,
         topic: String,
-        streamId: Long,
+        streamId: Long?,
         query: String
     ): Single<List<MessageModel>> {
         val result = api.getMessages(
@@ -71,16 +71,21 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
             numBefore,
             numAfter,
             narrow(topic, streamId, query)
-        ).map { message -> message.messages.map { m -> toMessageDomain(m) } }
+        ).map { message -> message.messages
+            .filter { m -> m.streamId != null && m.subject != null }
+            .map { m -> toMessageDomain(m) }
+        }
 
-        result.subscribeOn(Schedulers.io())
-            .subscribe(
-                {
-                    refreshLocalDataSource(it, streamId, topic)
-                }, {
-                    Log.e("error", it.message ?: it.stackTraceToString())
-                }
-            )
+        if(streamId != null) {
+            result.subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        refreshLocalDataSource(it, streamId, topic)
+                    }, {
+                        Log.e("error", it.message ?: it.stackTraceToString())
+                    }
+                )
+        }
 
         return result
     }
@@ -106,15 +111,16 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
 
     private fun narrow(
         topic: String,
-        streamId: Long,
+        streamId: Long?,
         query: String
-    ): String {
+    ): String? {
         val list = mutableListOf<NarrowDto>()
 
         if (topic.isNotBlank())
             list.add(NarrowDto(operator = "topic", operand = topic))
 
-        list.add(NarrowDto(operator = "stream", operand = streamId))
+        if(streamId != null)
+            list.add(NarrowDto(operator = "stream", operand = streamId))
 
         if (query.isNotBlank())
             list.add(NarrowDto(operator = "search", operand = query))
@@ -126,6 +132,6 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         val moshi = Moshi.Builder().build()
         var adapter = moshi.adapter<List<NarrowDto>>(type)
 
-        return adapter.toJson(list)
+        return if(list.isEmpty()) null else adapter.toJson(list)
     }
 }

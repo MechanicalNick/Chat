@@ -20,7 +20,9 @@ class MessageDto(
     @field:Json(name = "sender_id")
     val senderId: Long,
     @field:Json(name = "subject")
-    val subject: String,
+    val subject: String?,
+    @field:Json(name = "stream_id")
+    val streamId: Long?,
     @field:Json(name = "timestamp")
     val timestamp: Long,
 )

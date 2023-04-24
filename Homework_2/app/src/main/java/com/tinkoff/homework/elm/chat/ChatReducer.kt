@@ -103,6 +103,8 @@ private fun concatenate(
         id = event.messageId,
         senderId = Const.myId,
         senderFullName = Const.myFullName,
+        subject = event.topic,
+        streamId = event.streamId,
         text = event.message,
         date = LocalDate.now(),
         avatarUrl = Const.myAvatar,
