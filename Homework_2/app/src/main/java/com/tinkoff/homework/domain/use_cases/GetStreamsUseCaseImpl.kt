@@ -6,7 +6,15 @@ import com.tinkoff.homework.repository.interfaces.StreamRepository
 import io.reactivex.Single
 
 class GetStreamsUseCaseImpl(val repository: StreamRepository) : GetStreamsUseCase {
-    override fun execute(isSubscribed: Boolean, query: String): Single<List<Stream>> {
-        return repository.getResults(isSubscribed, query)
+    override fun execute(
+        isSubscribed: Boolean,
+        isCashed: Boolean,
+        query: String
+    ): Single<List<Stream>> {
+        return if (isCashed) {
+            repository.fetchCashedResults(isSubscribed)
+        } else {
+            repository.fetchResults(isSubscribed, query)
+        }
     }
 }

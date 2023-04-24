@@ -97,6 +97,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         savedState?.items?.let {
             this.store.accept(ChannelsEvent.Internal.DataLoaded(it))
         }?: run {
+            this.store.accept(ChannelsEvent.Ui.LoadCashedData)
             this.store.accept(ChannelsEvent.Ui.LoadData)
         }
 
@@ -124,12 +125,10 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
     }
 
     override fun render(state: ChannelsState) {
-        if (state.isLoading)
+        if (state.items.isNullOrEmpty()) {
             binding.shimmer.showShimmer(true)
-        else
+        } else {
             binding.shimmer.hideShimmer()
-
-        state.items?.let {
             streamFactory.updateDelegateItems(state.items)
             adapter.submitList(streamFactory.delegates)
         }

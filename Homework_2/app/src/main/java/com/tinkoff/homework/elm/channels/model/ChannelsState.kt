@@ -9,7 +9,6 @@ import kotlinx.parcelize.RawValue
 data class ChannelsState(
     val items: @RawValue List<Stream>? = null,
     val error: Throwable? = null,
-    val isLoading: Boolean = false,
     val onlySubscribed: Boolean = false,
     // Библиотека не вызывает render(state: ChannelsState) при обновлении списка
     val flagForUpdateUi: Boolean = false

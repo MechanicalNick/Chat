@@ -5,7 +5,7 @@ import com.tinkoff.homework.data.dto.MessageResponse
 import io.reactivex.Single
 
 interface MessageRepository {
-    fun getMessages(
+    fun fetchMessages(
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -14,6 +14,7 @@ interface MessageRepository {
         query: String
     ): Single<List<MessageModel>>
 
+    fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>>
     fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse>
     fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse>
     fun sendMessage(streamId: Long, topic: String, message: String): Single<MessageResponse>

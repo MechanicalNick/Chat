@@ -5,6 +5,7 @@ import io.reactivex.Single
 
 interface GetMessagesUseCase {
     fun execute(
+        isCashed: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,

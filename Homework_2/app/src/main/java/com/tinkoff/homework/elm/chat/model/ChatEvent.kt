@@ -8,6 +8,7 @@ sealed class ChatEvent {
     sealed class Ui : ChatEvent() {
         object Init : Ui()
         data class LoadData(val topicName: String, val streamId: Long) : Ui()
+        data class LoadCashedData(val topicName: String, val streamId: Long) : Ui()
         data class AddReaction(val messageId: Long, val reaction: Reaction) : Ui()
         data class RemoveReaction(val messageId: Long, val reaction: Reaction) : Ui()
         data class SendMessage(val streamId: Long, val topic: String, val message: String) : Ui()

@@ -23,7 +23,7 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                     )
                 }
             }
-            is ChatEvent.Ui.LoadData -> {
+            is ChatEvent.Ui.LoadCashedData -> {
                 state {
                     copy(
                         isLoading = true,
@@ -33,6 +33,9 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                         streamId = event.streamId
                     )
                 }
+                commands { +ChatCommand.LoadCashedData(state.topicName, state.streamId) }
+            }
+            is ChatEvent.Ui.LoadData -> {
                 commands { +ChatCommand.LoadData(state.topicName, state.streamId) }
             }
             is ChatEvent.Ui.AddReaction -> {

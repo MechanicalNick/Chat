@@ -1,18 +1,20 @@
 package com.tinkoff.homework.repository
 
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import com.tinkoff.homework.App
 import com.tinkoff.homework.data.domain.MessageModel
-import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
+import com.tinkoff.homework.db.dao.MessageDao
 import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.utils.ZulipChatApi
+import com.tinkoff.homework.utils.mapper.toDomainMessage
+import com.tinkoff.homework.utils.mapper.toMessageDomain
+import com.tinkoff.homework.utils.mapper.toMessageEntity
+import com.tinkoff.homework.utils.mapper.toReactionEntity
 import io.reactivex.Single
-import java.time.Instant
-import java.time.LocalDateTime
-import java.util.*
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(): MessageRepository {
@@ -22,7 +24,10 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
     @Inject
     lateinit var moshi: Moshi
 
-    override fun getMessages(
+    @Inject
+    lateinit var messageDao: MessageDao
+
+    override fun fetchMessages(
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -30,32 +35,11 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         streamId: Long,
         query: String
     ): Single<List<MessageModel>> {
-        return api.getMessages(
-            anchor,
-            numBefore,
-            numAfter,
-            narrow(topic, streamId, query)
-        ).map { message -> message.messages }.map { list ->
-            list.map { m ->
-                val date = LocalDateTime.ofInstant(
-                    Instant.ofEpochMilli(m.timestamp),
-                    TimeZone.getDefault().toZoneId())
-                    .toLocalDate()
-                MessageModel(
-                    m.id,
-                    m.senderId,
-                    m.senderFullName,
-                    m.content,
-                    date,
-                    m.avatarUrl,
-                    m.reactions.map { r -> Reaction(
-                        emojiCode = r.emojiCode,
-                        emojiName = r.emojiName,
-                        userId = r.userId
-                    ) }.toMutableList()
-                )
-            }
-        }
+        return loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
+    }
+
+    override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {
+        return loadLocalResults(streamId, topic)
     }
 
     override fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
@@ -72,6 +56,52 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         message: String
     ): Single<MessageResponse> {
         return api.sendMessage(streamId, topic, message)
+    }
+
+    private fun loadResultsFromServer(
+        anchor: String,
+        numBefore: Long,
+        numAfter: Long,
+        topic: String,
+        streamId: Long,
+        query: String
+    ): Single<List<MessageModel>> {
+        val result = api.getMessages(
+            anchor,
+            numBefore,
+            numAfter,
+            narrow(topic, streamId, query)
+        ).map { message -> message.messages.map { m -> toMessageDomain(m) } }
+
+        result.subscribeOn(Schedulers.io())
+            .subscribe(
+                {
+                    refreshLocalDataSource(it, streamId, topic)
+                }, {
+                    Log.e("error", it.message ?: it.stackTraceToString())
+                }
+            )
+
+        return result
+    }
+
+    private fun loadLocalResults(streamId: Long, topicName: String): Single<List<MessageModel>> {
+        return messageDao.getAll(streamId, topicName)
+            .map { list -> list.map { result -> toDomainMessage(result) } }
+    }
+
+    private fun refreshLocalDataSource(
+        messages: List<MessageModel>,
+        streamId: Long,
+        topic: String
+    ) {
+        messageDao.deleteMessages(streamId, topic)
+        messages.map { message ->
+            messageDao.insertMessage(
+                toMessageEntity(message, streamId, topic),
+                message.reactions.map { reaction -> toReactionEntity(reaction, message.id) }
+            )
+        }
     }
 
     private fun narrow(

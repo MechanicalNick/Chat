@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tinkoff.homework.data.domain.Stream
-import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.repository.StreamRepositoryImpl
+import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.utils.DelegateItem
 import com.tinkoff.homework.utils.StreamFactory
 import com.tinkoff.homework.utils.UiState
@@ -69,7 +69,7 @@ class StreamViewModel(private val onlySubscribed: Boolean) : ViewModel() {
     fun init() {
         _searchState.postValue(UiState.Loading())
 
-        streamRepository.getResults(onlySubscribed, "")
+        streamRepository.fetchResults(onlySubscribed, "")
             .subscribeOn(Schedulers.io())
             .subscribe({ list ->
                 var newItems = factory.updateDelegateItems(list)

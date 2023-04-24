@@ -14,10 +14,20 @@ class ChatActor(
 ) : Actor<ChatCommand, ChatEvent> {
     override fun execute(command: ChatCommand): Observable<ChatEvent> {
         return when (command) {
+            is ChatCommand.LoadCashedData -> getMessagesUseCase.execute(
+                isCashed = true,
+                anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT,
+                numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
+            )
+                .mapEvents(
+                    { messages -> ChatEvent.Internal.DataLoaded(messages) },
+                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                )
             is ChatCommand.LoadData ->
                 getMessagesUseCase.execute(
-                    "newest", Const.MAX_MESSAGE_COUNT,
-                    0, command.topicName, command.streamId, ""
+                    isCashed = false,
+                    anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT,
+                    numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )
                     .mapEvents(
                         { messages -> ChatEvent.Internal.DataLoaded(messages) },

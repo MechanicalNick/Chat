@@ -1,7 +1,8 @@
 package com.tinkoff.homework.utils
 
 object Const {
-    val DELAY: Long = 5L
+    const val DELAY: Long = 5L
+    const val DB_NAME = "roomdb"
     const val MAX_MESSAGE_COUNT = 5000L
     const val myId = 605342L
     const val myFullName = "Nikita"

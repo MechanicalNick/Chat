@@ -14,13 +14,11 @@ import com.tinkoff.homework.view.MainActivity
 import com.tinkoff.homework.view.fragment.MainFragment
 import dagger.BindsInstance
 import dagger.Component
-import dagger.multibindings.IntoMap
-import dagger.multibindings.StringKey
 import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [LocalNavigationModule::class,
+    modules = [LocalNavigationModule::class, RoomModule::class,
         NetworkModule::class, RepositoryModule::class, FactoryModule::class,
         UseCaseModule::class, ViewModelsModule::class]
 )

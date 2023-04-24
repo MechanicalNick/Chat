@@ -81,19 +81,18 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         createRecyclerView()
 
         chatViewModel.store = this.store
+        this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, streamId!!))
         this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
 
         return binding.root
     }
 
     override fun render(state: ChatState) {
-        if (state.isLoading)
+        if (state.items.isNullOrEmpty()) {
             binding.shimmer.showShimmer(true)
-        else
+        } else {
             binding.shimmer.hideShimmer()
-
-        state.items?.let {
-            adapter.submitList(messageFactory.init(it, Const.myId))
+            adapter.submitList(messageFactory.init(state.items, Const.myId))
             binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
