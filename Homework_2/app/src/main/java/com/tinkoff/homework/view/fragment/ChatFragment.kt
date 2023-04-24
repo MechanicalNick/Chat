@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
@@ -81,20 +82,37 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         createRecyclerView()
 
         chatViewModel.store = this.store
-        this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, streamId!!))
-        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
+        loadData()
 
         return binding.root
     }
 
     override fun render(state: ChatState) {
-        if (state.items.isNullOrEmpty()) {
-            binding.shimmer.showShimmer(true)
-        } else {
-            binding.shimmer.hideShimmer()
-            adapter.submitList(messageFactory.init(state.items, Const.myId))
-            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+        if(state.error == null) {
+            binding.errorStateContainer.errorLayout.isVisible = false
+            binding.recycler.isVisible = true
+            binding.shimmer.isVisible = true
+            if (state.items.isNullOrEmpty()) {
+                binding.shimmer.showShimmer(true)
+            } else {
+                binding.shimmer.hideShimmer()
+                adapter.submitList(messageFactory.init(state.items, Const.myId))
+                binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+            }
+        } else{
+            binding.errorStateContainer.errorLayout.isVisible = true
+            binding.shimmer.isVisible = false
+            binding.recycler.isVisible = false
+            binding.errorStateContainer.errorText.text = state.error.message
+            binding.errorStateContainer.retryButton.setOnClickListener(){
+                loadData()
+            }
         }
+    }
+
+    private fun loadData() {
+        this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, streamId!!))
+        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
     }
 
     private fun createRecyclerView() {
