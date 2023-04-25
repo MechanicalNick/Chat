@@ -4,11 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.data.dto.MessageResponse
-import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.db.dao.MessageDao
 import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.utils.Const
@@ -22,18 +20,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
-class MessageRepositoryImpl @Inject constructor(): MessageRepository {
-    @Inject
-    lateinit var api: ZulipChatApi
-
-    @Inject
-    lateinit var moshi: Moshi
-
-    @Inject
-    lateinit var messageDao: MessageDao
-
-    @Inject
-    lateinit var context: Context
+class MessageRepositoryImpl @Inject constructor(
+    private val api: ZulipChatApi,
+    private val moshi: Moshi,
+    private val messageDao: MessageDao,
+    private val context: Context
+) : MessageRepository {
 
     override fun fetchMessages(
         anchor: String,
@@ -43,7 +35,9 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         streamId: Long?,
         query: String
     ): Single<List<MessageModel>> {
-        return streamId?.let { Single.zip(loadLocalResults(it, topic),
+        return streamId?.let {
+            Single.zip(
+                loadLocalResults(it, topic),
             loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)){
             local, server ->
                 val list = mutableListOf<MessageModel>()
@@ -104,7 +98,7 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
             anchor,
             numBefore,
             numAfter,
-            narrow(topic, streamId, query)
+            toNarrow(moshi, topic, streamId, query)
         ).map { message -> message.messages
             .filter { m -> m.streamId != null && m.subject != null }
             .map { m -> toMessageDomain(m) }
@@ -145,31 +139,5 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
                 message.reactions.map { reaction -> toReactionEntity(reaction, message.id) }
             )
         }
-    }
-
-    private fun narrow(
-        topic: String,
-        streamId: Long?,
-        query: String
-    ): String? {
-        val list = mutableListOf<NarrowDto>()
-
-        if (topic.isNotBlank())
-            list.add(NarrowDto(operator = "topic", operand = topic))
-
-        if(streamId != null)
-            list.add(NarrowDto(operator = "stream", operand = streamId))
-
-        if (query.isNotBlank())
-            list.add(NarrowDto(operator = "search", operand = query))
-
-        val type = Types.newParameterizedType(
-            List::class.java,
-            NarrowDto::class.java,
-        )
-        val moshi = Moshi.Builder().build()
-        var adapter = moshi.adapter<List<NarrowDto>>(type)
-
-        return if(list.isEmpty()) null else adapter.toJson(list)
     }
 }

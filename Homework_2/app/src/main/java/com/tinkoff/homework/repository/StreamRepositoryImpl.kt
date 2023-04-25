@@ -4,7 +4,6 @@ import android.util.Log
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
-import com.tinkoff.homework.data.dto.TopicDto
 import com.tinkoff.homework.db.dao.StreamDao
 import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.repository.interfaces.StreamRepository
@@ -19,15 +18,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class StreamRepositoryImpl @Inject constructor() : StreamRepository {
-    @Inject
-    lateinit var api: ZulipChatApi
-
-    @Inject
-    lateinit var messageRepository: MessageRepository
-
-    @Inject
-    lateinit var streamDao: StreamDao
+class StreamRepositoryImpl @Inject constructor(
+    private val api: ZulipChatApi,
+    private val messageRepository: MessageRepository,
+    private val streamDao: StreamDao
+) : StreamRepository {
 
     override fun getAll(): Single<List<Stream>> {
         return api.getAllStreams()

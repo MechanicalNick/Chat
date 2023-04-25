@@ -1,9 +1,12 @@
 package com.tinkoff.homework.utils.mapper
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageDto
 import com.tinkoff.homework.data.dto.MessageResponse
+import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.data.entity.MessageEntity
 import com.tinkoff.homework.data.entity.ReactionEntity
 import com.tinkoff.homework.data.results.MessageResult
@@ -86,4 +89,30 @@ fun toMyMessageEntity(response: MessageResponse, streamId: Long, topic: String):
         LocalDate.now(),
         Const.myAvatar
     )
+}
+
+fun toNarrow(
+    moshi: Moshi,
+    topic: String,
+    streamId: Long?,
+    query: String
+): String? {
+    val list = mutableListOf<NarrowDto>()
+
+    if (topic.isNotBlank())
+        list.add(NarrowDto(operator = "topic", operand = topic))
+
+    if (streamId != null)
+        list.add(NarrowDto(operator = "stream", operand = streamId))
+
+    if (query.isNotBlank())
+        list.add(NarrowDto(operator = "search", operand = query))
+
+    val type = Types.newParameterizedType(
+        List::class.java,
+        NarrowDto::class.java,
+    )
+    var adapter = moshi.adapter<List<NarrowDto>>(type)
+
+    return if (list.isEmpty()) null else adapter.toJson(list)
 }

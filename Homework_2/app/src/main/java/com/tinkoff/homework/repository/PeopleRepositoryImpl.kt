@@ -1,6 +1,5 @@
 package com.tinkoff.homework.repository
 
-import com.tinkoff.homework.App
 import com.tinkoff.homework.data.domain.People
 import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.data.dto.PresencesResponse
@@ -9,9 +8,9 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import io.reactivex.Single
 import javax.inject.Inject
 
-class PeopleRepositoryImpl @Inject constructor(): PeopleRepository {
-    @Inject
-    lateinit var api: ZulipChatApi
+class PeopleRepositoryImpl @Inject constructor(
+    private val api: ZulipChatApi
+) : PeopleRepository {
 
     override fun getAllPresence(): Single<PresencesResponse> {
         return api.getAllPresence()
