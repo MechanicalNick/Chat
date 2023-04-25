@@ -91,7 +91,7 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                         itemsState = !itemsState,
                     )
                 }
-                effects { +ChatEffect.ScrollToLastElement }
+                effects { +ChatEffect.SmoothScrollToLastElement }
             }
             is ChatEvent.Internal.DataLoaded -> {
                 state {

@@ -119,6 +119,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         return when(effect){
             ChatEffect.ScrollToLastElement ->
                 binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+            ChatEffect.SmoothScrollToLastElement ->
+                binding.recycler.smoothScrollToPosition(messageFactory.getCount() - 1)
         }
     }
 
