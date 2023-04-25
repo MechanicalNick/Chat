@@ -19,6 +19,7 @@ class CompanionMessageLayout @JvmOverloads constructor(
     internal val textMessage: TextView by lazy { findViewById(R.id.textMessage) }
     internal val textName: TextView by lazy { findViewById(R.id.textName) }
     internal  val flexbox: FlexboxLayout by lazy { findViewById(R.id.flexbox) }
+    internal val userImage: ImageView by lazy { findViewById(R.id.userImage) }
 
     private val marginBetweenImageAndFlexbox = 9
     private val marginBetweenCardAndFlexbox = 7

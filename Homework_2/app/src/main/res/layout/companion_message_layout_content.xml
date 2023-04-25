@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             style="@style/Theme.Homework.CardView"
             android:id="@+id/cardView">
+
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -24,6 +25,14 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="13dp"
                 android:text="Darrell Steward" />
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="150dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="29dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
                 android:id="@+id/textMessage"

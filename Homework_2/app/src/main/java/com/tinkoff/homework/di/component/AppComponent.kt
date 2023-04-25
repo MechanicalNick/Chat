@@ -1,6 +1,7 @@
 package com.tinkoff.homework.di.component
 
 import android.content.Context
+import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.di.*
@@ -28,6 +29,7 @@ interface AppComponent {
     val getProfileUseCase: GetProfileUseCase
     val getSteamsUseCase: GetStreamsUseCase
     val sendImageUseCase: SendImageUseCase
+    val lazyHeaders: LazyHeaders
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)

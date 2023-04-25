@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Reaction
@@ -35,12 +36,12 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
 
     @Inject
     lateinit var router: Router
-
     @Inject
     override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
-
     @Inject
     lateinit var messageFactory: MessageFactory
+    @Inject
+    lateinit var lazyHeaders: LazyHeaders
 
     override val initEvent = ChatEvent.Ui.Init
 
@@ -54,7 +55,9 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
     private val binding get() = _binding!!
     private var streamId: Long? = null
     private var topicName: String = ""
-
+    // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
+    // Паттерн: []()
+    private val isUserImageRegex = Regex("\\[(.*?)\\](\\((.*?)\\))")
 
     override fun onAttach(context: Context) {
         DaggerChatComponent.factory()
@@ -131,8 +134,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
 
     private fun createRecyclerView() {
         adapter.apply {
-            addDelegate(MyMessageDelegate(this@ChatFragment))
-            addDelegate(CompanionMessageDelegate(this@ChatFragment))
+            addDelegate(MyMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
+            addDelegate(CompanionMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
             addDelegate(DateDelegate())
         }
         val itemDecoration = MarginItemDecorator(

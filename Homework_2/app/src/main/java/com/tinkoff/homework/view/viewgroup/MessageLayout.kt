@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import com.tinkoff.homework.R
@@ -13,6 +14,7 @@ class MessageLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
     internal val textView: TextView by lazy { findViewById(R.id.textMessage) }
     internal val flexbox: FlexboxLayout by lazy { findViewById(R.id.flexbox) }
+    internal val userImage: ImageView by lazy { findViewById(R.id.userImage) }
 
     private val cardView: View by lazy { findViewById(R.id.cardView) }
     private val marginBetweenCardAndFlexbox = 7
