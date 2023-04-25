@@ -2,6 +2,7 @@ package com.tinkoff.homework.di
 
 import com.tinkoff.homework.di.scope.ChatScope
 import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
 import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.chat.ChatActor
 import com.tinkoff.homework.elm.chat.ChatReducer
@@ -32,9 +33,10 @@ class ChatModule {
     @Provides
     fun provideChatActor(
         getMessagesUseCase: GetMessagesUseCase,
+        sendImageUseCase: SendImageUseCase,
         messageFactory: MessageFactory
     ): ChatActor {
-        return ChatActor(getMessagesUseCase, messageFactory)
+        return ChatActor(getMessagesUseCase, sendImageUseCase, messageFactory)
     }
 
     @ChatScope

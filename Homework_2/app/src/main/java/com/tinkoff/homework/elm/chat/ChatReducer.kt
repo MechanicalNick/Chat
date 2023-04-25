@@ -2,6 +2,7 @@ package com.tinkoff.homework.elm.chat
 
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
@@ -37,6 +38,9 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
             }
             is ChatEvent.Ui.LoadData -> {
                 commands { +ChatCommand.LoadData(state.topicName, state.streamId) }
+            }
+            is ChatEvent.Ui.LoadImage -> {
+                commands { +ChatCommand.LoadImage(event.uri, state.topicName, state.streamId) }
             }
             is ChatEvent.Ui.LoadNextPage -> {
                 state {
@@ -80,11 +84,14 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                     itemsState = !itemsState,
                 )
             }
-            is ChatEvent.Internal.MessageSent -> state {
-                copy(
-                    items = concatenate(items, event),
-                    itemsState = !itemsState,
-                )
+            is ChatEvent.Internal.MessageSent -> {
+                state {
+                    copy(
+                        items = concatenate(items, event),
+                        itemsState = !itemsState,
+                    )
+                }
+                effects { +ChatEffect.ScrollToLastElement }
             }
             is ChatEvent.Internal.DataLoaded -> {
                 state {
@@ -115,8 +122,16 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                     isShowProgress = false
                 )
             }
+            is ChatEvent.Internal.ImageLoaded ->
+                commands { +ChatCommand.SendMessage(event.streamId,
+                    event.topicName, buildMessage(event.response))
+            }
         }
     }
+}
+
+private fun buildMessage(response: ImageResponse): String{
+    return "[image](${response.uri})"
 }
 
 private fun concatenate(

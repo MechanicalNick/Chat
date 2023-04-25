@@ -1,13 +1,18 @@
 package com.tinkoff.homework.repository
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
+import androidx.core.net.toFile
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.db.dao.MessageDao
 import com.tinkoff.homework.repository.interfaces.MessageRepository
+import com.tinkoff.homework.utils.FileUtils
 import com.tinkoff.homework.utils.ZulipChatApi
 import com.tinkoff.homework.utils.mapper.toDomainMessage
 import com.tinkoff.homework.utils.mapper.toMessageDomain
@@ -15,6 +20,11 @@ import com.tinkoff.homework.utils.mapper.toMessageEntity
 import com.tinkoff.homework.utils.mapper.toReactionEntity
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(): MessageRepository {
@@ -26,6 +36,9 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
 
     @Inject
     lateinit var messageDao: MessageDao
+
+    @Inject
+    lateinit var context: Context
 
     override fun fetchMessages(
         anchor: String,
@@ -68,6 +81,14 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         message: String
     ): Single<MessageResponse> {
         return api.sendMessage(streamId, topic, message)
+    }
+
+    override fun sendImage(uri: Uri): Single<ImageResponse> {
+        val bytes = FileUtils.getBytes(uri, context)
+        val requestFile = bytes.toRequestBody("image/*".toMediaTypeOrNull())
+        val fileName = FileUtils.getFileNameFromURL(uri)
+        val part = MultipartBody.Part.createFormData("imageName", fileName, requestFile)
+        return api.uploadFile(part)
     }
 
     private fun loadResultsFromServer(
