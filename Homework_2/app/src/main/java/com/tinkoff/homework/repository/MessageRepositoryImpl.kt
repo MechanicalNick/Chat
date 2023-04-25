@@ -113,7 +113,8 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
             result.subscribeOn(Schedulers.io())
                 .subscribe(
                     {
-                        refreshLocalDataSource(it, streamId, topic)
+                        val needDelete = numBefore == Const.MAX_MESSAGE_COUNT_IN_DB
+                        refreshLocalDataSource(it, streamId, topic, needDelete)
                     }, {
                         Log.e("error", it.message ?: it.stackTraceToString())
                     }
@@ -131,8 +132,12 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
     private fun refreshLocalDataSource(
         messages: List<MessageModel>,
         streamId: Long,
-        topic: String
+        topic: String,
+        needDelete: Boolean
     ) {
+        if(needDelete) {
+            messageDao.deleteMessages(streamId, topic)
+        }
         messages.map { message ->
             messageDao.insertMessage(
                 toMessageEntity(message, streamId, topic),
