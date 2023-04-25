@@ -3,9 +3,12 @@ package com.tinkoff.homework.utils.mapper
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
 import com.tinkoff.homework.data.dto.MessageDto
+import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.entity.MessageEntity
 import com.tinkoff.homework.data.entity.ReactionEntity
 import com.tinkoff.homework.data.results.MessageResult
+import com.tinkoff.homework.utils.Const
+import java.time.LocalDate
 
 fun toMessageEntity(domain: MessageModel, streamId: Long, topic: String): MessageEntity {
     return MessageEntity(
@@ -69,5 +72,18 @@ fun toDomainReaction(entity: ReactionEntity): Reaction {
         emojiName = entity.emojiName,
         emojiCode = entity.emojiCode,
         userId = entity.userId
+    )
+}
+
+fun toMyMessageEntity(response: MessageResponse, streamId: Long, topic: String): MessageEntity {
+    return MessageEntity(
+        response.id,
+        streamId,
+        topic,
+        Const.myId,
+        Const.myFullName,
+        response.msg,
+        LocalDate.now(),
+        Const.myAvatar
     )
 }
