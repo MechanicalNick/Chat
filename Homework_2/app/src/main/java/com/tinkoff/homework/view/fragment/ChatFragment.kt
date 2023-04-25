@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Reaction
@@ -79,15 +80,17 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             router.exit()
         }
 
-        createRecyclerView()
-
         chatViewModel.store = this.store
+
+        createRecyclerView()
         loadData()
 
         return binding.root
     }
 
     override fun render(state: ChatState) {
+        binding.progressBar.isVisible = state.isShowProgress
+
         if(state.error == null) {
             binding.errorStateContainer.errorLayout.isVisible = false
             binding.recycler.isVisible = true
@@ -97,7 +100,6 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             } else {
                 binding.shimmer.hideShimmer()
                 adapter.submitList(messageFactory.init(state.items, Const.myId))
-                binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
             }
         } else{
             binding.errorStateContainer.errorLayout.isVisible = true
@@ -107,6 +109,13 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             binding.errorStateContainer.retryButton.setOnClickListener(){
                 loadData()
             }
+        }
+    }
+
+    override fun handleEffect(effect: ChatEffect): Unit? {
+        return when(effect){
+            ChatEffect.ScrollToLastElement ->
+                binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
 
@@ -126,6 +135,12 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             binding.linearLayout.orientation
         )
         binding.recycler.addItemDecoration(itemDecoration)
+        binding.recycler.addOnScrollListener(
+            ChatScrollListener(
+                binding.recycler.layoutManager as LinearLayoutManager,
+                chatViewModel.store
+            )
+        )
         binding.recycler.adapter = adapter
 
         binding.contentEditor.arrowButton.setOnClickListener {

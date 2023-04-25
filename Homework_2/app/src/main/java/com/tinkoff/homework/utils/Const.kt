@@ -4,6 +4,9 @@ object Const {
     const val DELAY: Long = 5L
     const val DB_NAME = "roomdb"
     const val MAX_MESSAGE_COUNT = 5000L
+    const val MAX_MESSAGE_COUNT_IN_DB = 50L
+    const val MAX_MESSAGE_ON_PAGE = 20L
+    const val MESSAGE_THRESHOLD = 5L
     const val myId = 605342L
     const val myFullName = "Nikita"
     const val myAvatar =

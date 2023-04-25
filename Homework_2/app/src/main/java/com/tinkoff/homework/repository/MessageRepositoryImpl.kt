@@ -35,7 +35,19 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         streamId: Long?,
         query: String
     ): Single<List<MessageModel>> {
-        return loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
+        return streamId?.let { Single.zip(loadLocalResults(it, topic),
+            loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)){
+            local, server ->
+                val list = mutableListOf<MessageModel>()
+                val repeatedRequest = server.count() == 1 && server.first().id == local.firstOrNull()?.id
+                if (!repeatedRequest)
+                    list.addAll(server)
+                list.addAll(local)
+                list
+            }
+        } ?: run {
+            loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
+        }
     }
 
     override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {
@@ -100,7 +112,6 @@ class MessageRepositoryImpl @Inject constructor(): MessageRepository {
         streamId: Long,
         topic: String
     ) {
-        messageDao.deleteMessages(streamId, topic)
         messages.map { message ->
             messageDao.insertMessage(
                 toMessageEntity(message, streamId, topic),

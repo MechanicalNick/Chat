@@ -38,6 +38,15 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
             is ChatEvent.Ui.LoadData -> {
                 commands { +ChatCommand.LoadData(state.topicName, state.streamId) }
             }
+            is ChatEvent.Ui.LoadNextPage -> {
+                state {
+                    copy(
+                        isShowProgress = true
+                    )
+                }
+                commands { +ChatCommand.LoadNextPage(state.items?.firstOrNull()?.id ?: 0,
+                    state.topicName, state.streamId) }
+            }
             is ChatEvent.Ui.AddReaction -> {
                 commands { +ChatCommand.AddReaction(event.messageId, event.reaction) }
             }
@@ -77,18 +86,33 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                     itemsState = !itemsState,
                 )
             }
-            is ChatEvent.Internal.DataLoaded -> state {
-                copy(
-                    isLoading = false,
-                    items = event.messages,
-                    error = null
-                )
+            is ChatEvent.Internal.DataLoaded -> {
+                state {
+                    copy(
+                        isLoading = false,
+                        items = event.messages,
+                        error = null,
+                        isShowProgress = false
+                    )
+                }
+                effects { +ChatEffect.ScrollToLastElement }
+            }
+            is ChatEvent.Internal.PageDataLoaded -> {
+                state {
+                    copy(
+                        isLoading = false,
+                        items = event.messages,
+                        error = null,
+                        isShowProgress = false
+                    )
+                }
             }
             is ChatEvent.Internal.ErrorLoading -> state {
                 copy(
                     isLoading = false,
                     items = null,
-                    error = event.error
+                    error = event.error,
+                    isShowProgress = false
                 )
             }
         }

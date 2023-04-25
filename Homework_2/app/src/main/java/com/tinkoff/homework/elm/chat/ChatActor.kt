@@ -16,7 +16,7 @@ class ChatActor(
         return when (command) {
             is ChatCommand.LoadCashedData -> getMessagesUseCase.execute(
                 isCashed = true,
-                anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT,
+                anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT_IN_DB,
                 numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
             )
                 .mapEvents(
@@ -26,11 +26,21 @@ class ChatActor(
             is ChatCommand.LoadData ->
                 getMessagesUseCase.execute(
                     isCashed = false,
-                    anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT,
+                    anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT_IN_DB,
                     numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )
                     .mapEvents(
                         { messages -> ChatEvent.Internal.DataLoaded(messages) },
+                        { error -> ChatEvent.Internal.ErrorLoading(error) }
+                    )
+            is ChatCommand.LoadNextPage ->
+                getMessagesUseCase.execute(
+                    isCashed = false,
+                    anchor = command.messageId.toString(), numBefore = Const.MAX_MESSAGE_ON_PAGE,
+                    numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
+                )
+                    .mapEvents(
+                        { messages -> ChatEvent.Internal.PageDataLoaded(messages) },
                         { error -> ChatEvent.Internal.ErrorLoading(error) }
                     )
             is ChatCommand.AddReaction -> messageFactory.addReaction(
