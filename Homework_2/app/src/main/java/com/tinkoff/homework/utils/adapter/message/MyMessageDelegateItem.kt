@@ -12,6 +12,9 @@ class MyMessageDelegateItem(
     override fun id(): Long = id
 
     override fun compareToOther(other: DelegateItem): Boolean {
-        return (other as MyMessageDelegateItem).value == content()
+        val otherItem = (other as MyMessageDelegateItem).value
+        val currentItem = content() as MessageModel
+        return otherItem.id == currentItem.id &&
+                otherItem.text == currentItem.text
     }
 }

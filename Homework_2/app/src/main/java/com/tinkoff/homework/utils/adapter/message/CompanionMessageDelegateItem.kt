@@ -12,6 +12,9 @@ class CompanionMessageDelegateItem(
     override fun id(): Long = id
 
     override fun compareToOther(other: DelegateItem): Boolean {
-        return (other as CompanionMessageDelegateItem).value == content()
+        val otherItem = (other as CompanionMessageDelegateItem).value
+        val currentItem = content() as MessageModel
+        return otherItem.id == currentItem.id &&
+                otherItem.text == currentItem.text
     }
 }
