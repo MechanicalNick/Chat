@@ -8,17 +8,18 @@ import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.utils.Const
 import vivid.money.elmslie.core.store.Store
 
-class ChatScrollListener(private val layoutManager: LinearLayoutManager,
-                         val store: Store<ChatEvent, ChatEffect, ChatState>) : RecyclerView.OnScrollListener() {
+class ChatScrollListener(
+    private val layoutManager: LinearLayoutManager,
+    private val store: Store<ChatEvent, ChatEffect, ChatState>
+) : RecyclerView.OnScrollListener() {
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
 
-        val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
-        val totalItemCount = layoutManager.itemCount
+        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-        if (!isLoading() && dy < 0) {
-            if(firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
+        if (!isLoading()) {
+            if (dy != 0 && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
                 loadMoreItems()
             }
         }
