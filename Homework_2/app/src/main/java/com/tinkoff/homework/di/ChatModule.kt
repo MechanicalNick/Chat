@@ -1,5 +1,6 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.di.scope.ChatScope
 import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
@@ -25,8 +26,8 @@ class ChatModule {
 
     @ChatScope
     @Provides
-    fun provideChatReducer(): ChatReducer {
-        return ChatReducer()
+    fun provideChatReducer(credentials: Credentials): ChatReducer {
+        return ChatReducer(credentials)
     }
 
     @ChatScope

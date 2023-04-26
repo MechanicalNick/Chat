@@ -4,6 +4,7 @@ import android.content.Context
 import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.di.*
 import com.tinkoff.homework.domain.use_cases.interfaces.*
 import com.tinkoff.homework.utils.MessageFactory
@@ -16,7 +17,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [LocalNavigationModule::class, RoomModule::class,
+    modules = [CredentialsModule::class, LocalNavigationModule::class, RoomModule::class,
         NetworkModule::class, RepositoryModule::class, FactoryModule::class,
         UseCaseModule::class, ViewModelsModule::class]
 )
@@ -30,6 +31,7 @@ interface AppComponent {
     val getSteamsUseCase: GetStreamsUseCase
     val sendImageUseCase: SendImageUseCase
     val lazyHeaders: LazyHeaders
+    val credentials: Credentials
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)

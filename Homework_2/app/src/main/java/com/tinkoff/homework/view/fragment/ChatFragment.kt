@@ -15,6 +15,7 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.ChartFragmentBinding
 import com.tinkoff.homework.di.component.DaggerChatComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -33,7 +34,8 @@ import com.tinkoff.homework.viewmodel.ChatViewModel
 import javax.inject.Inject
 
 class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragmentCallback {
-
+    @Inject
+    lateinit var credentials: Credentials
     @Inject
     lateinit var router: Router
     @Inject
@@ -105,7 +107,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
                 binding.shimmer.showShimmer(true)
             } else {
                 binding.shimmer.hideShimmer()
-                adapter.submitList(messageFactory.init(state.items, Const.myId))
+                adapter.submitList(messageFactory.init(state.items, credentials.id))
             }
         } else{
             binding.errorStateContainer.errorLayout.isVisible = true

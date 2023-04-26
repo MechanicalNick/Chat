@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import com.squareup.moshi.Moshi
 import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.db.dao.MessageDao
@@ -24,7 +25,8 @@ class MessageRepositoryImpl @Inject constructor(
     private val api: ZulipChatApi,
     private val moshi: Moshi,
     private val messageDao: MessageDao,
-    private val context: Context
+    private val context: Context,
+    private val credentials: Credentials
 ) : MessageRepository {
 
     override fun fetchMessages(
@@ -72,7 +74,7 @@ class MessageRepositoryImpl @Inject constructor(
         val sendMessage = api.sendMessage(streamId, topic, message)
 
         sendMessage.doAfterSuccess {
-            messageDao.insert(toMyMessageEntity(it, streamId, topic))
+            messageDao.insert(toMyMessageEntity(credentials, it, streamId, topic))
         }
 
         return sendMessage

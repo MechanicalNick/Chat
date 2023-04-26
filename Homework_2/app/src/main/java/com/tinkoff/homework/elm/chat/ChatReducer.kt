@@ -2,17 +2,19 @@ package com.tinkoff.homework.elm.chat
 
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
-import com.tinkoff.homework.utils.Const
 import kotlinx.parcelize.RawValue
 import vivid.money.elmslie.core.store.dsl_reducer.DslReducer
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() {
+class ChatReducer(private val credentials: Credentials) :
+    DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() {
     override fun Result.reduce(event: ChatEvent): Any {
         return when (event) {
             is ChatEvent.Ui.Init -> {
@@ -64,6 +66,7 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
                 copy(
                     items = items?.map { message ->
                         applyReaction(
+                            credentials,
                             event.reaction,
                             message,
                             event.messageId
@@ -87,7 +90,7 @@ class ChatReducer : DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() 
             is ChatEvent.Internal.MessageSent -> {
                 state {
                     copy(
-                        items = concatenate(items, event),
+                        items = concatenate(credentials, items, event),
                         itemsState = !itemsState,
                     )
                 }
@@ -135,18 +138,19 @@ private fun buildMessage(response: ImageResponse): String{
 }
 
 private fun concatenate(
+    credentials: Credentials,
     messages: @RawValue List<MessageModel>?,
     event: ChatEvent.Internal.MessageSent
 ): List<MessageModel> {
     val message = MessageModel(
         id = event.messageId,
-        senderId = Const.myId,
-        senderFullName = Const.myFullName,
+        senderId = credentials.id,
+        senderFullName = credentials.fullName,
         subject = event.topic,
         streamId = event.streamId,
         text = event.message,
         date = LocalDate.now(),
-        avatarUrl = Const.myAvatar,
+        avatarUrl = credentials.avatar,
         reactions = mutableListOf()
     )
     val list = messages!!.toMutableList()
@@ -154,10 +158,15 @@ private fun concatenate(
     return list
 }
 
-private fun applyReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
+private fun applyReaction(
+    credentials: Credentials,
+    value: Reaction,
+    old: MessageModel,
+    applicableId: Long
+): MessageModel {
     if (old.id != applicableId)
         return old
-    val sameReaction = old.reactions.firstOrNull { r -> r.userId == Const.myId }
+    val sameReaction = old.reactions.firstOrNull { r -> r.userId == credentials.id }
     if (sameReaction == null)
         old.reactions.add(value)
     return old

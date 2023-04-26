@@ -4,6 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.MessageDto
 import com.tinkoff.homework.data.dto.MessageResponse
 import com.tinkoff.homework.data.dto.NarrowDto
@@ -78,16 +79,16 @@ fun toDomainReaction(entity: ReactionEntity): Reaction {
     )
 }
 
-fun toMyMessageEntity(response: MessageResponse, streamId: Long, topic: String): MessageEntity {
+fun toMyMessageEntity(credentials: Credentials, response: MessageResponse, streamId: Long, topic: String): MessageEntity {
     return MessageEntity(
         response.id,
         streamId,
         topic,
-        Const.myId,
-        Const.myFullName,
+        credentials.id,
+        credentials.fullName,
         response.msg,
         LocalDate.now(),
-        Const.myAvatar
+        credentials.avatar
     )
 }
 
