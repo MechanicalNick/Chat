@@ -8,6 +8,7 @@ import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
+import com.tinkoff.homework.utils.Const
 import kotlinx.parcelize.RawValue
 import vivid.money.elmslie.core.store.dsl_reducer.DslReducer
 import java.time.LocalDate
@@ -133,7 +134,7 @@ class ChatReducer(private val credentials: Credentials) :
 }
 
 private fun buildMessage(response: ImageResponse): String{
-    return "[image](${response.uri})"
+    return "${Const.IMAGE_PREFIX}(${response.uri})"
 }
 
 private fun concatenate(
