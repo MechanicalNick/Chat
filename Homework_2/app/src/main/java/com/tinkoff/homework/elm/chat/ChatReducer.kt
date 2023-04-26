@@ -11,7 +11,6 @@ import com.tinkoff.homework.elm.chat.model.ChatState
 import kotlinx.parcelize.RawValue
 import vivid.money.elmslie.core.store.dsl_reducer.DslReducer
 import java.time.LocalDate
-import javax.inject.Inject
 
 class ChatReducer(private val credentials: Credentials) :
     DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() {
@@ -166,7 +165,8 @@ private fun applyReaction(
 ): MessageModel {
     if (old.id != applicableId)
         return old
-    val sameReaction = old.reactions.firstOrNull { r -> r.userId == credentials.id }
+    val sameReaction =
+        old.reactions.firstOrNull { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
     if (sameReaction == null)
         old.reactions.add(value)
     return old
@@ -175,7 +175,8 @@ private fun applyReaction(
 private fun removeReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
     if (old.id != applicableId)
         return old
-    val sameReaction = old.reactions.firstOrNull { r -> r.userId == value.userId }
+    val sameReaction =
+        old.reactions.firstOrNull { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
     if (sameReaction != null)
         old.reactions.remove(value)
     return old
