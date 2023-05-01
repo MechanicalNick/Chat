@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
 class LocalDateConverter {
     @TypeConverter
     fun fromCharSequence(value: String): LocalDate {
-        return LocalDate.parse(value)
+        return LocalDate.parse(value, DateTimeFormatter.ofPattern(Const.DATE_PATTERN))
     }
 
     @TypeConverter

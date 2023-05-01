@@ -75,11 +75,6 @@
         <item name="cardBackgroundColor">@color/default_color_text_header</item>
     </style>
 
-    <style name="Theme.Homework.Chip">
-        <item name="chipBackgroundColor">@color/date_background_color</item>
-        <item name="android:textColor">@color/date_text_color</item>
-    </style>
-
     <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@color/black</item>
     </style>

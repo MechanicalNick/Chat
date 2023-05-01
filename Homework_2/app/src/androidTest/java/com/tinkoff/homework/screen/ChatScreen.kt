@@ -2,14 +2,11 @@ package com.tinkoff.homework.screen
 
 import android.view.View
 import com.kaspersky.kaspresso.screens.KScreen
-import com.tinkoff.homework.view.KFlexbox
 import com.tinkoff.homework.R
-import com.tinkoff.homework.view.KChip
+import com.tinkoff.homework.view.KFlexbox
 import com.tinkoff.homework.view.fragment.ChatFragment
-import io.github.kakaocup.kakao.chipgroup.KChipGroup
 import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.image.KImageView
-import io.github.kakaocup.kakao.list.KAbsListView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
 import io.github.kakaocup.kakao.text.KTextView
@@ -44,7 +41,7 @@ class ChatScreen : KScreen<ChatScreen>() {
     }
 
     class DateMessageItem(parent: Matcher<View>) : KRecyclerItem<DateMessageItem>(parent) {
-        val chip = KChip (parent) { withId(R.id.date) }
+        val chip = KTextView(parent) { withId(R.id.date) }
     }
 
     class ReactionItem(parent: Matcher<View>) : KRecyclerItem<ReactionItem>(parent) {
