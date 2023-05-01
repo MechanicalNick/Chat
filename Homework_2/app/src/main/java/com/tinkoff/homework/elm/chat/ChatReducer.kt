@@ -50,18 +50,30 @@ class ChatReducer(private val credentials: Credentials) :
                         isShowProgress = true
                     )
                 }
-                commands { +ChatCommand.LoadNextPage(state.items?.firstOrNull()?.id ?: 0,
-                    state.topicName, state.streamId) }
+                commands {
+                    +ChatCommand.LoadNextPage(
+                        state.items?.firstOrNull()?.id ?: 0,
+                        state.topicName, state.streamId
+                    )
+                }
             }
+
             is ChatEvent.Ui.AddReaction -> {
                 commands { +ChatCommand.AddReaction(event.messageId, event.reaction) }
             }
+
+            is ChatEvent.Ui.ChangeReaction -> {
+                commands { +ChatCommand.ChangeReaction(event.messageId, event.reaction) }
+            }
+
             is ChatEvent.Ui.RemoveReaction -> {
                 commands { +ChatCommand.RemoveReaction(event.messageId, event.reaction) }
             }
+
             is ChatEvent.Ui.SendMessage -> {
                 commands { +ChatCommand.SendMessage(event.streamId, event.topic, event.message) }
             }
+
             is ChatEvent.Internal.ReactionAdded -> state {
                 copy(
                     items = items?.map { message ->

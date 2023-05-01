@@ -6,28 +6,28 @@
        tools:parentTag="com.tinkoff.homework.view.viewgroup.CompanionMessageLayout">
 
     <ImageView
-            android:id="@+id/image"
-            android:layout_width="37dp"
+            android:id="@+id/companionAvatarView"
+        android:layout_width="37dp"
             android:layout_height="37dp"
             android:src="@mipmap/ic_launcher" />
 
     <androidx.cardview.widget.CardView
-            android:layout_width="217dp"
-            android:layout_height="wrap_content"
-            style="@style/Theme.Homework.CardView"
-            android:id="@+id/cardView">
+        android:id="@+id/companionCardView"
+        style="@style/Theme.Homework.CardView"
+        android:layout_width="217dp"
+        android:layout_height="wrap_content">
 
         <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textName"
-                style="@style/Theme.Homework.TextHeader"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="13dp"
-                android:text="Darrell Steward" />
+            android:id="@+id/companionTextName"
+            style="@style/Theme.Homework.TextHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="8dp"
+            android:text="Darrell Steward" />
 
         <ImageView
-            android:id="@+id/userImage"
+            android:id="@+id/companionUserImage"
             android:layout_width="150dp"
             android:layout_height="120dp"
             android:layout_marginTop="29dp"
@@ -35,8 +35,8 @@
             android:layout_marginBottom="8dp"/>
 
         <TextView
-                android:id="@+id/textMessage"
-                android:layout_width="wrap_content"
+            android:id="@+id/companionTextMessage"
+            android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="29dp"
                 android:layout_marginStart="13dp"
@@ -47,8 +47,8 @@
 
     <com.tinkoff.homework.view.viewgroup.FlexboxLayout
             app:maxCountInRow="@integer/flexbox_maxCountInRow"
-            app:flexboxMargin="@integer/flexbox_flexboxMargin"
-            android:id="@+id/flexbox"
-            android:layout_width="wrap_content"
+        android:id="@+id/companionFlexbox"
+        android:layout_width="wrap_content"
+        app:flexboxMargin="@integer/flexbox_flexboxMargin"
             android:layout_height="wrap_content"/>
 </merge>

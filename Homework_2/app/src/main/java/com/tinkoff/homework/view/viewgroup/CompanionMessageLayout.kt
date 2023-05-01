@@ -14,12 +14,12 @@ import java.lang.Integer.max
 class CompanionMessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
-    internal val image: ImageView by lazy { findViewById(R.id.image) }
-    internal val cardView: View  by lazy { findViewById(R.id.cardView) }
-    internal val textMessage: TextView by lazy { findViewById(R.id.textMessage) }
-    internal val textName: TextView by lazy { findViewById(R.id.textName) }
-    internal  val flexbox: FlexboxLayout by lazy { findViewById(R.id.flexbox) }
-    internal val userImage: ImageView by lazy { findViewById(R.id.userImage) }
+    val avatarView: ImageView by lazy { findViewById(R.id.companionAvatarView) }
+    val cardView: View by lazy { findViewById(R.id.companionCardView) }
+    val textMessage: TextView by lazy { findViewById(R.id.companionTextMessage) }
+    val textName: TextView by lazy { findViewById(R.id.companionTextName) }
+    val flexbox: FlexboxLayout by lazy { findViewById(R.id.companionFlexbox) }
+    val userImage: ImageView by lazy { findViewById(R.id.companionUserImage) }
 
     private val marginBetweenImageAndFlexbox = 9
     private val marginBetweenCardAndFlexbox = 7
@@ -35,7 +35,10 @@ class CompanionMessageLayout @JvmOverloads constructor(
         if(flexbox.measuredHeight > 0)
          totalHeight += marginBetweenCardAndFlexbox + flexbox.measuredHeight
 
-        val totalWidth = image.measuredWidth + marginBetweenImageAndFlexbox + max(flexbox.measuredWidth, cardView.measuredWidth)
+        val totalWidth = avatarView.measuredWidth + marginBetweenImageAndFlexbox + max(
+            flexbox.measuredWidth,
+            cardView.measuredWidth
+        )
 
         setMeasuredDimension(totalWidth, totalHeight)
     }
@@ -44,14 +47,14 @@ class CompanionMessageLayout @JvmOverloads constructor(
         var offsetX = 0
         var offsetY = 0
 
-        image.layout(
+        avatarView.layout(
             0,
             0,
-            image.measuredWidth,
-            image.measuredHeight
+            avatarView.measuredWidth,
+            avatarView.measuredHeight
         )
 
-        offsetX += image.measuredWidth + marginBetweenImageAndFlexbox
+        offsetX += avatarView.measuredWidth + marginBetweenImageAndFlexbox
 
         cardView.layout(
             offsetX,

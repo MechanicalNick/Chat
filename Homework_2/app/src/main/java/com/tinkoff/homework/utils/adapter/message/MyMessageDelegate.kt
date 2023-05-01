@@ -76,7 +76,7 @@ class MyMessageDelegate(
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
-                    { callback.reactionRemove(it, model.id, model.senderId) },
+                    { callback.reactionChange(it, model.id, model.senderId) },
                     { callback.showBottomSheetDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)

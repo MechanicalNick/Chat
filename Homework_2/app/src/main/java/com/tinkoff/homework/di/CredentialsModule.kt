@@ -10,5 +10,9 @@ import javax.inject.Singleton
 interface CredentialsModule {
     @Binds
     @Singleton
-    fun bindsCredentials(impl : CredentialsImpl): Credentials
+    fun bindsCredentials(impl: CredentialsImpl): Credentials
+
+    @Binds
+    @Singleton
+    fun bindApiUrlProvider(impl: ApiUrlProviderImpl): ApiUrlProvider
 }

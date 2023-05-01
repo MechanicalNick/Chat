@@ -15,7 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -62,15 +61,16 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideZulipChat(client: OkHttpClient): ZulipChatApi {
+    fun provideZulipChat(apiUrlProvider: ApiUrlProvider, client: OkHttpClient): ZulipChatApi {
         var retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
-            .baseUrl(Const.SITE)
+            .baseUrl(apiUrlProvider.url)
             .build()
         return retrofit.create(ZulipChatApi::class.java)
     }
+
     @Singleton
     @Provides
     fun provideLazyHeaders(basicCredentials: String): LazyHeaders {

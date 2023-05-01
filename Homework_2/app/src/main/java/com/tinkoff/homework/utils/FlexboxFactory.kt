@@ -9,7 +9,7 @@ import com.tinkoff.homework.view.customview.ReactionView
 class FlexboxFactory(private val reactions: List<Reaction>, private val context: Context) {
 
     fun create(
-        reactionListner: (r: Reaction) -> Unit,
+        reactionListener: (r: Reaction) -> Unit,
         showBottomSheetDialog: () -> Boolean
     ): List<View> {
         val map = HashMap<String, MutableList<Reaction>>()
@@ -20,10 +20,10 @@ class FlexboxFactory(private val reactions: List<Reaction>, private val context:
         val views = mutableListOf<View>()
         reactions.distinctBy{it.emojiCode}.forEach { reaction ->
             val reactionView = ReactionView(context)
-            val emojiCode = emojiCodeToString(reaction.emojiCode)
+            val emojiCode = ReactionHelper.emojiCodeToString(reaction.emojiCode)
             reactionView.textToDraw = "$emojiCode ${map[reaction.emojiCode]?.count()}"
             reactionView.setOnClickListener {
-                reactionListner(reaction)
+                reactionListener(reaction)
             }
 
             views.add(reactionView)
@@ -38,12 +38,5 @@ class FlexboxFactory(private val reactions: List<Reaction>, private val context:
         }
 
         return views
-    }
-
-    private fun emojiCodeToString(raw: String): String {
-        var result = ""
-        for (value in raw.split('-'))
-            result += String(Character.toChars(value.toInt(16)))
-        return result
     }
 }

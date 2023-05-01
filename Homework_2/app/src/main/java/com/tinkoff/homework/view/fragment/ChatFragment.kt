@@ -23,7 +23,6 @@ import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.adapter.DelegatesAdapter
 import com.tinkoff.homework.utils.adapter.date.DateDelegate
@@ -102,10 +101,11 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         if(state.error == null) {
             binding.errorStateContainer.errorLayout.isVisible = false
             binding.recycler.isVisible = true
-            binding.shimmer.isVisible = true
-            if (state.items.isNullOrEmpty()) {
+            if (state.isLoading || state.items.isNullOrEmpty()) {
+                binding.shimmer.isVisible = true
                 binding.shimmer.showShimmer(true)
             } else {
+                binding.shimmer.isVisible = false
                 binding.shimmer.hideShimmer()
                 adapter.submitList(messageFactory.init(state.items, credentials.id))
             }
@@ -174,8 +174,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         }
     }
 
-    override fun reactionRemove(reaction: Reaction, messageId: Long, senderId: Long) {
-        this.store.accept(ChatEvent.Ui.RemoveReaction(messageId, reaction))
+    override fun reactionChange(reaction: Reaction, messageId: Long, senderId: Long) {
+        this.store.accept(ChatEvent.Ui.ChangeReaction(messageId, reaction))
     }
 
     override fun showBottomSheetDialog(id: Long, senderId: Long): Boolean {
@@ -191,9 +191,9 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         const val ARG_MODEL_ID = "modelId"
         const val ARG_SENDER_ID = "senderId"
 
-        private const val ARG_TOPIC = "topicName"
-        private const val ARG_STREAM = "steamName"
-        private const val ARG_STREAM_ID = "steamId"
+        const val ARG_TOPIC = "topicName"
+        const val ARG_STREAM = "steamName"
+        const val ARG_STREAM_ID = "steamId"
 
         fun newInstance(topicName: String, streamName: String, streamId: Long): ChatFragment {
             val fragment = ChatFragment()

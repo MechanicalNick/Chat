@@ -12,11 +12,11 @@ import com.tinkoff.homework.R
 class MessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
-    internal val textView: TextView by lazy { findViewById(R.id.textMessage) }
-    internal val flexbox: FlexboxLayout by lazy { findViewById(R.id.flexbox) }
-    internal val userImage: ImageView by lazy { findViewById(R.id.userImage) }
+    internal val textView: TextView by lazy { findViewById(R.id.myTextMessage) }
+    internal val flexbox: FlexboxLayout by lazy { findViewById(R.id.myFlexbox) }
+    internal val userImage: ImageView by lazy { findViewById(R.id.myUserImage) }
 
-    private val cardView: View by lazy { findViewById(R.id.cardView) }
+    private val cardView: View by lazy { findViewById(R.id.myCardView) }
     private val marginBetweenCardAndFlexbox = 7
 
     init {

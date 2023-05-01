@@ -58,6 +58,10 @@ class ReactionView @JvmOverloads constructor(
         canvas.drawText(textToDraw, paddingLeft.toFloat(), centerY, textPaint)
     }
 
+    fun getText(): CharSequence {
+        return textToDraw
+    }
+
     private fun Float.sp(context: Context) = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         this,
