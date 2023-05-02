@@ -62,6 +62,13 @@ ext {
     elmslieVersion = '2.1.1'
     recyclerVersion = '1.2.0-alpha02'
     roomVersion = '2.5.1'
+    monitorVersion= '1.6.1'
+    jUnitExtVersion='1.1.5'
+    orchestratorVersion='1.4.2'
+    testRunnerVersion='1.5.2'
+    kaspressoVersion ='1.5.1'
+    testingVersion='2.2.0'
+    jUnitVersion='4.13.2'
 }
 
 dependencies {
@@ -106,15 +113,13 @@ dependencies {
     implementation "androidx.room:room-rxjava2:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
 
-
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
-    debugImplementation "androidx.test:monitor:1.6.1"
-
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "androidx.arch.core:core-testing:2.2.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.5"
-    androidTestImplementation "com.kaspersky.android-components:kaspresso:1.5.1"
+    debugImplementation "androidx.test:monitor:$monitorVersion"
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "androidx.arch.core:core-testing:$testingVersion"
+    androidTestImplementation "androidx.test.ext:junit:$jUnitExtVersion"
+    androidTestImplementation "com.kaspersky.android-components:kaspresso:$kaspressoVersion"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+    androidTestImplementation "androidx.test:runner:testRunnerVersion"
+    androidTestUtil "androidx.test:orchestrator:$orchestratorVersion"
 }
