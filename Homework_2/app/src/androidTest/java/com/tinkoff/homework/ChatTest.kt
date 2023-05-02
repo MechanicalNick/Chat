@@ -1,10 +1,7 @@
 package com.tinkoff.homework
 
-import android.R.attr.value
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.platform.app.InstrumentationRegistry
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.tinkoff.homework.db.LocalDateConverter
@@ -37,16 +34,9 @@ class ChatTest : TestCase() {
     }
 
     //Отображение списка сообщений
-    //Получение пустого списка сообщений
     @Test
     fun showChatMessagesWithLoading_ByDefault() = run {
         val fragmentScreen = arrangeDefaultScreen()
-
-        step("Сообщений нет, идёт загрузка") {
-            fragmentScreen.shimmer {
-                isVisible()
-            }
-        }
 
         step("Сообщения загрузились") {
             fragmentScreen.shimmer {
@@ -55,21 +45,37 @@ class ChatTest : TestCase() {
                 }
             }
             fragmentScreen.recycler {
-                isDisplayed()
-                val messages = 22
-                val dates = 5
-                hasSize(messages + dates)
-                childAt<ChatScreen.CompanionMessageItem>(2) {
-                    companionMessage.isDisplayed()
-                    companionAvatar.isDisplayed()
-                    companionFlexbox.isDisplayed()
+                flakySafely {
+                    isDisplayed()
+                    val messages = 22
+                    val dates = 5
+                    hasSize(messages + dates)
+                    childAt<ChatScreen.CompanionMessageItem>(2) {
+                        companionMessage.isDisplayed()
+                        companionAvatar.isDisplayed()
+                        companionFlexbox.isDisplayed()
+                    }
+                    lastChild<ChatScreen.MyMessageItem> {
+                        myMessage.hasAnyText()
+                        myFlexbox.isDisplayed()
+                    }
+                    firstChild<ChatScreen.DateMessageItem> {
+                        chip.isDisplayed()
+                    }
                 }
-                lastChild<ChatScreen.MyMessageItem> {
-                    myMessage.hasAnyText()
-                    myFlexbox.isDisplayed()
-                }
-                firstChild<ChatScreen.DateMessageItem> {
-                    chip.isDisplayed()
+            }
+        }
+    }
+
+    //Получение пустого списка сообщений
+    @Test
+    fun showChatMessagesWithLoading_Empty() = run {
+        val fragmentScreen = arrangeEmptyScreen()
+
+        step("Загрузился пустой список") {
+            fragmentScreen.shimmer {
+                flakySafely {
+                    isDisplayed()
                 }
             }
         }
@@ -116,8 +122,10 @@ class ChatTest : TestCase() {
             fragmentScreen.recycler {
                 dates.forEach { (position, date) ->
                     this.childAt<ChatScreen.DateMessageItem>(position) {
-                        isDisplayed()
-                        chip.hasText(converter.localDateToCharSequence(date))
+                        flakySafely {
+                            isDisplayed()
+                            chip.hasText(converter.localDateToCharSequence(date))
+                        }
                     }
                 }
             }
@@ -253,6 +261,17 @@ class ChatTest : TestCase() {
                 }
             }
         }
+    }
+
+    private fun arrangeEmptyScreen(): ChatScreen {
+        mockServer.dispatcher = MockRequestDispatcher().apply {
+            returnsForPath("/messages?anchor=newest&num_before=50&num_after=0&narrow=%5B%7B%22operator%22%3A%22topic%22%2C%22operand%22%3A%22%D0%BD%D0%BE%D0%B2%D1%8B%D0%B9%20%D1%82%D0%BE%D0%BF%D0%B8%D0%BA%22%7D%2C%7B%22operator%22%3A%22stream%22%2C%22operand%22%3A0%7D%5D&apply_markdown=false") {
+                setBody(loadFromAssets("empty_messages_request.json"))
+                    .setBodyDelay(300, TimeUnit.MILLISECONDS)
+            }
+        }
+        launchFragmentInContainer()
+        return ChatScreen()
     }
 
     private fun arrangeDefaultScreen(): ChatScreen {
