@@ -41,8 +41,8 @@ class MessageFactory(
                 dates.add(dateModel)
                 items.add(DateDelegateItem(dateModel.id, dateModel))
                 group.value.forEach {
-                    val item = if (it.senderId == myId) MyMessageDelegateItem(it.id, it)
-                    else CompanionMessageDelegateItem(it.id, it)
+                    val item = if (it.senderId == myId) MyMessageDelegateItem(it.id, it, it.reactions.count())
+                    else CompanionMessageDelegateItem(it.id, it, it.reactions.count())
                     items.add(item)
                 }
             }

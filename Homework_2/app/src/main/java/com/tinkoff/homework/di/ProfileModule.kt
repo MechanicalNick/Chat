@@ -1,5 +1,6 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.di.scope.ProfileScope
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -24,8 +25,8 @@ class ProfileModule {
 
     @ProfileScope
     @Provides
-    fun provideProfileReducer(): ProfileReducer {
-        return ProfileReducer()
+    fun provideProfileReducer(credentials: Credentials): ProfileReducer {
+        return ProfileReducer(credentials)
     }
 
     @ProfileScope

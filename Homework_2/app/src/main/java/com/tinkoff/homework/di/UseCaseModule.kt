@@ -53,4 +53,10 @@ class UseCaseModule {
     fun provideGetMessagesUseCase(repository: MessageRepository): GetMessagesUseCase {
         return GetMessagesUseCaseImpl(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideSendImageUseCase(repository: MessageRepository): SendImageUseCase {
+        return SendImageUseCaseImpl(repository)
+    }
 }

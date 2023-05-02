@@ -13,7 +13,6 @@ class ChannelsReducer :
         return when (event) {
             is ChannelsEvent.Internal.DataLoaded -> state {
                 copy(
-                    isLoading = false,
                     items = event.streams,
                     flagForUpdateUi = !flagForUpdateUi,
                     error = null
@@ -21,38 +20,24 @@ class ChannelsReducer :
             }
             is ChannelsEvent.Internal.ErrorLoading -> state {
                 copy(
-                    isLoading = false,
-                    items = null,
                     error = event.error
                 )
             }
             is ChannelsEvent.Ui.Wait -> {
                 state {
                     copy(
-                        isLoading = true,
                         items = null,
                         error = null
                     )
                 }
             }
+            is ChannelsEvent.Ui.LoadCashedData -> {
+                commands { +ChannelsCommand.LoadCashedData(state.onlySubscribed) }
+            }
             is ChannelsEvent.Ui.LoadData -> {
-                state {
-                    copy(
-                        isLoading = true,
-                        items = null,
-                        error = null
-                    )
-                }
                 commands { +ChannelsCommand.LoadData(state.onlySubscribed) }
             }
             is ChannelsEvent.Ui.Search -> {
-                state {
-                    copy(
-                        isLoading = true,
-                        items = null,
-                        error = null
-                    )
-                }
                 commands { +ChannelsCommand.Search(state.onlySubscribed, event.query) }
             }
             is ChannelsEvent.Ui.CollapseStream -> {

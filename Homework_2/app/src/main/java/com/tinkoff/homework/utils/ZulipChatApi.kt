@@ -2,6 +2,7 @@ package com.tinkoff.homework.utils
 
 import com.tinkoff.homework.data.dto.*
 import io.reactivex.Single
+import okhttp3.MultipartBody
 import retrofit2.http.*
 
 interface ZulipChatApi {
@@ -28,7 +29,7 @@ interface ZulipChatApi {
         @Query("anchor") anchor: String = "newest",
         @Query("num_before") numBefore: Long,
         @Query("num_after") numAfter: Long,
-        @Query("narrow") narrow: String,
+        @Query("narrow") narrow: String?,
         @Query("apply_markdown") markdown: Boolean = false,
     ): Single<MessagesResponse>
 
@@ -51,4 +52,10 @@ interface ZulipChatApi {
         @Query("content") message: String,
         @Query("type") type: String = "stream"
     ): Single<MessageResponse>
+
+    @Multipart
+    @POST("user_uploads")
+    fun uploadFile(
+        @Part file: MultipartBody.Part
+    ): Single<ImageResponse>
 }

@@ -1,5 +1,6 @@
 package com.tinkoff.homework.di
 
+import com.bumptech.glide.load.model.LazyHeaders
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tinkoff.homework.utils.Const
@@ -69,5 +70,12 @@ class NetworkModule {
             .baseUrl(Const.SITE)
             .build()
         return retrofit.create(ZulipChatApi::class.java)
+    }
+    @Singleton
+    @Provides
+    fun provideLazyHeaders(basicCredentials: String): LazyHeaders {
+        return LazyHeaders.Builder()
+            .addHeader("Authorization", basicCredentials)
+            .build()
     }
 }

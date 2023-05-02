@@ -55,6 +55,7 @@ ext {
     glideVersion = '4.11.0'
     elmslieVersion = '2.1.1'
     recyclerVersion = '1.2.0-alpha02'
+    roomVersion = '2.5.1'
 }
 
 dependencies {
@@ -92,4 +93,9 @@ dependencies {
     implementation "com.github.vivid-money.elmslie:elmslie-rxjava-2:$elmslieVersion"
 
     implementation "androidx.recyclerview:recyclerview:$recyclerVersion"
+
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 }

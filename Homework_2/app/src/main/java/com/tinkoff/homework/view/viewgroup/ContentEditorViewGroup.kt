@@ -15,8 +15,7 @@ class ContentEditorViewGroup @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, R.attr.contentEditorStyle) {
     val arrowButton: View by lazy { findViewById(R.id.arrowButton) }
     val editText: EditText by lazy { findViewById(R.id.editTextView) }
-
-    private val plusButton: View by lazy { findViewById(R.id.plusButton) }
+    val plusButton: View by lazy { findViewById(R.id.plusButton) }
 
     private val textViewLeftMargin = 10
     private val textViewTopMargin = 6

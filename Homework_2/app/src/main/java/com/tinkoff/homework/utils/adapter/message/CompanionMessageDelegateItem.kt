@@ -5,13 +5,19 @@ import com.tinkoff.homework.utils.DelegateItem
 
 class CompanionMessageDelegateItem(
     override val id: Long,
-    override val value: MessageModel
+    override val value: MessageModel,
+    private val count: Int
 ) : MessageDelegateItem {
     override fun content(): Any = value
 
     override fun id(): Long = id
 
     override fun compareToOther(other: DelegateItem): Boolean {
-        return (other as CompanionMessageDelegateItem).value == content()
+        val otherItem = (other as CompanionMessageDelegateItem).value
+        val currentItem = content() as MessageModel
+        return otherItem.id == currentItem.id &&
+                otherItem.text == currentItem.text &&
+                otherItem.reactions == currentItem.reactions &&
+                otherItem.reactions.count() == count
     }
 }

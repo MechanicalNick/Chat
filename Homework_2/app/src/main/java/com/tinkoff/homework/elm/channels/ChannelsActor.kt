@@ -12,15 +12,25 @@ class ChannelsActor(
     override fun execute(command: ChannelsCommand): Observable<ChannelsEvent> {
         return when (command) {
             is ChannelsCommand.LoadData -> getStreamsUseCase.execute(
-                command.isSubscribed,
-                ""
+                isSubscribed = command.isSubscribed,
+                isCashed = false,
+                query = ""
             ).mapEvents(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
                 { error -> ChannelsEvent.Internal.ErrorLoading(error) }
             )
             is ChannelsCommand.Search -> getStreamsUseCase.execute(
-                command.isSubscribed,
-                command.query
+                isSubscribed = command.isSubscribed,
+                isCashed = false,
+                query = command.query
+            ).mapEvents(
+                { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
+                { error -> ChannelsEvent.Internal.ErrorLoading(error) }
+            )
+            is ChannelsCommand.LoadCashedData -> getStreamsUseCase.execute(
+                isSubscribed = command.isSubscribed,
+                isCashed = true,
+                query = ""
             ).mapEvents(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
                 { error -> ChannelsEvent.Internal.ErrorLoading(error) }

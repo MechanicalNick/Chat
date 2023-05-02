@@ -2,13 +2,20 @@ package com.tinkoff.homework.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.ChartFragmentBinding
 import com.tinkoff.homework.di.component.DaggerChatComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -27,15 +34,16 @@ import com.tinkoff.homework.viewmodel.ChatViewModel
 import javax.inject.Inject
 
 class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragmentCallback {
-
+    @Inject
+    lateinit var credentials: Credentials
     @Inject
     lateinit var router: Router
-
     @Inject
     override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
-
     @Inject
     lateinit var messageFactory: MessageFactory
+    @Inject
+    lateinit var lazyHeaders: LazyHeaders
 
     override val initEvent = ChatEvent.Ui.Init
 
@@ -49,7 +57,9 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
     private val binding get() = _binding!!
     private var streamId: Long? = null
     private var topicName: String = ""
-
+    // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
+    // Паттерн: []()
+    private val isUserImageRegex = Regex("\\[(.*?)\\](\\((.*?)\\))")
 
     override fun onAttach(context: Context) {
         DaggerChatComponent.factory()
@@ -78,30 +88,56 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             router.exit()
         }
 
-        createRecyclerView()
-
         chatViewModel.store = this.store
-        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
+
+        createRecyclerView()
+        loadData()
 
         return binding.root
     }
 
     override fun render(state: ChatState) {
-        if (state.isLoading)
-            binding.shimmer.showShimmer(true)
-        else
-            binding.shimmer.hideShimmer()
+        binding.progressBar.isVisible = state.isShowProgress
 
-        state.items?.let {
-            adapter.submitList(messageFactory.init(it, Const.myId))
-            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+        if(state.error == null) {
+            binding.errorStateContainer.errorLayout.isVisible = false
+            binding.recycler.isVisible = true
+            binding.shimmer.isVisible = true
+            if (state.items.isNullOrEmpty()) {
+                binding.shimmer.showShimmer(true)
+            } else {
+                binding.shimmer.hideShimmer()
+                adapter.submitList(messageFactory.init(state.items, credentials.id))
+            }
+        } else{
+            binding.errorStateContainer.errorLayout.isVisible = true
+            binding.shimmer.isVisible = false
+            binding.recycler.isVisible = false
+            binding.errorStateContainer.errorText.text = state.error.message
+            binding.errorStateContainer.retryButton.setOnClickListener(){
+                loadData()
+            }
         }
+    }
+
+    override fun handleEffect(effect: ChatEffect): Unit? {
+        return when(effect){
+            ChatEffect.ScrollToLastElement ->
+                binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+            ChatEffect.SmoothScrollToLastElement ->
+                binding.recycler.smoothScrollToPosition(messageFactory.getCount() - 1)
+        }
+    }
+
+    private fun loadData() {
+        this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, streamId!!))
+        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
     }
 
     private fun createRecyclerView() {
         adapter.apply {
-            addDelegate(MyMessageDelegate(this@ChatFragment))
-            addDelegate(CompanionMessageDelegate(this@ChatFragment))
+            addDelegate(MyMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
+            addDelegate(CompanionMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
             addDelegate(DateDelegate())
         }
         val itemDecoration = MarginItemDecorator(
@@ -109,7 +145,26 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             binding.linearLayout.orientation
         )
         binding.recycler.addItemDecoration(itemDecoration)
+        binding.recycler.addOnScrollListener(
+            ChatScrollListener(
+                binding.recycler.layoutManager as LinearLayoutManager,
+                chatViewModel.store
+            )
+        )
         binding.recycler.adapter = adapter
+
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                this.store.accept(ChatEvent.Ui.LoadImage(uri, topicName, streamId!!))
+                Log.d("PhotoPicker", "Selected URI: $uri")
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
+
+        binding.contentEditor.plusButton.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         binding.contentEditor.arrowButton.setOnClickListener {
             val message = binding.contentEditor.editText.text.toString()

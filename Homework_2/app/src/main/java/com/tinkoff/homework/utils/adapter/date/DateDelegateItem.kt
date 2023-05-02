@@ -12,6 +12,9 @@ class DateDelegateItem(
     override fun id(): Long = id
 
     override fun compareToOther(other: DelegateItem): Boolean {
-        return (other as DateDelegateItem).value == content()
+        val otherItem = (other as DateDelegateItem).value
+        val currentItem = content() as DateModel
+        return otherItem.id == currentItem.id &&
+                otherItem.date == currentItem.date
     }
 }
