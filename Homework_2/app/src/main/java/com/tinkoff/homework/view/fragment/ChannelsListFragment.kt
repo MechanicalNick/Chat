@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
+import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.databinding.ChannelsListBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
@@ -35,6 +38,7 @@ import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
 import vivid.money.elmslie.android.storeholder.StoreHolder
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
     ToChatRouter {
@@ -75,7 +79,17 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         savedInstanceState: Bundle?
     ): View {
         binding = ChannelsListBinding.inflate(layoutInflater)
+        val dividerItemDecoration = DividerItemDecoration(
+            binding.channelRecyclerView.context,
+            DividerItemDecoration.VERTICAL
+        )
+        context?.let { ctx ->
+            ResourcesCompat.getDrawable(ctx.resources, R.drawable.item_decorator, ctx.theme)?.let {
+                drawable -> dividerItemDecoration.setDrawable(drawable)
+            }
+        }
 
+        binding.channelRecyclerView.addItemDecoration(dividerItemDecoration)
         adapter.addDelegate(StreamDelegate(this))
         adapter.addDelegate(TopicDelegate(this))
         adapter.stateRestorationPolicy =

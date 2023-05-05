@@ -15,11 +15,12 @@ class CompanionMessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
     val avatarView: ImageView by lazy { findViewById(R.id.companionAvatarView) }
-    val cardView: View by lazy { findViewById(R.id.companionCardView) }
     val textMessage: TextView by lazy { findViewById(R.id.companionTextMessage) }
     val textName: TextView by lazy { findViewById(R.id.companionTextName) }
     val flexbox: FlexboxLayout by lazy { findViewById(R.id.companionFlexbox) }
     val userImage: ImageView by lazy { findViewById(R.id.companionUserImage) }
+
+    private val cardView: View by lazy { findViewById(R.id.companionCardView) }
 
     private val marginBetweenImageAndFlexbox = 9
     private val marginBetweenCardAndFlexbox = 7
@@ -92,10 +93,6 @@ class CompanionMessageLayout @JvmOverloads constructor(
     override fun checkLayoutParams(p: LayoutParams): Boolean {
         return p is MarginLayoutParams
     }
-    private fun Float.dp(context: Context) = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this,
-        context.resources.displayMetrics
-    )
+
 
 }

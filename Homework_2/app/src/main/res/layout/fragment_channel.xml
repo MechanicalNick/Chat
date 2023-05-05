@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="63dp"
-        android:orientation="horizontal">
+    <com.tinkoff.homework.view.viewgroup.SearchViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:id="@+id/search"
+        app:hint="@string/search_tooltip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:id="@+id/search"
-            android:layout_marginLeft="20dp"
-            android:tooltipText="@string/search_tooltip"
-            android:textColor="@color/white"/>
-
-        <View android:layout_width="27dp"
-            android:layout_height="27dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="36dp"
-            android:layout_marginRight="33dp"
-            android:background="@drawable/ic_search"/>
-    </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:id="@+id/emptyView"
+        android:background="@color/content_editor_background_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search"
+        />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         style="@style/MyCustomTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="35dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="27dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/fragmentViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/date_background_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emptyView" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,11 @@
         <attr name="maxCountInRow" format="integer" />
         <attr name="flexboxMargin" format="integer" />
     </declare-styleable>
+    <declare-styleable name="SearchViewGroup">
+        <attr name="hint" format="string" />
+    </declare-styleable>
     <attr format="reference" name="reactionViewStyle"/>
     <attr format="reference" name="plusViewStyle"/>
     <attr format="reference" name="contentEditorStyle"/>
+    <attr format="reference" name="searchViewGroupStyle"/>
 </resources>

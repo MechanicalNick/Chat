@@ -32,7 +32,7 @@ class ChannelsFragment: Fragment()  {
             tab.text = tabNames[position]
         }.attach()
 
-        binding.search.addTextChangedListener {
+        binding.search.searchText.addTextChangedListener {
             if(ignoreRotation) {
                 ignoreRotation = false
                 return@addTextChangedListener

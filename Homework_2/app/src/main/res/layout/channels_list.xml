@@ -16,6 +16,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channelRecyclerView"
+            android:background="@color/default_color_background"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:layout_width="match_parent"
