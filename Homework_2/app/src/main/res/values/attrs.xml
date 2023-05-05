@@ -10,6 +10,7 @@
     </declare-styleable>
     <declare-styleable name="SearchViewGroup">
         <attr name="hint" format="string" />
+        <attr name="backgroundTintColor" format="color" />
     </declare-styleable>
     <attr format="reference" name="reactionViewStyle"/>
     <attr format="reference" name="plusViewStyle"/>

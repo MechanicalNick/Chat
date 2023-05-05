@@ -31,4 +31,5 @@
     <color name="red">#FF0000</color>
     <color name="orange">#FFA500</color>
     <color name="tab_indicator">#219653</color>
+    <color name="custom_search_tint">#323232</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.tinkoff.homework.view.viewgroup
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -21,6 +22,8 @@ class SearchViewGroup @JvmOverloads constructor(
             getString(R.styleable.SearchViewGroup_hint)?.let {
                 searchText.hint = it
             }
+            searchText.backgroundTintList = ColorStateList
+                .valueOf(getColor(R.styleable.SearchViewGroup_backgroundTintColor, 0))
         }
     }
 

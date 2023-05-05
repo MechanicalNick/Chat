@@ -7,7 +7,6 @@
         android:id="@+id/search_text"
         android:layout_width="match_parent"
         android:layout_height="63dp"
-        android:backgroundTint="#323232"
         android:hint="@string/search_tooltip"
         android:textColor="@color/white"
         android:textColorHint="@color/white"

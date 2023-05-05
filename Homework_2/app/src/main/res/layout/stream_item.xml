@@ -9,7 +9,7 @@
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/default_color_text"
-        android:layout_marginStart="41dp"
+        android:layout_marginStart="21dp"
         android:id="@+id/streamName"/>
 
     <CheckBox

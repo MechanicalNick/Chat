@@ -10,6 +10,7 @@
         android:layout_height="66dp"
         android:id="@+id/search"
         app:hint="@string/search_tooltip"
+        app:backgroundTintColor="@color/custom_search_tint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

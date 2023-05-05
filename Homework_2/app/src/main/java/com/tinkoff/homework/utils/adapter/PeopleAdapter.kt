@@ -29,6 +29,7 @@ class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
             binding.userAvatar.let {
                 Glide.with(binding.root)
                     .load(model.avatarUrl)
+                    .circleCrop()
                     .placeholder(R.mipmap.ic_launcher_round)
                     .error(R.drawable.error_placeholder)
                     .into(it)
