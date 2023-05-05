@@ -1,6 +1,6 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.di.scope.StreamScope
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.domain.use_cases.interfaces.AddReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.RemoveReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendMessageUseCase
@@ -9,7 +9,6 @@ import com.tinkoff.homework.utils.StreamFactory
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import dagger.multibindings.StringKey
 import javax.inject.Singleton
 
 @Module
@@ -19,9 +18,15 @@ class FactoryModule {
     fun providesMessageFactory(
         addReactionUseCase: AddReactionUseCase,
         removeReactionUseCase: RemoveReactionUseCase,
-        sendMessageUseCase: SendMessageUseCase
+        sendMessageUseCase: SendMessageUseCase,
+        credentials: Credentials
     ): MessageFactory {
-        return MessageFactory(addReactionUseCase, removeReactionUseCase, sendMessageUseCase)
+        return MessageFactory(
+            addReactionUseCase,
+            removeReactionUseCase,
+            sendMessageUseCase,
+            credentials
+        )
     }
 
     @Singleton

@@ -9,18 +9,18 @@
         android:layout_width="217dp"
         android:layout_height="wrap_content"
         style="@style/Theme.Homework.CardView.Message"
-        android:id="@+id/cardView">
+        android:id="@+id/myCardView">
 
         <ImageView
-            android:id="@+id/userImage"
+            android:id="@+id/myUserImage"
             android:layout_width="150dp"
             android:layout_height="120dp"
             android:layout_marginTop="29dp"
             android:layout_marginStart="13dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <TextView
-            android:id="@+id/textMessage"
+            android:id="@+id/myTextMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -34,7 +34,7 @@
     <com.tinkoff.homework.view.viewgroup.FlexboxLayout
         app:maxCountInRow="@integer/flexbox_maxCountInRow"
         app:flexboxMargin="@integer/flexbox_flexboxMargin"
-        android:id="@+id/flexbox"
+        android:id="@+id/myFlexbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </merge>

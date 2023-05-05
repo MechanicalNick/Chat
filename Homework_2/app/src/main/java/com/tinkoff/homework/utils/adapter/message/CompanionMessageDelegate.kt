@@ -46,7 +46,7 @@ class CompanionMessageDelegate(
 
         fun bind(model: MessageModel) {
             with(binding) {
-                root.image.let {
+                root.avatarView.let {
                     Glide.with(binding.root)
                         .load(model.avatarUrl)
                         .placeholder(R.mipmap.ic_launcher_round)
@@ -86,7 +86,7 @@ class CompanionMessageDelegate(
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
-                    { callback.reactionRemove(it, model.id, model.senderId) },
+                    { callback.reactionChange(it, model.id, model.senderId) },
                     { callback.showBottomSheetDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)

@@ -1,5 +1,6 @@
 package com.tinkoff.homework.elm.chat
 
+import com.tinkoff.homework.data.domain.MessageResponseWrapperStatus
 import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
 import com.tinkoff.homework.elm.chat.model.ChatCommand
@@ -54,6 +55,7 @@ class ChatActor(
                         { messages -> ChatEvent.Internal.PageDataLoaded(messages) },
                         { error -> ChatEvent.Internal.ErrorLoading(error) }
                     )
+
             is ChatCommand.AddReaction -> messageFactory.addReaction(
                 command.messageId,
                 command.reaction
@@ -62,6 +64,21 @@ class ChatActor(
                     { ChatEvent.Internal.ReactionAdded(command.messageId, command.reaction) },
                     { error -> ChatEvent.Internal.ErrorLoading(error) }
                 )
+
+            is ChatCommand.ChangeReaction -> messageFactory.changeReaction(
+                command.messageId,
+                command.reaction
+            )
+                .mapEvents(
+                    {
+                        if (it.status == MessageResponseWrapperStatus.Added)
+                            ChatEvent.Internal.ReactionAdded(command.messageId, command.reaction)
+                        else
+                            ChatEvent.Internal.ReactionRemoved(command.messageId, command.reaction)
+                    },
+                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                )
+
             is ChatCommand.RemoveReaction -> messageFactory.removeReaction(
                 command.messageId,
                 command.reaction
@@ -70,6 +87,7 @@ class ChatActor(
                     { ChatEvent.Internal.ReactionRemoved(command.messageId, command.reaction) },
                     { error -> ChatEvent.Internal.ErrorLoading(error) }
                 )
+
             is ChatCommand.SendMessage -> messageFactory.sendMessage(
                 command.streamId,
                 command.topic,

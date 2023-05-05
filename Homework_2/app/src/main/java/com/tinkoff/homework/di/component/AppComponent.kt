@@ -5,8 +5,20 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.data.dto.Credentials
-import com.tinkoff.homework.di.*
-import com.tinkoff.homework.domain.use_cases.interfaces.*
+import com.tinkoff.homework.di.ApiUrlProvider
+import com.tinkoff.homework.di.CredentialsModule
+import com.tinkoff.homework.di.FactoryModule
+import com.tinkoff.homework.di.LocalNavigationModule
+import com.tinkoff.homework.di.NetworkModule
+import com.tinkoff.homework.di.RepositoryModule
+import com.tinkoff.homework.di.RoomModule
+import com.tinkoff.homework.di.UseCaseModule
+import com.tinkoff.homework.di.ViewModelsModule
+import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
+import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
 import com.tinkoff.homework.utils.MessageFactory
 import com.tinkoff.homework.utils.StreamFactory
 import com.tinkoff.homework.view.MainActivity
@@ -32,6 +44,7 @@ interface AppComponent {
     val sendImageUseCase: SendImageUseCase
     val lazyHeaders: LazyHeaders
     val credentials: Credentials
+    val apiUrlProvider: ApiUrlProvider
 
     fun inject(activity: MainActivity)
     fun inject(fragment: MainFragment)

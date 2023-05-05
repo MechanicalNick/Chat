@@ -16,62 +16,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                app:buttonGravity="center_vertical"
-                app:navigationIcon="@drawable/arrow_back"
-                app:titleTextColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="66dp"/>
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/chips_background"
-                android:gravity="center|center_horizontal">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/arrow_back"
+            app:titleTextColor="@color/white" />
 
-                <TextView
-                    android:textColor="@color/hint_text_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/topic"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/chips_background"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/header"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/hint_text_color"
-                    android:gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_gravity="top|center"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/topic"
+                android:textColor="@color/hint_text_color" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="0dp" />
-
-            <com.tinkoff.homework.view.viewgroup.ContentEditorViewGroup
-                android:id="@+id/contentEditor"
-                android:layout_width="match_parent"
-                android:layout_height="62dp" />
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textColor="@color/hint_text_color" />
         </LinearLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <com.tinkoff.homework.view.viewgroup.ContentEditorViewGroup
+            android:id="@+id/contentEditor"
+            android:layout_width="match_parent"
+            android:layout_height="62dp" />
+    </LinearLayout>
 </FrameLayout>
 
 
