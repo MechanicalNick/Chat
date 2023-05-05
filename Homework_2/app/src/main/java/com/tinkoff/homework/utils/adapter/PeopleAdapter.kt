@@ -42,7 +42,7 @@ class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
                 Status.Offline -> R.drawable.circle_offline
             }
             binding.userStatus.background = ResourcesCompat
-                .getDrawable(binding.root.context.resources, id, null)
+                .getDrawable(binding.root.context.resources, id, binding.root.context.theme)
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.facebook.shimmer.ShimmerFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/shimmer"
     android:layout_width="match_parent"
@@ -10,42 +11,52 @@
         android:visibility="gone"
         layout="@layout/error_layout" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:background="@color/date_background_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolbar"
+            android:background="@color/content_editor_background_color"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/arrow_back">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:text="@string/profile"
+                android:layout_gravity="center"/>
+        </androidx.appcompat.widget.Toolbar>
 
         <ImageView
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="113dp"
             android:id="@+id/profileImage"
             android:layout_width="185dp"
-            android:layout_height="185dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2" />
+            android:layout_height="185dp"/>
 
         <TextView
-            android:id="@+id/profileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Darrell Steward"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+            android:layout_gravity="center_horizontal"
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Darrell Steward"
+        android:textColor="@color/white"
+        android:textSize="32sp" />
 
         <TextView
-            android:id="@+id/status"
+            android:id="@+id/profileStatus"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="online"
             android:textColor="@color/green"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileName" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="16sp" />
+
+    </LinearLayout>
 </com.facebook.shimmer.ShimmerFrameLayout>

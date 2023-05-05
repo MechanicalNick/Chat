@@ -17,4 +17,5 @@
     <string name="users_tooltip">Users...</string>
     <string name="default_error_message">Произошла какая-то ошибка. Повторите запрос позднее</string>
     <string name="state_error_button_retry">Повторить</string>
+    <string name="profile">Profile</string>
 </resources>

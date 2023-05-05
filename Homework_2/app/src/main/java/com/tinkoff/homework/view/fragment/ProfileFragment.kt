@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.Profile
 import com.tinkoff.homework.data.domain.Status
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.FragmentProfileBinding
 import com.tinkoff.homework.di.component.DaggerProfileComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -22,6 +24,8 @@ import javax.inject.Inject
 class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>() {
     @Inject
     override lateinit var factory: BaseStoreFactory<ProfileEvent, ProfileEffect, ProfileState>
+    @Inject
+    lateinit var credentials: Credentials
     override val initEvent: ProfileEvent = ProfileEvent.Ui.LoadData
 
     lateinit var binding: FragmentProfileBinding
@@ -70,6 +74,8 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
                 .into(it)
         }
 
+        binding.profileToolbar.isVisible = profile.id != credentials.id
+
         binding.profileName.text = profile.name
 
         val pair = when(profile.status){
@@ -78,8 +84,8 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
             Status.Offline ->  Pair(R.string.offline, R.color.red)
         }
 
-        binding.status.text = requireContext().resources.getText(pair.first)
-        binding.status.setTextColor(requireContext().resources.getColor(pair.second, null))
+        binding.profileStatus.text = requireContext().resources.getText(pair.first)
+        binding.profileStatus.setTextColor(requireContext().resources.getColor(pair.second, null))
     }
 
 
