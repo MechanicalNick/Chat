@@ -28,9 +28,10 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/chatToolbar"
             android:layout_width="match_parent"
             android:layout_height="66dp"
+            android:background="@color/default_color_text_header"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/arrow_back"
             app:titleTextColor="@color/white" />
@@ -46,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:textSize="20sp"
                 android:text="@string/topic"
                 android:textColor="@color/hint_text_color" />
 
@@ -53,6 +55,7 @@
                 android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
                 android:textColor="@color/hint_text_color" />

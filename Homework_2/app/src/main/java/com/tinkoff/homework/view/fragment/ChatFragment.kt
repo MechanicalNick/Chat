@@ -79,11 +79,11 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         binding.header.text = getString(R.string.sharp, topicName)
 
         val streamName = requireArguments().getString(ARG_STREAM)
-        binding.toolbar.title = streamName
+        binding.chatToolbar.title = getString(R.string.sharp, streamName)
 
         streamId = requireArguments().getLong(ARG_STREAM_ID)
 
-        binding.toolbar.setNavigationOnClickListener {
+        binding.chatToolbar.setNavigationOnClickListener {
             router.exit()
         }
 
