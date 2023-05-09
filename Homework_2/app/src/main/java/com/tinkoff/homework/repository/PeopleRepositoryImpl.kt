@@ -6,6 +6,7 @@ import com.tinkoff.homework.repository.interfaces.PeopleRepository
 import com.tinkoff.homework.utils.ZulipChatApi
 import com.tinkoff.homework.utils.mapper.toDomain
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PeopleRepositoryImpl @Inject constructor(
@@ -14,10 +15,15 @@ class PeopleRepositoryImpl @Inject constructor(
 
     override fun getAllPresence(): Single<PresencesResponse> {
         return api.getAllPresence()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
     }
 
     override fun getPeoples(): Single<List<People>> {
-        return api.getAllPeoples().map { p -> p.peoples }
+        return api.getAllPeoples()
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map { p -> p.peoples }
             .map { peoples ->
                 peoples
                     .filter { peopleDto -> !peopleDto.is_bot }

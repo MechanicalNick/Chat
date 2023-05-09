@@ -63,10 +63,14 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.addReaction(messageId, emojiName)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
     }
 
     override fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.removeReaction(messageId, emojiName)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
     }
 
     override fun sendMessage(
@@ -104,11 +108,14 @@ class MessageRepositoryImpl @Inject constructor(
             numBefore,
             numAfter,
             toNarrow(moshi, topic, streamId, query)
-        ).map { message ->
-            message.messages
-                .filter { m -> m.streamId != null && m.subject != null }
-                .map { m -> m.toDomain() }
-        }
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map { message ->
+                message.messages
+                    .filter { m -> m.streamId != null && m.subject != null }
+                    .map { m -> m.toDomain() }
+            }
 
         if(streamId != null) {
             result.subscribeOn(Schedulers.io())

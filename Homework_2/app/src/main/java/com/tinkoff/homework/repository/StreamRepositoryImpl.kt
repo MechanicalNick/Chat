@@ -4,6 +4,8 @@ import android.util.Log
 import com.tinkoff.homework.data.domain.MessageModel
 import com.tinkoff.homework.data.domain.Stream
 import com.tinkoff.homework.data.domain.Topic
+import com.tinkoff.homework.data.dto.TopicDto
+import com.tinkoff.homework.data.dto.TopicResponse
 import com.tinkoff.homework.db.dao.StreamDao
 import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.repository.interfaces.StreamRepository
@@ -12,6 +14,7 @@ import com.tinkoff.homework.utils.ZulipChatApi
 import com.tinkoff.homework.utils.mapper.toDomain
 import com.tinkoff.homework.utils.mapper.toEntities
 import com.tinkoff.homework.utils.mapper.toEntity
+import com.tinkoff.homework.utils.zipSingles
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -30,7 +33,9 @@ class StreamRepositoryImpl @Inject constructor(
             .map { list ->
                 list.map { dto ->
                     Stream(
-                        dto.streamId, dto.name, mutableListOf(),
+                        id = dto.streamId,
+                        name = dto.name,
+                        topics = mutableListOf(),
                         isExpanded = false
                     )
                 }
@@ -44,7 +49,9 @@ class StreamRepositoryImpl @Inject constructor(
             .map { list ->
                 list.map { dto ->
                     Stream(
-                        dto.streamId, dto.name, mutableListOf(),
+                        id = dto.streamId,
+                        name = dto.name,
+                        topics = mutableListOf(),
                         isExpanded = false
                     )
                 }
@@ -56,10 +63,11 @@ class StreamRepositoryImpl @Inject constructor(
         return loadResultsFromServer(isSubscribed)
             .flattenAsObservable { it }
             .filter { stream ->
-                if (query.isBlank()) true else stream.name.contains(
-                    query,
-                    ignoreCase = true
-                )
+                if (query.isBlank()) {
+                    true
+                } else {
+                    stream.name.contains(query, ignoreCase = true)
+                }
             }
             .toList()
     }
@@ -71,40 +79,51 @@ class StreamRepositoryImpl @Inject constructor(
     private fun loadResultsFromServer(isSubscribed: Boolean): Single<List<Stream>> {
         val collection = if (isSubscribed) getSubscriptions() else getAll()
 
-        val result = collection
-            .retryWhen { throwable -> throwable.delay(Const.DELAY, TimeUnit.SECONDS) }
-            .flattenAsObservable { it }
-            .flatMapSingle { stream ->
-                Single.zip(
-                    Single.just(stream),
-                    api.getAllTopics(stream.id).subscribeOn(Schedulers.io()),
-                    fetchMessages()
-                ) { stream, topics, messages ->
-                    val newTopics = topics.topics.map { topicDto ->
-                        Topic(topicDto.name, messages.count { messageModel ->
-                            messageModel.subject == topicDto.name && messageModel.streamId == stream.id
-                        }.toLong(), stream.name, stream.id)
+        val result = Single.zip(collection, fetchMessages()) { list, messages ->
+            Pair(list, messages)
+        }   .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .flatMap { pair ->
+                pair.first.map { stream ->
+                    Single.zip(
+                        Single.just(stream),
+                        api.getAllTopics(stream.id)
+                    ) { curStream, topics ->
+                        val newTopics = createTopics(topics, pair, curStream)
+                        curStream.topics.addAll(newTopics)
+                        curStream
                     }
-                    stream.topics.addAll(newTopics)
-                    stream
-                }
+                }.zipSingles()
+            }.doOnSuccess {
+                refreshLocalDataSource(it, isSubscribed)
             }
-            .subscribeOn(Schedulers.io())
-            .toList()
-
-        val subscribe = result
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.computation())
-            .subscribe(
-                {
-                    refreshLocalDataSource(it, isSubscribed)
-                }, {
-                    Log.e("error", it.message ?: it.stackTraceToString())
-                }
-            )
 
         return result
     }
+
+    private fun createTopics(
+        topics: TopicResponse,
+        pair: Pair<List<Stream>, List<MessageModel>>,
+        curStream: Stream
+    ): List<Topic> {
+        return topics.topics.map { topicDto ->
+            Topic(
+                topicDto.name,
+                getMessageCount(pair, topicDto, curStream),
+                curStream.name,
+                curStream.id
+            )
+        }
+    }
+
+    private fun getMessageCount(
+        pair: Pair<List<Stream>, List<MessageModel>>,
+        topicDto: TopicDto,
+        curStream: Stream
+    ) = pair.second.count { messageModel ->
+        messageModel.subject == topicDto.name &&
+                messageModel.streamId == curStream.id
+    }.toLong()
 
     private fun loadLocalResults(isSubscribed: Boolean): Single<List<Stream>> {
         val collection =

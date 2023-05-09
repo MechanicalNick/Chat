@@ -123,9 +123,6 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
             }
             .addTo(compositeDisposable)
 
-
-        searchQueryPublisher.onNext(query)
-
         return binding.root
     }
 
