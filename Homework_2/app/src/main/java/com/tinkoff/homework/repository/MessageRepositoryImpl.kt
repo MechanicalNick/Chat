@@ -13,7 +13,10 @@ import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.FileUtils
 import com.tinkoff.homework.utils.ZulipChatApi
-import com.tinkoff.homework.utils.mapper.*
+import com.tinkoff.homework.utils.mapper.toDomain
+import com.tinkoff.homework.utils.mapper.toEntity
+import com.tinkoff.homework.utils.mapper.toMyMessageEntity
+import com.tinkoff.homework.utils.mapper.toNarrow
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -74,7 +77,7 @@ class MessageRepositoryImpl @Inject constructor(
         val sendMessage = api.sendMessage(streamId, topic, message)
 
         sendMessage.doAfterSuccess {
-            messageDao.insert(toMyMessageEntity(credentials, it, streamId, topic))
+            messageDao.insert(it.toMyMessageEntity(credentials, streamId, topic))
         }
 
         return sendMessage
@@ -101,9 +104,10 @@ class MessageRepositoryImpl @Inject constructor(
             numBefore,
             numAfter,
             toNarrow(moshi, topic, streamId, query)
-        ).map { message -> message.messages
-            .filter { m -> m.streamId != null && m.subject != null }
-            .map { m -> toMessageDomain(m) }
+        ).map { message ->
+            message.messages
+                .filter { m -> m.streamId != null && m.subject != null }
+                .map { m -> m.toDomain() }
         }
 
         if(streamId != null) {
@@ -123,7 +127,7 @@ class MessageRepositoryImpl @Inject constructor(
 
     private fun loadLocalResults(streamId: Long, topicName: String): Single<List<MessageModel>> {
         return messageDao.getAll(streamId, topicName)
-            .map { list -> list.map { result -> toDomainMessage(result) } }
+            .map { list -> list.map { result -> result.toDomain() } }
     }
 
     private fun refreshLocalDataSource(
@@ -137,8 +141,8 @@ class MessageRepositoryImpl @Inject constructor(
         }
         messages.map { message ->
             messageDao.insertMessage(
-                toMessageEntity(message, streamId, topic),
-                message.reactions.map { reaction -> toReactionEntity(reaction, message.id) }
+                message.toEntity(streamId, topic),
+                message.reactions.map { reaction -> reaction.toEntity(message.id) }
             )
         }
     }

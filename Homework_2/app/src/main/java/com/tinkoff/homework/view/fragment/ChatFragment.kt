@@ -105,6 +105,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         if(state.error == null) {
             binding.errorStateContainer.errorLayout.isVisible = false
             binding.recycler.isVisible = true
+            binding.contentEditor.isVisible = true
             if (state.isLoading || state.items.isNullOrEmpty()) {
                 binding.shimmer.isVisible = true
                 binding.shimmer.showShimmer(true)
@@ -117,6 +118,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             binding.errorStateContainer.errorLayout.isVisible = true
             binding.shimmer.isVisible = false
             binding.recycler.isVisible = false
+            binding.contentEditor.isVisible = false
             binding.errorStateContainer.errorText.text = state.error.message
         }
     }

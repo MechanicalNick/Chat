@@ -6,16 +6,16 @@ import com.tinkoff.homework.data.entity.StreamEntity
 import com.tinkoff.homework.data.entity.TopicEntity
 import com.tinkoff.homework.data.results.StreamResult
 
-fun toStreamEntity(domain: Stream, isSubscribed: Boolean): StreamEntity {
+fun Stream.toEntity(isSubscribed: Boolean): StreamEntity {
     return StreamEntity(
-        streamId = domain.id,
-        name = domain.name,
+        streamId = this.id,
+        name = this.name,
         isSubscribed = isSubscribed
     )
 }
 
-fun toTopicEntities(domain: Stream): List<TopicEntity> {
-    return domain.topics.map {
+fun Stream.toEntities(): List<TopicEntity> {
+    return this.topics.map {
         TopicEntity(
             name = it.name,
             messageCount = it.messageCount,
@@ -24,25 +24,22 @@ fun toTopicEntities(domain: Stream): List<TopicEntity> {
     }.toList()
 }
 
-fun toDomainStream(streamResult: StreamResult): Stream {
+fun StreamResult.toDomain(): Stream {
     return Stream(
-        id = streamResult.streamEntity.streamId,
-        name = streamResult.streamEntity.name,
-        topics = streamResult.topics.map { topic ->
-            toDomainTopic(
-                streamResult.streamEntity,
-                topic
-            )
+        id = this.streamEntity.streamId,
+        name = this.streamEntity.name,
+        topics = this.topics.map { topic ->
+            topic.toDomain(this.streamEntity)
         }
             .toMutableList(),
         isExpanded = false
     )
 }
 
-fun toDomainTopic(streamEntity: StreamEntity, topicEntity: TopicEntity): Topic {
+fun TopicEntity.toDomain(streamEntity: StreamEntity): Topic {
     return Topic(
-        name = topicEntity.name,
-        messageCount = topicEntity.messageCount,
+        name = this.name,
+        messageCount = this.messageCount,
         streamName = streamEntity.name,
         streamId = streamEntity.streamId
     )

@@ -9,9 +9,9 @@ import com.tinkoff.homework.repository.interfaces.MessageRepository
 import com.tinkoff.homework.repository.interfaces.StreamRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.ZulipChatApi
-import com.tinkoff.homework.utils.mapper.toDomainStream
-import com.tinkoff.homework.utils.mapper.toStreamEntity
-import com.tinkoff.homework.utils.mapper.toTopicEntities
+import com.tinkoff.homework.utils.mapper.toDomain
+import com.tinkoff.homework.utils.mapper.toEntities
+import com.tinkoff.homework.utils.mapper.toEntity
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -110,7 +110,7 @@ class StreamRepositoryImpl @Inject constructor(
         val collection =
             if (isSubscribed) streamDao.getSubscribed(onlySubscribed = true) else streamDao.getAll()
         return collection
-            .map { list -> list.map { streamResult -> toDomainStream(streamResult) } }
+            .map { list -> list.map { streamResult -> streamResult.toDomain() } }
     }
 
     private fun fetchMessages(): Single<List<MessageModel>> {
@@ -131,13 +131,13 @@ class StreamRepositoryImpl @Inject constructor(
         streams.map {
             if (isSubscribed) {
                 streamDao.insertStreamWithReplaceStrategy(
-                    toStreamEntity(it, isSubscribed = true),
-                    toTopicEntities(it)
+                    stream = it.toEntity(isSubscribed = true),
+                    topics = it.toEntities()
                 )
             } else {
                 streamDao.insertStreamWithIgnoreStrategy(
-                    toStreamEntity(it, isSubscribed = false),
-                    toTopicEntities(it)
+                    stream = it.toEntity(isSubscribed = false),
+                    topics = it.toEntities()
                 )
             }
         }
