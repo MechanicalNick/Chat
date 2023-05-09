@@ -4,7 +4,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class PeopleResponse(
-    @field:Json(name = "members")
-    val peoples: List<UserDto>
+class StatusDto(
+    @field:Json(name = "status")
+    val status: String,
+    @field:Json(name = "timestamp")
+    val timestamp: Long,
 )

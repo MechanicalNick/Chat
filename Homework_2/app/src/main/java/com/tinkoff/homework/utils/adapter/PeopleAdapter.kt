@@ -9,19 +9,27 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.data.domain.People
 import com.tinkoff.homework.data.domain.Status
 import com.tinkoff.homework.databinding.PeopleItemBinding
+import com.tinkoff.homework.utils.ToProfileRouter
 
-class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
+class PeopleAdapter(private val router: ToProfileRouter) :
+    RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {
     val peoples: MutableList<People> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-        ViewHolder(PeopleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        ViewHolder(
+            PeopleItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            router
+        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(peoples[position])
 
     override fun getItemCount(): Int = peoples.size
 
-    class ViewHolder(_binding: PeopleItemBinding) : RecyclerView.ViewHolder(_binding.root) {
+    class ViewHolder(
+        _binding: PeopleItemBinding,
+        private val router: ToProfileRouter
+    ) : RecyclerView.ViewHolder(_binding.root) {
 
         var binding: PeopleItemBinding = PeopleItemBinding.bind(itemView)
 
@@ -43,6 +51,10 @@ class PeopleAdapter(): RecyclerView.Adapter<PeopleAdapter.ViewHolder>()  {
             }
             binding.userStatus.background = ResourcesCompat
                 .getDrawable(binding.root.context.resources, id, binding.root.context.theme)
+
+            binding.root.setOnClickListener {
+                router.goToProfile(model.userId)
+            }
         }
     }
 }

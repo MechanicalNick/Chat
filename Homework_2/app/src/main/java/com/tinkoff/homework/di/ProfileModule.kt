@@ -1,6 +1,5 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.di.scope.ProfileScope
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -12,7 +11,6 @@ import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class ProfileModule {
@@ -25,8 +23,8 @@ class ProfileModule {
 
     @ProfileScope
     @Provides
-    fun provideProfileReducer(credentials: Credentials): ProfileReducer {
-        return ProfileReducer(credentials)
+    fun provideProfileReducer(): ProfileReducer {
+        return ProfileReducer()
     }
 
     @ProfileScope

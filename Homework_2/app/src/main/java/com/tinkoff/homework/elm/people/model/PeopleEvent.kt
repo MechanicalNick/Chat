@@ -6,6 +6,7 @@ sealed class PeopleEvent {
 
     sealed class Ui : PeopleEvent() {
         object LoadData : Ui()
+        data class GoToProfile(val userId: Long) : Ui()
     }
 
     sealed class Internal : PeopleEvent() {

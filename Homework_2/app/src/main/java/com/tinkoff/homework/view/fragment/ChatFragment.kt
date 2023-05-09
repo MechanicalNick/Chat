@@ -92,6 +92,10 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         createRecyclerView()
         loadData()
 
+        binding.errorStateContainer.retryButton.setOnClickListener {
+            loadData()
+        }
+
         return binding.root
     }
 
@@ -114,9 +118,6 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             binding.shimmer.isVisible = false
             binding.recycler.isVisible = false
             binding.errorStateContainer.errorText.text = state.error.message
-            binding.errorStateContainer.retryButton.setOnClickListener(){
-                loadData()
-            }
         }
     }
 

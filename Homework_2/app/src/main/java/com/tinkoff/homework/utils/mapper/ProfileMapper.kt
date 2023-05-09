@@ -1,13 +1,11 @@
 package com.tinkoff.homework.utils.mapper
 
 import com.tinkoff.homework.data.domain.Profile
-import com.tinkoff.homework.data.dto.ProfileDto
+import com.tinkoff.homework.data.dto.UserDto
 
-fun toDomainProfile(dto: ProfileDto): Profile = dto.toDomain()
-
-fun ProfileDto.toDomain(): Profile = Profile(
-    id = id,
-    name = name,
+fun UserDto.toDomainProfile(status: String): Profile = Profile(
+    id = userId,
+    name = full_name,
     avatarUrl = avatarUrl,
-    status = status
+    status = toStatus(status)
 )

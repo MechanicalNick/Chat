@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.facebook.shimmer.ShimmerFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/shimmer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,52 +9,59 @@
         android:visibility="gone"
         layout="@layout/error_layout" />
 
-    <LinearLayout
-        android:background="@color/date_background_color"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/profileToolbar"
-            android:background="@color/content_editor_background_color"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="66dp"
-            app:buttonGravity="center_vertical"
-            app:navigationIcon="@drawable/arrow_back">
+            android:layout_height="match_parent"
+            android:background="@color/date_background_color"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/profileToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:background="@color/content_editor_background_color"
+                app:buttonGravity="center_vertical"
+                app:navigationIcon="@drawable/arrow_back">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/profile"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/profileImage"
+
+                android:layout_width="185dp"
+                android:layout_height="185dp"
+                android:layout_gravity="center_horizontal" />
+
             <TextView
+                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
+                android:layout_gravity="center_horizontal"
+                android:text="Darrell Steward"
                 android:textColor="@color/white"
-                android:text="@string/profile"
-                android:layout_gravity="center"/>
-        </androidx.appcompat.widget.Toolbar>
+                android:textSize="32sp" />
 
-        <ImageView
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="113dp"
-            android:id="@+id/profileImage"
-            android:layout_width="185dp"
-            android:layout_height="185dp"/>
+            <TextView
+                android:id="@+id/profileStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="online"
+                android:textColor="@color/green"
+                android:textSize="16sp" />
 
-        <TextView
-            android:layout_gravity="center_horizontal"
-        android:id="@+id/profileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Darrell Steward"
-        android:textColor="@color/white"
-        android:textSize="32sp" />
-
-        <TextView
-            android:id="@+id/profileStatus"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="online"
-            android:textColor="@color/green"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-</com.facebook.shimmer.ShimmerFrameLayout>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</FrameLayout>

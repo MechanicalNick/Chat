@@ -5,7 +5,8 @@ import com.tinkoff.homework.data.domain.Profile
 sealed class ProfileEvent {
 
     sealed class Ui : ProfileEvent() {
-        object LoadData : Ui()
+        object Wait : Ui()
+        data class LoadData(val profileId: Long) : Ui()
     }
 
     sealed class Internal : ProfileEvent() {

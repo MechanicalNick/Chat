@@ -3,7 +3,6 @@ package com.tinkoff.homework.view.viewgroup
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -79,9 +78,4 @@ class SearchViewGroup @JvmOverloads constructor(
     override fun checkLayoutParams(p: LayoutParams): Boolean {
         return p is MarginLayoutParams
     }
-    private fun Int.dp(context: Context) = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this.toFloat(),
-        context.resources.displayMetrics
-    ).toInt()
 }

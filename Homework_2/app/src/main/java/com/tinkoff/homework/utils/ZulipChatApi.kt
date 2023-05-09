@@ -21,8 +21,11 @@ interface ZulipChatApi {
     @GET("realm/presence")
     fun getAllPresence(): Single<PresencesResponse>
 
-    @GET("users/me")
-    fun getMyInfo(): Single<PeopleDto>
+    @GET("users/{userId}/presence")
+    fun getPresence(@Path("userId") userId: Long): Single<PresenceResponse>
+
+    @GET("users/{userId}")
+    fun getUserInfo(@Path("userId") userId: Long): Single<UserResponse>
 
     @GET("messages")
     fun getMessages(

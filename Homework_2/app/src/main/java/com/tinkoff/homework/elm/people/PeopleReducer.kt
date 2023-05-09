@@ -16,6 +16,7 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
                     error = null
                 )
             }
+
             is PeopleEvent.Internal.ErrorLoading -> state {
                 copy(
                     isLoading = false,
@@ -23,6 +24,11 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
                     error = event.error
                 )
             }
+
+            is PeopleEvent.Ui.GoToProfile -> {
+                effects { +PeopleEffect.GoToProfile(event.userId) }
+            }
+
             is PeopleEvent.Ui.LoadData -> {
                 state {
                     copy(

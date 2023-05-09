@@ -29,10 +29,12 @@
         android:text="darrel@company.com"
         android:layout_marginStart="89dp"
         android:layout_marginTop="31dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:id="@+id/userEmail"
         android:textColor="@color/description_color_text"
         android:textSize="16sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:maxLines="1" />
 
 </FrameLayout>

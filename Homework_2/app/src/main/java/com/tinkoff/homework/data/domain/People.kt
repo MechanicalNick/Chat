@@ -5,5 +5,6 @@ class People(
     val key: String,
     val email: String,
     var status: Status,
-    val avatarUrl: String?
+    val avatarUrl: String?,
+    val userId: Long
 )
