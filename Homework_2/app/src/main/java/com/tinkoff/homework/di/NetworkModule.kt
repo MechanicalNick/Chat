@@ -5,7 +5,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.RateLimitInterceptor
-import com.tinkoff.homework.utils.ZulipChatApi
+import com.tinkoff.homework.data.ZulipChatApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.Credentials

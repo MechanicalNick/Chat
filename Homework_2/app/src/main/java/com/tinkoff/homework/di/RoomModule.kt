@@ -2,9 +2,9 @@ package com.tinkoff.homework.di
 
 import android.content.Context
 import androidx.room.Room.databaseBuilder
-import com.tinkoff.homework.db.AppDatabase
-import com.tinkoff.homework.db.dao.MessageDao
-import com.tinkoff.homework.db.dao.StreamDao
+import com.tinkoff.homework.data.db.AppDatabase
+import com.tinkoff.homework.data.db.dao.MessageDao
+import com.tinkoff.homework.data.db.dao.StreamDao
 import com.tinkoff.homework.utils.Const.DB_NAME
 import dagger.Module
 import dagger.Provides

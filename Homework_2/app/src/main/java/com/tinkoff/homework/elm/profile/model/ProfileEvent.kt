@@ -1,6 +1,6 @@
 package com.tinkoff.homework.elm.profile.model
 
-import com.tinkoff.homework.data.domain.Profile
+import com.tinkoff.homework.domain.data.Profile
 
 sealed class ProfileEvent {
 

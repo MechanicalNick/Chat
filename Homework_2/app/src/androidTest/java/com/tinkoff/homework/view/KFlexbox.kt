@@ -8,8 +8,8 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
-import com.tinkoff.homework.view.customview.ReactionView
-import com.tinkoff.homework.view.viewgroup.FlexboxLayout
+import com.tinkoff.homework.presentation.view.customview.ReactionView
+import com.tinkoff.homework.presentation.view.viewgroup.FlexboxLayout
 import io.github.kakaocup.kakao.common.actions.BaseActions
 import io.github.kakaocup.kakao.common.assertions.BaseAssertions
 import io.github.kakaocup.kakao.common.builders.ViewBuilder

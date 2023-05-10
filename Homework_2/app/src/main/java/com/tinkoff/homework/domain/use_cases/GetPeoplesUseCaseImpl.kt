@@ -1,9 +1,9 @@
 package com.tinkoff.homework.domain.use_cases
 
-import com.tinkoff.homework.data.domain.People
-import com.tinkoff.homework.repository.interfaces.PeopleRepository
+import com.tinkoff.homework.domain.data.People
+import com.tinkoff.homework.domain.repository.PeopleRepository
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
-import com.tinkoff.homework.utils.mapper.toStatus
+import com.tinkoff.homework.data.mapper.toStatus
 import io.reactivex.Single
 
 class GetPeoplesUseCaseImpl(val repository: PeopleRepository) : GetPeoplesUseCase {

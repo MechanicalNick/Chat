@@ -1,7 +1,7 @@
 package com.tinkoff.homework.elm.channels.model
 
 import android.os.Parcelable
-import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.domain.data.Stream
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 

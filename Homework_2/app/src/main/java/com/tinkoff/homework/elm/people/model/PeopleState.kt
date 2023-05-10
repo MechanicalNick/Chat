@@ -1,7 +1,7 @@
 package com.tinkoff.homework.elm.people.model
 
 import android.os.Parcelable
-import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.domain.data.People
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 

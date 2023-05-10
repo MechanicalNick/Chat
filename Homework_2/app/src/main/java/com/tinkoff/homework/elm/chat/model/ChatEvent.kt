@@ -1,8 +1,8 @@
 package com.tinkoff.homework.elm.chat.model
 
 import android.net.Uri
-import com.tinkoff.homework.data.domain.MessageModel
-import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.ImageResponse
 
 sealed class ChatEvent {

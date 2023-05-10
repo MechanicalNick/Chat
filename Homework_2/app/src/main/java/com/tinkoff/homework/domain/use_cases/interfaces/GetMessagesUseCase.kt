@@ -1,6 +1,6 @@
 package com.tinkoff.homework.domain.use_cases.interfaces
 
-import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.domain.data.MessageModel
 import io.reactivex.Single
 
 interface GetMessagesUseCase {

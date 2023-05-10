@@ -1,6 +1,6 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.viewmodel.MainViewModel
+import com.tinkoff.homework.presentation.viewmodel.MainViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

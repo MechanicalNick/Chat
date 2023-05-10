@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/includes"
-    tools:parentTag="com.tinkoff.homework.view.viewgroup.SearchViewGroup">
+    tools:parentTag="com.tinkoff.homework.presentation.view.viewgroup.SearchViewGroup">
     <EditText
         android:id="@+id/search_text"
         android:layout_width="match_parent"

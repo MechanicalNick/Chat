@@ -1,6 +1,6 @@
 package com.tinkoff.homework.domain.use_cases.interfaces
 
-import com.tinkoff.homework.data.domain.Profile
+import com.tinkoff.homework.domain.data.Profile
 import io.reactivex.Single
 
 interface GetProfileUseCase {

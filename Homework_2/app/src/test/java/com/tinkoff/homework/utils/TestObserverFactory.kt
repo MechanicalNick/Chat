@@ -1,6 +1,6 @@
 package com.tinkoff.homework.utils
 
-import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.data.stub.MessageRepositoryStub
 import com.tinkoff.homework.domain.use_cases.GetMessagesUseCaseImpl
 import io.reactivex.Single

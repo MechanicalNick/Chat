@@ -19,10 +19,10 @@ import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
-import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.StreamFactory
-import com.tinkoff.homework.view.MainActivity
-import com.tinkoff.homework.view.fragment.MainFragment
+import com.tinkoff.homework.navigation.MessageFactory
+import com.tinkoff.homework.navigation.StreamFactory
+import com.tinkoff.homework.presentation.view.MainActivity
+import com.tinkoff.homework.presentation.view.fragment.MainFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

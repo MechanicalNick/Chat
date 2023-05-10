@@ -1,6 +1,6 @@
 package com.tinkoff.homework.elm.people.model
 
-import com.tinkoff.homework.data.domain.People
+import com.tinkoff.homework.domain.data.People
 
 sealed class PeopleEvent {
 

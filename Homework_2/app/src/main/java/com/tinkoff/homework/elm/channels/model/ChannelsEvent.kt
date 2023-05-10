@@ -1,6 +1,6 @@
 package com.tinkoff.homework.elm.channels.model
 
-import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.domain.data.Stream
 
 sealed class ChannelsEvent {
 

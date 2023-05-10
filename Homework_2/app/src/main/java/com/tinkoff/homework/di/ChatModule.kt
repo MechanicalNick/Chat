@@ -11,10 +11,9 @@ import com.tinkoff.homework.elm.chat.ChatStoreFactory
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
-import com.tinkoff.homework.utils.MessageFactory
+import com.tinkoff.homework.navigation.MessageFactory
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class ChatModule {

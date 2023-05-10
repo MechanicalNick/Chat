@@ -2,7 +2,7 @@ package com.tinkoff.homework.di.component
 
 import com.tinkoff.homework.di.PeoplesModule
 import com.tinkoff.homework.di.scope.PeoplesScope
-import com.tinkoff.homework.view.fragment.PeoplesFragment
+import com.tinkoff.homework.presentation.view.fragment.PeoplesFragment
 import dagger.Component
 
 @PeoplesScope

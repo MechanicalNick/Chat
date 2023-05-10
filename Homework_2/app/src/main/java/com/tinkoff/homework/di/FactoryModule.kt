@@ -4,8 +4,8 @@ import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.domain.use_cases.interfaces.AddReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.RemoveReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendMessageUseCase
-import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.StreamFactory
+import com.tinkoff.homework.navigation.MessageFactory
+import com.tinkoff.homework.navigation.StreamFactory
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap

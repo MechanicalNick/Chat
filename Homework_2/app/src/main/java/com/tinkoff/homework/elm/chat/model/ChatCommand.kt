@@ -1,7 +1,7 @@
 package com.tinkoff.homework.elm.chat.model
 
 import android.net.Uri
-import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.domain.data.Reaction
 
 sealed class ChatCommand {
     data class LoadCashedData(val topicName: String, val streamId: Long) : ChatCommand()

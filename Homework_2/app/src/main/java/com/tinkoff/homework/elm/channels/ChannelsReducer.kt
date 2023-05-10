@@ -1,6 +1,6 @@
 package com.tinkoff.homework.elm.channels
 
-import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.elm.channels.model.ChannelsCommand
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent

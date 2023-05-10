@@ -2,7 +2,7 @@ package com.tinkoff.homework.di.component
 
 import com.tinkoff.homework.di.StreamModule
 import com.tinkoff.homework.di.scope.StreamScope
-import com.tinkoff.homework.view.fragment.ChannelsListFragment
+import com.tinkoff.homework.presentation.view.fragment.ChannelsListFragment
 import dagger.Component
 
 @StreamScope

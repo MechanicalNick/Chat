@@ -2,10 +2,10 @@ package com.tinkoff.homework.di
 
 import com.tinkoff.homework.domain.use_cases.*
 import com.tinkoff.homework.domain.use_cases.interfaces.*
-import com.tinkoff.homework.repository.interfaces.MessageRepository
-import com.tinkoff.homework.repository.interfaces.PeopleRepository
-import com.tinkoff.homework.repository.interfaces.ProfileRepository
-import com.tinkoff.homework.repository.interfaces.StreamRepository
+import com.tinkoff.homework.domain.repository.MessageRepository
+import com.tinkoff.homework.domain.repository.PeopleRepository
+import com.tinkoff.homework.domain.repository.ProfileRepository
+import com.tinkoff.homework.domain.repository.StreamRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

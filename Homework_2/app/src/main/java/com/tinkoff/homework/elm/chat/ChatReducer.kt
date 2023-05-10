@@ -1,7 +1,7 @@
 package com.tinkoff.homework.elm.chat
 
-import com.tinkoff.homework.data.domain.MessageModel
-import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.elm.chat.model.ChatCommand
