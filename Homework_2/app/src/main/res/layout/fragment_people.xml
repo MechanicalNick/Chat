@@ -9,20 +9,14 @@
         layout="@layout/error_layout"
         android:visibility="gone" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
+    <include
         android:id="@+id/shimmer"
-        android:forceDarkAllowed="false"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        layout="@layout/shimmer_layout" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/peopleData"
         android:orientation="vertical">
 
         <com.tinkoff.homework.presentation.view.viewgroup.SearchViewGroup

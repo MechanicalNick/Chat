@@ -6,22 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.databinding.FragmentPeopleBinding
 import com.tinkoff.homework.di.component.DaggerPeoplesComponent
 import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.people.model.PeopleEffect
 import com.tinkoff.homework.elm.people.model.PeopleEvent
 import com.tinkoff.homework.elm.people.model.PeopleState
+import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.navigation.ToProfileRouter
 import com.tinkoff.homework.presentation.PeopleAdapter
-import com.tinkoff.homework.utils.dp
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
+import com.tinkoff.homework.utils.dp
 import javax.inject.Inject
 
 class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), ToProfileRouter {
@@ -35,6 +36,7 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
     lateinit var binding: FragmentPeopleBinding
 
     private val adapter: PeopleAdapter by lazy { PeopleAdapter(this) }
+    private val spaceSize = 16
 
     override fun onAttach(context: Context) {
         DaggerPeoplesComponent.factory()
@@ -49,33 +51,51 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
     ): View {
         binding = FragmentPeopleBinding.inflate(layoutInflater)
 
-        val space = 16.dp(requireContext())
-        val itemDecoration = MarginItemDecorator(
-            space,
+        binding.peopleRecyclerView.addItemDecoration(MarginItemDecorator(
+            spaceSize.dp(requireContext()),
             LinearLayout.VERTICAL
-        )
+        ))
 
-        binding.peopleRecyclerView.addItemDecoration(itemDecoration)
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.peopleRecyclerView.adapter = adapter
+
+        binding.errorStateContainer.retryButton.setOnClickListener {
+            this.store.accept(PeopleEvent.Ui.LoadData)
+        }
 
         return binding.root
     }
 
     override fun render(state: PeopleState) {
-        if (state.isLoading)
-            binding.shimmer.showShimmer(true)
-        else
-            binding.shimmer.hideShimmer()
-        state.error?.let { throwable ->
-            binding.errorStateContainer.errorLayout.isVisible = true
-            binding.errorStateContainer.errorText.text = throwable.message
-        } ?: run {
-            binding.errorStateContainer.errorLayout.isVisible = false
-            state.item?.let {
-                adapter.peoples.clear()
-                adapter.peoples.addAll(it)
-                adapter.notifyDataSetChanged()
+        when (state.state) {
+            ViewState.Loading -> {
+                renderLoadingState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.peopleData
+                )
+            }
+            ViewState.Error -> {
+                renderErrorState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.peopleData
+                )
+                state.error?.let { throwable ->
+                    binding.errorStateContainer.errorText.text = throwable.message
+                }
+            }
+            ViewState.ShowData -> {
+                renderDataState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.peopleData
+                )
+                state.item?.let {
+                    adapter.peoples.clear()
+                    adapter.peoples.addAll(it)
+                    adapter.notifyItemRangeChanged(0, it.count())
+                }
             }
         }
     }

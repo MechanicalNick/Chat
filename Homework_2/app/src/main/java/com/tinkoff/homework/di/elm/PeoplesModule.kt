@@ -1,4 +1,4 @@
-package com.tinkoff.homework.di
+package com.tinkoff.homework.di.elm
 
 import com.tinkoff.homework.di.scope.PeoplesScope
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase

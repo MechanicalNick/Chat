@@ -3,8 +3,8 @@ package com.tinkoff.homework.presentation.view.adapter.date
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.tinkoff.homework.domain.data.DateModel
 import com.tinkoff.homework.databinding.DateItemBinding
+import com.tinkoff.homework.domain.data.DateModel
 import com.tinkoff.homework.navigation.DelegateItem
 import com.tinkoff.homework.presentation.AdapterDelegate
 import java.time.format.DateTimeFormatter

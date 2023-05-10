@@ -1,5 +1,6 @@
 package com.tinkoff.homework.elm.profile
 
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.profile.model.ProfileCommand
 import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
@@ -12,7 +13,7 @@ class ProfileReducer :
         return when (event) {
             is ProfileEvent.Internal.DataLoaded -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.ShowData,
                     item = event.profile,
                     error = null
                 )
@@ -20,7 +21,7 @@ class ProfileReducer :
 
             is ProfileEvent.Internal.ErrorLoading -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.Error,
                     item = null,
                     error = event.error
                 )
@@ -29,7 +30,7 @@ class ProfileReducer :
             is ProfileEvent.Ui.Wait -> {
                 state {
                     copy(
-                        isLoading = true,
+                        state = ViewState.Loading,
                         item = null,
                         error = null
                     )
@@ -39,7 +40,7 @@ class ProfileReducer :
             is ProfileEvent.Ui.LoadData -> {
                 state {
                     copy(
-                        isLoading = true,
+                        state = ViewState.Loading,
                         item = null,
                         error = null
                     )

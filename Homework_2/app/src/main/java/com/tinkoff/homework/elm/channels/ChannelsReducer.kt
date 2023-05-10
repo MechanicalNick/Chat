@@ -1,6 +1,7 @@
 package com.tinkoff.homework.elm.channels
 
 import com.tinkoff.homework.domain.data.Stream
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.channels.model.ChannelsCommand
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
@@ -14,20 +15,23 @@ class ChannelsReducer :
             is ChannelsEvent.Internal.DataLoaded -> state {
                 copy(
                     items = event.streams,
+                    state = ViewState.ShowData,
                     flagForUpdateUi = !flagForUpdateUi,
                     error = null
                 )
             }
             is ChannelsEvent.Internal.ErrorLoading -> state {
                 copy(
-                    error = event.error
+                    error = event.error,
+                    state = ViewState.Error
                 )
             }
             is ChannelsEvent.Ui.Wait -> {
                 state {
                     copy(
                         items = null,
-                        error = null
+                        error = null,
+                        state = ViewState.Loading
                     )
                 }
             }
@@ -63,7 +67,7 @@ class ChannelsReducer :
     }
 
     private fun applyExpanded(value: Boolean, old: Stream, applicable: Stream): Stream {
-        if (applicable != old)
+        if (applicable.id != old.id)
             return old
         applicable.isExpanded = value
         return applicable

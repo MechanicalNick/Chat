@@ -8,13 +8,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.tinkoff.homework.R
-import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
-import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.navigation.DelegateItem
 import com.tinkoff.homework.navigation.FlexboxFactory
 import com.tinkoff.homework.presentation.AdapterDelegate
 import com.tinkoff.homework.presentation.view.fragment.ChatFragmentCallback
+import com.tinkoff.homework.utils.Const
 
 class CompanionMessageDelegate(
     private val callback: ChatFragmentCallback,

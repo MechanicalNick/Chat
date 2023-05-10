@@ -11,18 +11,13 @@
         layout="@layout/error_layout"
         android:visibility="gone" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
+    <include
         android:id="@+id/shimmer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        layout="@layout/shimmer_layout"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/chatData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">

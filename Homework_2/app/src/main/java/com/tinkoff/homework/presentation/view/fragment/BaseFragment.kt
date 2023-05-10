@@ -1,5 +1,8 @@
 package com.tinkoff.homework.presentation.view.fragment
 
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.tinkoff.homework.elm.BaseStoreFactory
 import vivid.money.elmslie.android.base.ElmFragment
 import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
@@ -16,5 +19,36 @@ abstract class BaseFragment<Event : Any, Effect : Any, State : Any> :
         LifecycleAwareStoreHolder(lifecycle) {
             store
         }
+    }
+
+
+    fun renderLoadingState(
+        shimmerFrameLayout: ShimmerFrameLayout,
+        errorContainer: ViewGroup,
+        data: ViewGroup
+    ) {
+        shimmerFrameLayout.showShimmer(true)
+        data.isVisible = false
+        errorContainer.isVisible = false
+    }
+
+    fun renderErrorState(
+        shimmerFrameLayout: ShimmerFrameLayout,
+        errorContainer: ViewGroup,
+        data: ViewGroup
+    ) {
+        shimmerFrameLayout.stopShimmer()
+        data.isVisible = false
+        errorContainer.isVisible = true
+    }
+
+    fun renderDataState(
+        shimmerFrameLayout: ShimmerFrameLayout,
+        errorContainer: ViewGroup,
+        data: ViewGroup
+    ) {
+        shimmerFrameLayout.stopShimmer()
+        data.isVisible = true
+        errorContainer.isVisible = false
     }
 }

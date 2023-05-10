@@ -9,59 +9,57 @@
         android:visibility="gone"
         layout="@layout/error_layout" />
 
-    <com.facebook.shimmer.ShimmerFrameLayout
+    <include
         android:id="@+id/shimmer"
+        layout="@layout/shimmer_layout"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/profileData"
+        android:background="@color/date_background_color"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/date_background_color"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/profileToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="66dp"
-                android:background="@color/content_editor_background_color"
-                app:buttonGravity="center_vertical"
-                app:navigationIcon="@drawable/arrow_back">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/profile"
-                    android:textColor="@color/white"
-                    android:textSize="24sp" />
-            </androidx.appcompat.widget.Toolbar>
-
-            <ImageView
-                android:id="@+id/profileImage"
-
-                android:layout_width="185dp"
-                android:layout_height="185dp"
-                android:layout_gravity="center_horizontal" />
+            android:layout_height="66dp"
+            android:background="@color/content_editor_background_color"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/arrow_back">
 
             <TextView
-                android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Darrell Steward"
+                android:layout_gravity="center"
+                android:text="@string/profile"
                 android:textColor="@color/white"
-                android:textSize="32sp" />
+                android:textSize="24sp" />
+        </androidx.appcompat.widget.Toolbar>
 
-            <TextView
-                android:id="@+id/profileStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="online"
-                android:textColor="@color/green"
-                android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="185dp"
+            android:layout_height="185dp"
+            android:layout_gravity="center_horizontal" />
 
-        </LinearLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        <TextView
+            android:id="@+id/profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Darrell Steward"
+            android:textColor="@color/white"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/profileStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="online"
+            android:textColor="@color/green"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 </FrameLayout>

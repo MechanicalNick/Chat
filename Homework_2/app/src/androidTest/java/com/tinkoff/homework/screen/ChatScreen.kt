@@ -13,7 +13,7 @@ import io.github.kakaocup.kakao.text.KTextView
 import org.hamcrest.Matcher
 
 class ChatScreen : KScreen<ChatScreen>() {
-    override val layoutId: Int = R.layout.chart_fragment
+    override val layoutId: Int = R.layout.fragment_chat
     override val viewClass: Class<*> = ChatFragment::class.java
 
     val recycler = KRecyclerView({ withId(R.id.recycler) }, {

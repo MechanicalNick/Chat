@@ -1,5 +1,6 @@
 package com.tinkoff.homework.elm.people
 
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.people.model.PeopleCommand
 import com.tinkoff.homework.elm.people.model.PeopleEffect
 import com.tinkoff.homework.elm.people.model.PeopleEvent
@@ -11,7 +12,7 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
         return when (event) {
             is PeopleEvent.Internal.DataLoaded -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.ShowData,
                     item = event.peoples,
                     error = null
                 )
@@ -19,7 +20,7 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
 
             is PeopleEvent.Internal.ErrorLoading -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.Error,
                     item = null,
                     error = event.error
                 )
@@ -32,7 +33,7 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
             is PeopleEvent.Ui.LoadData -> {
                 state {
                     copy(
-                        isLoading = true,
+                        state = ViewState.Loading,
                         item = null,
                         error = null
                     )

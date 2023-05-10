@@ -12,16 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
-import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.databinding.ChannelsListBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
-import com.tinkoff.homework.elm.channels.ChannelsStoreFactory
+import com.tinkoff.homework.domain.data.Stream
+import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
 import com.tinkoff.homework.elm.channels.model.ChannelsState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.navigation.Expander
+import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.navigation.StreamFactory
 import com.tinkoff.homework.navigation.ToChatRouter
 import com.tinkoff.homework.presentation.DelegatesAdapter
@@ -33,26 +34,26 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import vivid.money.elmslie.android.base.ElmFragment
-import vivid.money.elmslie.android.storeholder.LifecycleAwareStoreHolder
-import vivid.money.elmslie.android.storeholder.StoreHolder
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
+class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
     ToChatRouter {
+    // https://stackoverflow.com/questions/43141740/dagger-2-multibindings-with-kotlin/43149382#43149382
     @Inject
-    lateinit var channelsStoreFactory: ChannelsStoreFactory
+    lateinit var channelsStoreFactories: Map<Boolean,
+            @JvmSuppressWildcards BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>>
     @Inject
     lateinit var streamFactories: Map<Boolean, StreamFactory>
-    private lateinit var streamFactory: StreamFactory
     @Inject
     lateinit var router: Router
-    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    override lateinit var factory: BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>
     override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
     lateinit var binding: ChannelsListBinding
+    private lateinit var streamFactory: StreamFactory
+    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var query = ""
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
@@ -62,6 +63,7 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
             .inject(this)
         val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
         streamFactory = streamFactories[onlySubscribed]!!
+        factory = channelsStoreFactories[onlySubscribed]!!
         super.onAttach(context)
     }
 
@@ -115,6 +117,10 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
             loadData()
         }
 
+        binding.errorStateContainer.retryButton.setOnClickListener(){
+            loadData()
+        }
+
         searchQueryPublisher
             .distinctUntilChanged()
             .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
@@ -126,37 +132,37 @@ class ChannelsListFragment : ElmFragment<ChannelsEvent, ChannelsEffect, Channels
         return binding.root
     }
 
-    override val storeHolder: StoreHolder<ChannelsEvent, ChannelsEffect, ChannelsState> by lazy {
-        val onlySubscribed = requireArguments().getBoolean(ARG_MESSAGE)
-        val store = channelsStoreFactory.provide(onlySubscribed)
-        store.stop()
-        LifecycleAwareStoreHolder(lifecycle) {
-            store
-        }
-    }
-
     override fun render(state: ChannelsState) {
-        if(state.error == null){
-            binding.errorStateContainer.errorLayout.isVisible = false
-            binding.channelRecyclerView.isVisible = true
-            binding.shimmer.isVisible = true
-            if (state.items.isNullOrEmpty()) {
-                binding.shimmer.showShimmer(true)
-            } else {
-                binding.shimmer.hideShimmer()
-                val delegates = streamFactory.updateDelegateItems(state.items)
-                adapter.submitList(delegates)
+        when(state.state){
+            ViewState.Loading -> {
+                renderLoadingState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.channelRecyclerView
+                )
             }
-        } else {
-            binding.errorStateContainer.errorLayout.isVisible = true
-            binding.shimmer.isVisible = false
-            binding.channelRecyclerView.isVisible = false
-            binding.errorStateContainer.errorText.text = state.error.message
-            binding.errorStateContainer.retryButton.setOnClickListener(){
-                loadData()
+            ViewState.Error -> {
+                renderErrorState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.channelRecyclerView
+                )
+                state.error?.let { throwable ->
+                    binding.errorStateContainer.errorText.text = throwable.message
+                }
+            }
+            ViewState.ShowData -> {
+                renderDataState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.channelRecyclerView
+                )
+              state.items?.let {
+                  val delegates = streamFactory.updateDelegateItems(it)
+                  adapter.submitList(delegates)
+              }
             }
         }
-
     }
 
     override fun expand(item: StreamDelegateItem) {

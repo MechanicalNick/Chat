@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.Router
 import com.tinkoff.homework.R
-import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.Credentials
-import com.tinkoff.homework.databinding.ChartFragmentBinding
+import com.tinkoff.homework.databinding.FragmentChatBinding
 import com.tinkoff.homework.di.component.DaggerChatComponent
+import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
@@ -48,7 +49,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
 
     private lateinit var bottomFragment: BottomFragment
 
-    private var _binding: ChartFragmentBinding? = null
+    private var _binding: FragmentChatBinding? = null
 
     private val chatViewModel: ChatViewModel by viewModels()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
@@ -73,7 +74,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         savedInstanceState: Bundle?
     ): View {
         bottomFragment = BottomFragment()
-        _binding = ChartFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentChatBinding.inflate(inflater, container, false)
 
         topicName = requireArguments().getString(ARG_TOPIC)!!
         binding.header.text = getString(R.string.sharp, topicName)
@@ -100,30 +101,39 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
     }
 
     override fun render(state: ChatState) {
-        binding.progressBar.isVisible = state.isShowProgress
-
-        if(state.error == null) {
-            binding.errorStateContainer.errorLayout.isVisible = false
-            binding.recycler.isVisible = true
-            binding.contentEditor.isVisible = true
-            if (state.isLoading || state.items.isNullOrEmpty()) {
-                binding.shimmer.isVisible = true
-                binding.shimmer.showShimmer(true)
-            } else {
-                binding.shimmer.isVisible = false
-                binding.shimmer.hideShimmer()
-                adapter.submitList(messageFactory.init(state.items, credentials.id))
+        when(state.state){
+            ViewState.Loading -> {
+                renderLoadingState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.chatData
+                )
             }
-        } else{
-            binding.errorStateContainer.errorLayout.isVisible = true
-            binding.shimmer.isVisible = false
-            binding.recycler.isVisible = false
-            binding.contentEditor.isVisible = false
-            binding.errorStateContainer.errorText.text = state.error.message
+            ViewState.Error -> {
+                renderErrorState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.chatData
+                )
+                state.error?.let { throwable ->
+                    binding.errorStateContainer.errorText.text = throwable.message
+                }
+            }
+            ViewState.ShowData -> {
+                renderDataState(
+                    binding.shimmer.root,
+                    binding.errorStateContainer.root,
+                    binding.chatData
+                )
+                state.items?.let {
+                    adapter.submitList(messageFactory.init(state.items, credentials.id))
+                }
+            }
         }
+        binding.progressBar.isVisible = state.isShowProgress
     }
 
-    override fun handleEffect(effect: ChatEffect): Unit? {
+    override fun handleEffect(effect: ChatEffect) {
         return when(effect){
             ChatEffect.ScrollToLastElement ->
                 binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
@@ -145,7 +155,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         }
         val itemDecoration = MarginItemDecorator(
             space,
-            binding.linearLayout.orientation
+            binding.chatData.orientation
         )
         binding.recycler.addItemDecoration(itemDecoration)
         binding.recycler.addOnScrollListener(

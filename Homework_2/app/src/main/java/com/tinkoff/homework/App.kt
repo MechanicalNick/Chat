@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation
+package com.tinkoff.homework
 
 import android.app.Application
 import android.content.Context

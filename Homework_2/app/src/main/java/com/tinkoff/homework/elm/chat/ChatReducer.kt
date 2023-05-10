@@ -4,6 +4,7 @@ import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
@@ -21,6 +22,7 @@ class ChatReducer(private val credentials: Credentials) :
                 state {
                     copy(
                         isLoading = true,
+                        state = ViewState.Loading,
                         items = null,
                         error = null
                     )
@@ -30,6 +32,7 @@ class ChatReducer(private val credentials: Credentials) :
                 state {
                     copy(
                         isLoading = true,
+                        state = ViewState.Loading,
                         items = null,
                         error = null,
                         topicName = event.topicName,
@@ -112,6 +115,7 @@ class ChatReducer(private val credentials: Credentials) :
                 state {
                     copy(
                         isLoading = false,
+                        state = ViewState.ShowData,
                         items = event.messages,
                         error = null,
                         isShowProgress = false
@@ -123,6 +127,7 @@ class ChatReducer(private val credentials: Credentials) :
                 state {
                     copy(
                         isLoading = false,
+                        state = ViewState.ShowData,
                         items = event.messages,
                         error = null,
                         isShowProgress = false
@@ -134,6 +139,7 @@ class ChatReducer(private val credentials: Credentials) :
                     isLoading = false,
                     items = null,
                     error = event.error,
+                    state = ViewState.Error,
                     isShowProgress = false
                 )
             }

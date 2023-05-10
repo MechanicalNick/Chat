@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
-import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.databinding.StreamItemBinding
+import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.navigation.DelegateItem
 import com.tinkoff.homework.navigation.Expander
 import com.tinkoff.homework.presentation.AdapterDelegate
@@ -46,10 +46,12 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                 expanderView.isChecked = model.isExpanded
                 val listener = View.OnClickListener {
                     if(!model.isExpanded) {
-                        expander.expand(item as StreamDelegateItem);
+                        expander.expand(item as StreamDelegateItem)
+                        expanderView.isChecked = true
                     }
                     else{
-                        expander.collapse(item as StreamDelegateItem);
+                        expander.collapse(item as StreamDelegateItem)
+                        expanderView.isChecked = false
                     }
                 }
                 binding.root.setOnClickListener(listener)

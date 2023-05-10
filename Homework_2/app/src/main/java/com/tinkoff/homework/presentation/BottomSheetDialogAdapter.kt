@@ -3,8 +3,8 @@ package com.tinkoff.homework.presentation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.tinkoff.homework.domain.data.Emoji
 import com.tinkoff.homework.databinding.EmojiItemBinding
+import com.tinkoff.homework.domain.data.Emoji
 
 class BottomSheetDialogAdapter(
     private val emojiList: List<Emoji>,

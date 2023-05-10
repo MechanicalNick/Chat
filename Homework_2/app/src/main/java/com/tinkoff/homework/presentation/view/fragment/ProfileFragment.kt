@@ -8,15 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
-import com.tinkoff.homework.domain.data.Profile
-import com.tinkoff.homework.domain.data.Status
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.FragmentProfileBinding
 import com.tinkoff.homework.di.component.DaggerProfileComponent
+import com.tinkoff.homework.domain.data.Profile
+import com.tinkoff.homework.domain.data.Status
 import com.tinkoff.homework.elm.BaseStoreFactory
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
@@ -73,18 +75,32 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     }
 
     override fun render(state: ProfileState) {
-        if(state.isLoading)
-            binding.shimmer.showShimmer(true)
-        else
-            binding.shimmer.hideShimmer()
-        state.error?.let { throwable ->
-            binding.shimmer.isVisible = false
-            binding.errorStateContainer.errorLayout.isVisible = true
-            binding.errorStateContainer.errorText.text = throwable.message
-        } ?: run {
-            binding.shimmer.isVisible = true
-            binding.errorStateContainer.errorLayout.isVisible = false
-            state.item?.let { renderProfile(it) }
+        when (state.state) {
+            ViewState.Loading -> {
+                renderLoadingState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.profileData
+                )
+            }
+            ViewState.Error -> {
+                renderErrorState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.profileData
+                )
+                state.error?.let { throwable ->
+                    binding.errorStateContainer.errorText.text = throwable.message
+                }
+            }
+            ViewState.ShowData -> {
+                renderDataState(
+                    shimmerFrameLayout = binding.shimmer.root,
+                    errorContainer = binding.errorStateContainer.root,
+                    data = binding.profileData
+                )
+                state.item?.let { renderProfile(it) }
+            }
         }
     }
 
@@ -121,7 +137,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     }
 
 
-    fun setTopMarginLayoutParams(
+    private fun setTopMarginLayoutParams(
         topPortrait: Int,
         topLandscape: Int,
         view: View,

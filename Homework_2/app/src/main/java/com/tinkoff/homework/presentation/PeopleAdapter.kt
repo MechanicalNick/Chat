@@ -6,9 +6,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.tinkoff.homework.R
+import com.tinkoff.homework.databinding.PeopleItemBinding
 import com.tinkoff.homework.domain.data.People
 import com.tinkoff.homework.domain.data.Status
-import com.tinkoff.homework.databinding.PeopleItemBinding
 import com.tinkoff.homework.navigation.ToProfileRouter
 
 class PeopleAdapter(private val router: ToProfileRouter) :
