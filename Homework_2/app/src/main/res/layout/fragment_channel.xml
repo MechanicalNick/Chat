@@ -1,48 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <com.tinkoff.homework.presentation.view.viewgroup.SearchViewGroup
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:id="@+id/search"
-        app:hint="@string/search_tooltip"
-        app:backgroundTintColor="@color/custom_search_tint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include android:id="@+id/layout_channel" layout="@layout/layout_channel" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:id="@+id/emptyView"
-        android:background="@color/content_editor_background_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search"
-        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/channelFloatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/plus" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        style="@style/MyCustomTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/fragmentViewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/date_background_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emptyView" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

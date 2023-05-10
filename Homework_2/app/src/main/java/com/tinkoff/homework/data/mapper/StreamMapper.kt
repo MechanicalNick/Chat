@@ -1,10 +1,12 @@
 package com.tinkoff.homework.data.mapper
 
+import com.squareup.moshi.Moshi
 import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.domain.data.Topic
 import com.tinkoff.homework.data.db.entity.StreamEntity
 import com.tinkoff.homework.data.db.entity.TopicEntity
 import com.tinkoff.homework.data.db.entity.results.StreamResult
+import com.tinkoff.homework.data.dto.SubscribeOnStreamDto
 
 fun Stream.toEntity(isSubscribed: Boolean): StreamEntity {
     return StreamEntity(
@@ -43,4 +45,14 @@ fun TopicEntity.toDomain(streamEntity: StreamEntity): Topic {
         streamName = streamEntity.name,
         streamId = streamEntity.streamId
     )
+}
+
+fun toSubscription(
+    moshi: Moshi,
+    streamName: String
+): String {
+    val dto = SubscribeOnStreamDto(streamName)
+    var adapter = moshi.adapter(SubscribeOnStreamDto::class.java)
+    val str = adapter.toJson(dto)
+    return "[$str]"
 }

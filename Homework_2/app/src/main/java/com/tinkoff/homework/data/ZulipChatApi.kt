@@ -12,6 +12,11 @@ interface ZulipChatApi {
     @GET("users/me/subscriptions")
     fun getSubscriptions(): Single<SubscriptionsResponse>
 
+    @POST("users/me/subscriptions")
+    fun subscribeOnStream(
+        @Query("subscriptions") subscriptions: String
+    ):Single<SubscribeOnStreamResponse>
+
     @GET("users/me/{stream_id}/topics")
     fun getAllTopics(@Path("stream_id") streamId: Long): Single<TopicResponse>
 

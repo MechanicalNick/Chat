@@ -8,6 +8,7 @@ import com.tinkoff.homework.elm.channels.ChannelsReducer
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
 import com.tinkoff.homework.elm.channels.model.ChannelsState
+import com.tinkoff.homework.presentation.view.fragment.ChannelsFragment
 import com.tinkoff.homework.presentation.view.fragment.ChannelsListFragment
 import dagger.Component
 
@@ -16,6 +17,7 @@ import dagger.Component
 interface StreamComponent {
     val channelsStoreFactories: Map<Boolean, BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>>
 
+    fun inject(fragment: ChannelsFragment)
     fun inject(fragment: ChannelsListFragment)
 
     @Component.Factory

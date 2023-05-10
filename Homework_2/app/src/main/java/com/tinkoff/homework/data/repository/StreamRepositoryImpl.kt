@@ -1,6 +1,7 @@
 package com.tinkoff.homework.data.repository
 
 import android.util.Log
+import com.squareup.moshi.Moshi
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.domain.data.Topic
@@ -11,9 +12,11 @@ import com.tinkoff.homework.domain.repository.MessageRepository
 import com.tinkoff.homework.domain.repository.StreamRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.data.ZulipChatApi
+import com.tinkoff.homework.data.dto.SubscribeOnStreamResponse
 import com.tinkoff.homework.data.mapper.toDomain
 import com.tinkoff.homework.data.mapper.toEntities
 import com.tinkoff.homework.data.mapper.toEntity
+import com.tinkoff.homework.data.mapper.toSubscription
 import com.tinkoff.homework.utils.zipSingles
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -24,8 +27,15 @@ import javax.inject.Inject
 class StreamRepositoryImpl @Inject constructor(
     private val api: ZulipChatApi,
     private val messageRepository: MessageRepository,
-    private val streamDao: StreamDao
+    private val streamDao: StreamDao,
+    private val moshi: Moshi,
 ) : StreamRepository {
+
+    override fun subscribeOnStream(streamName: String): Single<SubscribeOnStreamResponse> {
+        return api
+            .subscribeOnStream(toSubscription(moshi, streamName))
+            .subscribeOn(Schedulers.io())
+    }
 
     override fun getAll(): Single<List<Stream>> {
         return api.getAllStreams()

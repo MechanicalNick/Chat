@@ -59,4 +59,10 @@ class UseCaseModule {
     fun provideSendImageUseCase(repository: MessageRepository): SendImageUseCase {
         return SendImageUseCaseImpl(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideCreateStreamUseCase(repository: StreamRepository): CreateStreamUseCase {
+        return CreateStreamUseCaseImpl(repository)
+    }
 }

@@ -18,4 +18,11 @@
     <string name="default_error_message">Произошла какая-то ошибка. Повторите запрос позднее</string>
     <string name="state_error_button_retry">Повторить</string>
     <string name="profile">Profile</string>
+    <string name="add_stream">Добавить канал</string>
+    <string name="create_channel">Создать канал</string>
+    <string name="channel_name_hint">Введите имя канала</string>
+    <string name="create_stream_success">Стрим успешно создан</string>
+    <string name="create_stream_unsuccess">Не удалось создать стрим</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Отмена</string>
 </resources>

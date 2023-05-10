@@ -14,6 +14,7 @@ import com.tinkoff.homework.di.RepositoryModule
 import com.tinkoff.homework.di.RoomModule
 import com.tinkoff.homework.di.UseCaseModule
 import com.tinkoff.homework.di.ViewModelsModule
+import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetMessagesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
@@ -46,6 +47,7 @@ interface AppComponent {
     val getProfileUseCase: GetProfileUseCase
     val getSteamsUseCase: GetStreamsUseCase
     val sendImageUseCase: SendImageUseCase
+    val createStreamUseCase: CreateStreamUseCase
     val lazyHeaders: LazyHeaders
     val credentials: Credentials
     val apiUrlProvider: ApiUrlProvider
