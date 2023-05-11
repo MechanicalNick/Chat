@@ -3,19 +3,19 @@ package com.tinkoff.homework.data.repository
 import android.content.Context
 import android.net.Uri
 import com.squareup.moshi.Moshi
-import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.data.ZulipChatApi
+import com.tinkoff.homework.data.db.dao.MessageDao
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.data.dto.MessageResponse
-import com.tinkoff.homework.data.db.dao.MessageDao
-import com.tinkoff.homework.domain.repository.MessageRepository
-import com.tinkoff.homework.utils.Const
-import com.tinkoff.homework.utils.FileUtils
-import com.tinkoff.homework.data.ZulipChatApi
 import com.tinkoff.homework.data.mapper.toDomain
 import com.tinkoff.homework.data.mapper.toEntity
 import com.tinkoff.homework.data.mapper.toMyMessageEntity
 import com.tinkoff.homework.data.mapper.toNarrow
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.repository.MessageRepository
+import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.utils.FileUtils
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -54,7 +54,7 @@ class MessageRepositoryImpl @Inject constructor(
                 list
             }
         } ?: run {
-            loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
+            loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId = null, query)
         }
     }
 
@@ -123,17 +123,22 @@ class MessageRepositoryImpl @Inject constructor(
                     .filter { m -> m.streamId != null && m.subject != null }
                     .map { m -> m.toDomain() }
             }
-            .doOnSuccess {
-                if(streamId != null) {
+            .doOnSuccess { list ->
+                streamId?.let {id ->
                     val needDelete = numBefore == Const.MAX_MESSAGE_COUNT_IN_DB
-                    refreshLocalDataSource(it, streamId, topic, needDelete)
+                    refreshLocalDataSource(list, id, topic, needDelete)
                 }
             }
         return result
     }
 
     private fun loadLocalResults(streamId: Long, topicName: String): Single<List<MessageModel>> {
-        return messageDao.getAll(streamId, topicName)
+        val collection =
+            if (topicName.isBlank()) messageDao.getAll(streamId) else messageDao.getAllByTopic(
+                streamId,
+                topicName
+            )
+        return collection
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .map { list -> list.map { result -> result.toDomain() } }

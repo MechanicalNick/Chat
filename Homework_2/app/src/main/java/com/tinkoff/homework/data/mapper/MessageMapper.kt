@@ -61,7 +61,7 @@ fun MessageResult.toDomain(): MessageModel {
         id = this.messageEntity.id,
         senderId = this.messageEntity.senderId,
         senderFullName = this.messageEntity.senderFullName,
-        subject = this.messageEntity.topicName,
+        topic = this.messageEntity.topicName,
         streamId = this.messageEntity.streamId,
         text = this.messageEntity.text,
         date = this.messageEntity.date,

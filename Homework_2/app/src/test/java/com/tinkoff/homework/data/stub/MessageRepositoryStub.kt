@@ -19,7 +19,7 @@ class MessageRepositoryStub : MessageRepository {
         query: String
     ): Single<List<MessageModel>> = messageProvider()
         .map { it.filter { messageModel -> messageModel.streamId == streamId
-                && messageModel.subject == topic }
+                && messageModel.topic == topic }
         }
 
     override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {

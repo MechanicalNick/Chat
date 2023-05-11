@@ -91,6 +91,9 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         chatViewModel.store = this.store
 
         createRecyclerView()
+        subscribeToSendMessage()
+        createMediaPicker()
+
         loadData()
 
         binding.errorStateContainer.retryButton.setOnClickListener {
@@ -165,7 +168,18 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             )
         )
         binding.recycler.adapter = adapter
+    }
 
+    private fun subscribeToSendMessage(){
+        binding.contentEditor.arrowButton.setOnClickListener {
+            val message = binding.contentEditor.editText.text.toString()
+            binding.contentEditor.editText.text.clear()
+            streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
+            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+        }
+    }
+
+    private fun createMediaPicker(){
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 this.store.accept(ChatEvent.Ui.LoadImage(uri, topicName, streamId!!))
@@ -178,14 +192,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         binding.contentEditor.plusButton.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-
-        binding.contentEditor.arrowButton.setOnClickListener {
-            val message = binding.contentEditor.editText.text.toString()
-            binding.contentEditor.editText.text.clear()
-            streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
-            binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
-        }
     }
+
 
     override fun reactionChange(reaction: Reaction, messageId: Long, senderId: Long) {
         this.store.accept(ChatEvent.Ui.ChangeReaction(messageId, reaction))

@@ -15,6 +15,7 @@ class ChannelsActor(
                 isSubscribed = command.isSubscribed,
                 isCashed = false,
                 query = ""
+
             ).mapEvents(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
                 { error -> ChannelsEvent.Internal.ErrorLoading(error) }

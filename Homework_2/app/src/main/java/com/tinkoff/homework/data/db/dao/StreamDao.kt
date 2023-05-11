@@ -32,7 +32,10 @@ interface StreamDao {
     }
 
     @Query("DELETE FROM stream WHERE isSubscribed =:onlySubscribed")
-    fun deleteStreams(onlySubscribed: Boolean)
+    fun deleteStreamsBySubscribed(onlySubscribed: Boolean)
+
+    @Query("DELETE FROM stream WHERE streamId NOT IN (:ids)")
+    fun deleteStreamsByNotInIds(ids: List<Long>)
 
     @Query("SELECT * FROM stream WHERE streamId =:streamId AND isSubscribed =:onlySubscribed")
     fun findByStreamIdAndIsSubscribed(streamId: Long, onlySubscribed: Boolean): StreamEntity?

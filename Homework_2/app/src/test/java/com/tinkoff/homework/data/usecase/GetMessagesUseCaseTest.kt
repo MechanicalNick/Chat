@@ -52,7 +52,7 @@ class GetMessagesUseCaseTest(
             return MessageModel(id,
                 senderId = 1,
                 senderFullName = "FullName",
-                subject = topic,
+                topic = topic,
                 streamId = streamId,
                 text = "text",
                 date = LocalDate.MIN,

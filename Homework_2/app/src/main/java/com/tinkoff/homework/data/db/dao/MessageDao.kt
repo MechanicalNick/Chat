@@ -10,7 +10,11 @@ import io.reactivex.Single
 interface MessageDao {
     @Transaction
     @Query("SELECT * FROM message WHERE streamId =:streamId AND topicName =:topicName")
-    fun getAll(streamId: Long, topicName: String): Single<List<MessageResult>>
+    fun getAllByTopic(streamId: Long, topicName: String): Single<List<MessageResult>>
+
+    @Transaction
+    @Query("SELECT * FROM message WHERE streamId =:streamId")
+    fun getAll(streamId: Long): Single<List<MessageResult>>
 
     @Transaction
     fun insertMessage(messageEntity: MessageEntity, reactions: List<ReactionEntity>) {

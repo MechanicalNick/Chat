@@ -80,7 +80,7 @@ class ChatReducer(private val credentials: Credentials) :
             is ChatEvent.Internal.ReactionAdded -> state {
                 copy(
                     items = items?.map { message ->
-                        applyReaction(
+                        addReaction(
                             credentials,
                             event.reaction,
                             message,
@@ -105,7 +105,7 @@ class ChatReducer(private val credentials: Credentials) :
             is ChatEvent.Internal.MessageSent -> {
                 state {
                     copy(
-                        items = concatenate(credentials, items, event),
+                        items = items?.let { concatenate(credentials, it, event) },
                         itemsState = !itemsState,
                     )
                 }
@@ -157,46 +157,56 @@ private fun buildMessage(response: ImageResponse): String{
 
 private fun concatenate(
     credentials: Credentials,
-    messages: @RawValue List<MessageModel>?,
+    messages: @RawValue List<MessageModel>,
     event: ChatEvent.Internal.MessageSent
 ): List<MessageModel> {
     val message = MessageModel(
         id = event.messageId,
         senderId = credentials.id,
         senderFullName = credentials.fullName,
-        subject = event.topic,
+        topic = event.topic,
         streamId = event.streamId,
         text = event.message,
         date = LocalDate.now(),
         avatarUrl = credentials.avatar,
         reactions = mutableListOf()
     )
-    val list = messages!!.toMutableList()
+    val list = messages.toMutableList()
     list.add(message)
     return list
 }
 
 private fun applyReaction(
+    value: Reaction,
+    old: MessageModel,
+    applicableId: Long,
+    condition: (Reaction) -> Boolean,
+    action: (MutableList<Reaction>, Reaction) -> Boolean
+): MessageModel {
+    if (old.id != applicableId)
+        return old
+    val sameReaction =
+        old.reactions.firstOrNull { r -> condition(r) }
+    if (sameReaction != null)
+        action(old.reactions, value)
+    return old
+}
+
+private fun addReaction(
     credentials: Credentials,
     value: Reaction,
     old: MessageModel,
     applicableId: Long
 ): MessageModel {
-    if (old.id != applicableId)
-        return old
-    val sameReaction =
-        old.reactions.firstOrNull { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
-    if (sameReaction == null)
-        old.reactions.add(value)
-    return old
+    val condition: (Reaction) -> Boolean =
+        { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
+    val add: (MutableList<Reaction>, Reaction) -> Boolean = { list, value -> list.add(value)}
+    return applyReaction(value, old, applicableId, condition, add)
 }
 
 private fun removeReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
-    if (old.id != applicableId)
-        return old
-    val sameReaction =
-        old.reactions.firstOrNull { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
-    if (sameReaction != null)
-        old.reactions.remove(value)
-    return old
+    val condition: (Reaction) -> Boolean =
+        { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
+    val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, value -> list.remove(value)}
+    return applyReaction(value, old, applicableId, condition, remove)
 }

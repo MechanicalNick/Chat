@@ -2,21 +2,21 @@ package com.tinkoff.homework.data.repository
 
 import android.util.Log
 import com.squareup.moshi.Moshi
-import com.tinkoff.homework.domain.data.MessageModel
-import com.tinkoff.homework.domain.data.Stream
-import com.tinkoff.homework.domain.data.Topic
+import com.tinkoff.homework.data.ZulipChatApi
+import com.tinkoff.homework.data.db.dao.StreamDao
+import com.tinkoff.homework.data.dto.SubscribeOnStreamResponse
 import com.tinkoff.homework.data.dto.TopicDto
 import com.tinkoff.homework.data.dto.TopicResponse
-import com.tinkoff.homework.data.db.dao.StreamDao
-import com.tinkoff.homework.domain.repository.MessageRepository
-import com.tinkoff.homework.domain.repository.StreamRepository
-import com.tinkoff.homework.utils.Const
-import com.tinkoff.homework.data.ZulipChatApi
-import com.tinkoff.homework.data.dto.SubscribeOnStreamResponse
 import com.tinkoff.homework.data.mapper.toDomain
 import com.tinkoff.homework.data.mapper.toEntities
 import com.tinkoff.homework.data.mapper.toEntity
 import com.tinkoff.homework.data.mapper.toSubscription
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Stream
+import com.tinkoff.homework.domain.data.Topic
+import com.tinkoff.homework.domain.repository.MessageRepository
+import com.tinkoff.homework.domain.repository.StreamRepository
+import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.zipSingles
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -99,7 +99,7 @@ class StreamRepositoryImpl @Inject constructor(
                         Single.just(stream),
                         api.getAllTopics(stream.id)
                     ) { curStream, topics ->
-                        val newTopics = createTopics(topics, pair, curStream)
+                        val newTopics = createTopics(topics, pair.second, curStream)
                         curStream.topics.addAll(newTopics)
                         curStream
                     }
@@ -113,13 +113,13 @@ class StreamRepositoryImpl @Inject constructor(
 
     private fun createTopics(
         topics: TopicResponse,
-        pair: Pair<List<Stream>, List<MessageModel>>,
+        messages: List<MessageModel>,
         curStream: Stream
     ): List<Topic> {
         return topics.topics.map { topicDto ->
             Topic(
                 topicDto.name,
-                getMessageCount(pair, topicDto, curStream),
+                getMessageCount(messages, topicDto, curStream),
                 curStream.name,
                 curStream.id
             )
@@ -127,11 +127,11 @@ class StreamRepositoryImpl @Inject constructor(
     }
 
     private fun getMessageCount(
-        pair: Pair<List<Stream>, List<MessageModel>>,
+        messages: List<MessageModel>,
         topicDto: TopicDto,
         curStream: Stream
-    ) = pair.second.count { messageModel ->
-        messageModel.subject == topicDto.name &&
+    ) = messages.count { messageModel ->
+        messageModel.topic == topicDto.name &&
                 messageModel.streamId == curStream.id
     }.toLong()
 
@@ -156,14 +156,17 @@ class StreamRepositoryImpl @Inject constructor(
     }
 
     private fun refreshLocalDataSource(streams: List<Stream>, isSubscribed: Boolean) {
-        streamDao.deleteStreams(isSubscribed)
-        streams.map {
-            if (isSubscribed) {
+        if (isSubscribed) {
+            streamDao.deleteStreamsBySubscribed(onlySubscribed = true)
+            streams.map {
                 streamDao.insertStreamWithReplaceStrategy(
                     stream = it.toEntity(isSubscribed = true),
                     topics = it.toEntities()
                 )
-            } else {
+            }
+        } else {
+            streamDao.deleteStreamsByNotInIds(streams.map { stream -> stream.id })
+            streams.map {
                 streamDao.insertStreamWithIgnoreStrategy(
                     stream = it.toEntity(isSubscribed = false),
                     topics = it.toEntities()
@@ -171,4 +174,5 @@ class StreamRepositoryImpl @Inject constructor(
             }
         }
     }
+
 }
