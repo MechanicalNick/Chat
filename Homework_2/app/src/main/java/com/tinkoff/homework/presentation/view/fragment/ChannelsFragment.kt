@@ -19,6 +19,7 @@ import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.presentation.ChannelPagerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -27,7 +28,7 @@ class ChannelsFragment: Fragment()  {
     lateinit var createStreamUseCase: CreateStreamUseCase
     private lateinit var binding: FragmentChannelBinding
     private var ignoreRotation: Boolean = true
-
+    private val compositeDisposable = CompositeDisposable()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -108,13 +109,13 @@ class ChannelsFragment: Fragment()  {
         alertDialogBuilderUserInput
             .setCancelable(false)
             .setPositiveButton(getString(R.string.ok)) {
-                    _, _ -> createStreamUseCase.execute(currentBinding.userInputDialog.text.toString())
+                    _, _ -> compositeDisposable.add(createStreamUseCase.execute(currentBinding.userInputDialog.text.toString())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                        Toast.makeText(context, getString(R.string.create_stream_success), Toast.LENGTH_LONG).show()
                 },{
                     Toast.makeText(context, getString(R.string.create_stream_unsuccess), Toast.LENGTH_LONG).show()
-                })
+                }))
             }
             .setNegativeButton(getString(R.string.cancel)) {
                     dialogBox, _ -> dialogBox.cancel()
@@ -122,6 +123,11 @@ class ChannelsFragment: Fragment()  {
 
         val alertDialogAndroid: AlertDialog = alertDialogBuilderUserInput.create()
         alertDialogAndroid.show()
+    }
+
+    override fun onDestroyView() {
+        compositeDisposable.dispose()
+        super.onDestroyView()
     }
 
     companion object {
