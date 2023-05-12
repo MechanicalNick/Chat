@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation.view.fragment
+package com.tinkoff.homework.presentation.view.fragment.chat
 
 import android.content.Context
 import android.os.Bundle
@@ -32,11 +32,15 @@ import com.tinkoff.homework.presentation.view.adapter.date.DateDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.CompanionMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.MyMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.TopicMessageDelegate
+import com.tinkoff.homework.presentation.view.fragment.BaseFragment
+import com.tinkoff.homework.presentation.view.fragment.BottomFragment
+import com.tinkoff.homework.presentation.view.fragment.ChatFragmentCallback
+import com.tinkoff.homework.presentation.view.fragment.ChatScrollListener
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
 
-class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
+abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     ChatFragmentCallback, ToChatRouter  {
     @Inject
     lateinit var credentials: Credentials
@@ -54,13 +58,12 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     private lateinit var bottomFragment: BottomFragment
 
     private var _binding: FragmentChatBinding? = null
-
     private val chatViewModel: ChatViewModel by viewModels()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val space = 32
-    private val binding get() = _binding!!
-    private var streamId: Long? = null
-    private var topicName: String = ""
+    protected val binding get() = _binding!!
+    protected var streamId: Long? = null
+    protected var topicName: String = ""
     private var streamName: String? = null
     // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
     // Паттерн: []()
@@ -81,15 +84,13 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         bottomFragment = BottomFragment()
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
-        topicName = requireArguments().getString(ARG_TOPIC)!!
-
-        binding.topicHeaderLayout.root.isVisible = topicName.isNotBlank()
-        binding.topicHeaderLayout.header.text = getString(R.string.sharp, topicName)
-
         streamName = requireArguments().getString(ARG_STREAM)!!
-        binding.chatToolbar.title = getString(R.string.sharp, streamName)
-
+        topicName = requireArguments().getString(ARG_TOPIC)!!
         streamId = requireArguments().getLong(ARG_STREAM_ID)
+
+        renderAdditionalViews()
+
+        binding.chatToolbar.title = getString(R.string.sharp, streamName)
 
         binding.chatToolbar.setNavigationOnClickListener {
             router.exit()
@@ -136,13 +137,12 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
                     binding.chatData
                 )
                 state.items?.let {
-                    val needGroup = topicName.isBlank()
                     adapter.submitList(messageFactory.init(
                         messages = state.items,
                         myId = credentials.id,
                         streamId = streamId!!,
                         streamName = streamName!!,
-                        needGroupByTopic = needGroup
+                        needGroupByTopic = needGroupByTopic
                     ))
                 }
             }
@@ -166,8 +166,10 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     }
 
     private fun loadData() {
-        this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, streamId!!))
-        this.store.accept(ChatEvent.Ui.LoadData(topicName, streamId!!))
+        streamId?.let {
+            this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, it))
+            this.store.accept(ChatEvent.Ui.LoadData(topicName, it))
+        }
     }
 
     private fun createRecyclerView() {
@@ -192,11 +194,16 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         binding.recycler.adapter = adapter
     }
 
+
+    abstract val needGroupByTopic: Boolean
+    abstract fun sendMessage(message: String)
+    abstract fun renderAdditionalViews()
+
     private fun subscribeToSendMessage(){
         binding.contentEditor.arrowButton.setOnClickListener {
             val message = binding.contentEditor.editText.text.toString()
             binding.contentEditor.editText.text.clear()
-            streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
+            sendMessage(message)
             binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
         }
     }
@@ -215,7 +222,6 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
-
 
     override fun reactionChange(reaction: Reaction, messageId: Long, senderId: Long) {
         this.store.accept(ChatEvent.Ui.ChangeReaction(messageId, reaction))
@@ -243,7 +249,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         const val ARG_STREAM_ID = "steamId"
 
         fun newInstance(topicName: String, streamName: String, streamId: Long): ChatFragment {
-            val fragment = ChatFragment()
+            val fragment =
+                if(topicName.isNotBlank()) SingleTopicChatFragment() else AllTopicsChatFragment()
             val arguments = Bundle()
             arguments.putString(ARG_TOPIC, topicName)
             arguments.putString(ARG_STREAM, streamName)

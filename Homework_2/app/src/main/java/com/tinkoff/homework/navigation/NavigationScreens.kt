@@ -2,7 +2,7 @@ package com.tinkoff.homework.navigation
 
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.tinkoff.homework.presentation.view.fragment.ChannelsFragment
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import com.tinkoff.homework.presentation.view.fragment.MainFragment
 import com.tinkoff.homework.presentation.view.fragment.PeoplesFragment
 import com.tinkoff.homework.presentation.view.fragment.ProfileFragment

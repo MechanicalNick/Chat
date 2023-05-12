@@ -47,6 +47,9 @@
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <include android:id="@+id/topic_selector_layout"
+            layout="@layout/layout_topic_selector" />
+
         <com.tinkoff.homework.presentation.view.viewgroup.ContentEditorViewGroup
             android:id="@+id/contentEditor"
             android:layout_width="match_parent"

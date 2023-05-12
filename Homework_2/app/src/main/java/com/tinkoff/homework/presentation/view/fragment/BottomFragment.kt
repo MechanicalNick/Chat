@@ -11,17 +11,12 @@ import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
 import com.tinkoff.homework.domain.data.EmojiResources
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.chat.model.ChatEvent
-import com.tinkoff.homework.presentation.view.MessageFactory
 import com.tinkoff.homework.presentation.view.adapter.BottomSheetDialogAdapter
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment.Companion.ARG_MODEL_ID
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment.Companion.ARG_SENDER_ID
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_MODEL_ID
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_SENDER_ID
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
-import javax.inject.Inject
 
 class BottomFragment : BottomSheetDialogFragment() {
-    @Inject
-    lateinit var messageFactory: MessageFactory
-
     private val viewModel: ChatViewModel by viewModels(
         ownerProducer = { this.requireParentFragment() }
     )

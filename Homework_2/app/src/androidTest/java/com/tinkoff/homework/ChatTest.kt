@@ -7,10 +7,10 @@ import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.tinkoff.homework.data.db.LocalDateConverter
 import com.tinkoff.homework.screen.ChatScreen
 import com.tinkoff.homework.presentation.ReactionHelper
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment.Companion.ARG_STREAM
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment.Companion.ARG_STREAM_ID
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment.Companion.ARG_TOPIC
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_STREAM
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_STREAM_ID
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_TOPIC
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before

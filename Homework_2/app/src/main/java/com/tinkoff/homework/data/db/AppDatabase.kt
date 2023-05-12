@@ -13,7 +13,7 @@ import com.tinkoff.homework.data.db.dao.StreamDao
 
 @Database(
     entities = [StreamEntity::class, TopicEntity::class, MessageEntity::class,
-        ReactionEntity::class], version = 12
+        ReactionEntity::class], version = 15
 )
 @TypeConverters(LocalDateConverter::class)
 abstract class AppDatabase : RoomDatabase() {

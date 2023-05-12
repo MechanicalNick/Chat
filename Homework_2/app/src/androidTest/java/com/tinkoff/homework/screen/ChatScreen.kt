@@ -4,7 +4,7 @@ import android.view.View
 import com.kaspersky.kaspresso.screens.KScreen
 import com.tinkoff.homework.R
 import com.tinkoff.homework.view.KFlexbox
-import com.tinkoff.homework.presentation.view.fragment.ChatFragment
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
