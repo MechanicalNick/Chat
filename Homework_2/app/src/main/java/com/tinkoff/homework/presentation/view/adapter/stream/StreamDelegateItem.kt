@@ -1,7 +1,7 @@
 package com.tinkoff.homework.presentation.view.adapter.stream
 
 import com.tinkoff.homework.domain.data.Stream
-import com.tinkoff.homework.navigation.DelegateItem
+import com.tinkoff.homework.presentation.view.DelegateItem
 
 class StreamDelegateItem(
     val id: Long,

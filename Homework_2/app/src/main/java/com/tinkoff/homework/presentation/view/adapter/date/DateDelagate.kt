@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.databinding.DateItemBinding
 import com.tinkoff.homework.domain.data.DateModel
-import com.tinkoff.homework.navigation.DelegateItem
-import com.tinkoff.homework.presentation.AdapterDelegate
+import com.tinkoff.homework.presentation.view.DelegateItem
+import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import java.time.format.DateTimeFormatter
 
 class DateDelegate : AdapterDelegate {

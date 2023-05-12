@@ -14,7 +14,6 @@ object NavigationScreens {
     fun profile(userId: Long?) = FragmentScreen("Profile_$userId") {
         ProfileFragment.newInstance(userId)
     }
-
     fun chat(topicName: String, streamName: String, streamId: Long) = FragmentScreen {
         ChatFragment.newInstance(topicName, streamName, streamId)
     }

@@ -1,4 +1,4 @@
-package com.tinkoff.homework.navigation
+package com.tinkoff.homework.presentation.view
 
 import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.domain.data.Topic

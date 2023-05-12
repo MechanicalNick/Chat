@@ -1,7 +1,7 @@
 package com.tinkoff.homework.presentation.view.adapter.topic
 
 import com.tinkoff.homework.domain.data.Topic
-import com.tinkoff.homework.navigation.DelegateItem
+import com.tinkoff.homework.presentation.view.DelegateItem
 
 class TopicDelegateItem(
     val id: Long,

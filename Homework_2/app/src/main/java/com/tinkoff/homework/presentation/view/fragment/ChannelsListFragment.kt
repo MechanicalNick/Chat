@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
@@ -21,14 +20,15 @@ import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
 import com.tinkoff.homework.elm.channels.model.ChannelsState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.navigation.Expander
+import com.tinkoff.homework.presentation.view.Expander
 import com.tinkoff.homework.navigation.NavigationScreens
-import com.tinkoff.homework.navigation.StreamFactory
-import com.tinkoff.homework.navigation.ToChatRouter
-import com.tinkoff.homework.presentation.DelegatesAdapter
+import com.tinkoff.homework.presentation.view.StreamFactory
+import com.tinkoff.homework.presentation.view.ToChatRouter
+import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegate
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.topic.TopicDelegate
+import com.tinkoff.homework.presentation.view.viewgroup.StreamView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -38,8 +38,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(), Expander,
-    ToChatRouter {
+class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(),
+    StreamView {
     // https://stackoverflow.com/questions/43141740/dagger-2-multibindings-with-kotlin/43149382#43149382
     @Inject
     lateinit var channelsStoreFactories: Map<Boolean,
@@ -210,7 +210,7 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
     companion object {
         private const val ARG_MESSAGE = "channels"
         private const val ARG_STATE = "CHANNEL_LIST_STATE"
-        fun newInstance(onlySubscribed: Boolean, name: String): ChannelsListFragment {
+        fun newInstance(onlySubscribed: Boolean): ChannelsListFragment {
             return ChannelsListFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(ARG_MESSAGE, onlySubscribed)

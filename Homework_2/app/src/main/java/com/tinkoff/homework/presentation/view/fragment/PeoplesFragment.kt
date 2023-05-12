@@ -16,11 +16,10 @@ import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.people.model.PeopleEffect
 import com.tinkoff.homework.elm.people.model.PeopleEvent
 import com.tinkoff.homework.elm.people.model.PeopleState
-import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
-import com.tinkoff.homework.navigation.ToProfileRouter
-import com.tinkoff.homework.presentation.PeopleAdapter
+import com.tinkoff.homework.presentation.view.ToProfileRouter
+import com.tinkoff.homework.presentation.view.adapter.PeopleAdapter
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.utils.dp
 import javax.inject.Inject

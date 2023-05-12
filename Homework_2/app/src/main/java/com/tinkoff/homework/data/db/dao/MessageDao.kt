@@ -28,6 +28,9 @@ interface MessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertReactions(reactions: List<ReactionEntity>)
 
+    @Query("DELETE FROM message WHERE streamId =:streamId")
+    fun deleteMessages(streamId: Long)
+
     @Query("DELETE FROM message WHERE streamId =:streamId AND topicName =:topicName")
-    fun deleteMessages(streamId: Long, topicName: String)
+    fun deleteMessagesByTopic(streamId: Long, topicName: String)
 }

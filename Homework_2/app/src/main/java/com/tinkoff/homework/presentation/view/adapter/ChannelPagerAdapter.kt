@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation
+package com.tinkoff.homework.presentation.view.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

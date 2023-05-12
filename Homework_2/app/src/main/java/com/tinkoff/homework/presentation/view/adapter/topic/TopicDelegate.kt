@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.TopicItemBinding
 import com.tinkoff.homework.domain.data.Topic
-import com.tinkoff.homework.navigation.DelegateItem
-import com.tinkoff.homework.navigation.ToChatRouter
-import com.tinkoff.homework.presentation.AdapterDelegate
+import com.tinkoff.homework.presentation.view.DelegateItem
+import com.tinkoff.homework.presentation.view.ToChatRouter
+import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 
 class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
 

@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("RxJava", e.cause?.message.orEmpty())
             } else {
                 Thread.currentThread().also { thread ->
-                    thread.uncaughtExceptionHandler.uncaughtException(thread, e)
+                    thread.uncaughtExceptionHandler?.uncaughtException(thread, e)
                 }
             }
         }

@@ -46,12 +46,9 @@ class MessageRepositoryImpl @Inject constructor(
             ){
             local, server ->
                 val list = mutableListOf<MessageModel>()
-                val repeatedRequest = server.count() == 1 &&
-                        server.first().id == local.firstOrNull()?.id
-                if (!repeatedRequest)
-                    list.addAll(server)
+                list.addAll(server)
                 list.addAll(local)
-                list
+                list.distinctBy{m -> m.id}
             }
         } ?: run {
             loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId = null, query)
@@ -102,7 +99,7 @@ class MessageRepositoryImpl @Inject constructor(
             .observeOn(Schedulers.io())
     }
 
-    private fun loadResultsFromServer(
+    override fun loadResultsFromServer(
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -151,11 +148,14 @@ class MessageRepositoryImpl @Inject constructor(
         needDelete: Boolean
     ) {
         if(needDelete) {
-            messageDao.deleteMessages(streamId, topic)
+            if(topic.isBlank())
+                messageDao.deleteMessages(streamId)
+            else
+                messageDao.deleteMessagesByTopic(streamId, topic)
         }
         messages.map { message ->
             messageDao.insertMessage(
-                message.toEntity(streamId, topic),
+                message.toEntity(streamId),
                 message.reactions.map { reaction -> reaction.toEntity(message.id) }
             )
         }

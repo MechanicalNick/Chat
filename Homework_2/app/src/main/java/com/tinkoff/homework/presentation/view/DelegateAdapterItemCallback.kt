@@ -1,4 +1,4 @@
-package com.tinkoff.homework.navigation
+package com.tinkoff.homework.presentation.view
 
 import androidx.recyclerview.widget.DiffUtil
 

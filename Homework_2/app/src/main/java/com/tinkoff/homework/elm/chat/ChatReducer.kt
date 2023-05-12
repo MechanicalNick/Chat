@@ -56,7 +56,7 @@ class ChatReducer(private val credentials: Credentials) :
                 commands {
                     +ChatCommand.LoadNextPage(
                         state.items?.firstOrNull()?.id ?: 0,
-                        state.topicName, state.streamId
+                        event.topicName, state.streamId
                     )
                 }
             }
@@ -147,6 +147,8 @@ class ChatReducer(private val credentials: Credentials) :
                 commands { +ChatCommand.SendMessage(event.streamId,
                     event.topicName, buildMessage(event.response))
             }
+            is ChatEvent.Ui.GoToChat ->
+                effects { +ChatEffect.GoToChat(event.topicName, event.streamName, event.streamId) }
         }
     }
 }
@@ -200,13 +202,13 @@ private fun addReaction(
 ): MessageModel {
     val condition: (Reaction) -> Boolean =
         { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
-    val add: (MutableList<Reaction>, Reaction) -> Boolean = { list, value -> list.add(value)}
+    val add: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.add(reaction)}
     return applyReaction(value, old, applicableId, condition, add)
 }
 
 private fun removeReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
     val condition: (Reaction) -> Boolean =
         { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
-    val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, value -> list.remove(value)}
+    val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.remove(reaction)}
     return applyReaction(value, old, applicableId, condition, remove)
 }

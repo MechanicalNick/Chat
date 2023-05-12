@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.StreamItemBinding
 import com.tinkoff.homework.domain.data.Stream
-import com.tinkoff.homework.navigation.DelegateItem
-import com.tinkoff.homework.navigation.Expander
-import com.tinkoff.homework.presentation.AdapterDelegate
+import com.tinkoff.homework.presentation.view.DelegateItem
+import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
+import com.tinkoff.homework.presentation.view.viewgroup.StreamView
 
-class StreamDelegate(private val expander: Expander): AdapterDelegate {
+class StreamDelegate(
+    private val streamView: StreamView
+    ): AdapterDelegate {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         ViewHolder(
             StreamItemBinding.inflate(
@@ -20,7 +22,6 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                 parent,
                 false
             ),
-            expander,
             parent.context
         )
 
@@ -34,9 +35,8 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
 
     override fun isOfViewType(item: DelegateItem): Boolean = item is StreamDelegateItem
 
-    class ViewHolder(
+    inner class ViewHolder(
         private val binding: StreamItemBinding,
-        private val expander: Expander,
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -46,16 +46,20 @@ class StreamDelegate(private val expander: Expander): AdapterDelegate {
                 expanderView.isChecked = model.isExpanded
                 val listener = View.OnClickListener {
                     if(!model.isExpanded) {
-                        expander.expand(item as StreamDelegateItem)
+                        streamView.expand(item as StreamDelegateItem)
                         expanderView.isChecked = true
                     }
                     else{
-                        expander.collapse(item as StreamDelegateItem)
+                        streamView.collapse(item as StreamDelegateItem)
                         expanderView.isChecked = false
                     }
                 }
                 binding.root.setOnClickListener(listener)
                 expanderView.setOnClickListener(listener)
+                binding.root.setOnLongClickListener {
+                    streamView.goToChat("", model.name, model.id)
+                    true
+                }
             }
         }
     }

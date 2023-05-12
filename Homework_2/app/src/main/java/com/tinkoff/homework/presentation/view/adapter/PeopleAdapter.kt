@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation
+package com.tinkoff.homework.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.PeopleItemBinding
 import com.tinkoff.homework.domain.data.People
 import com.tinkoff.homework.domain.data.Status
-import com.tinkoff.homework.navigation.ToProfileRouter
+import com.tinkoff.homework.presentation.view.ToProfileRouter
 
 class PeopleAdapter(private val router: ToProfileRouter) :
     RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {

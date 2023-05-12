@@ -10,9 +10,9 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
-import com.tinkoff.homework.navigation.DelegateItem
-import com.tinkoff.homework.navigation.FlexboxFactory
-import com.tinkoff.homework.presentation.AdapterDelegate
+import com.tinkoff.homework.presentation.view.DelegateItem
+import com.tinkoff.homework.presentation.view.FlexboxFactory
+import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import com.tinkoff.homework.presentation.view.fragment.ChatFragmentCallback
 import com.tinkoff.homework.utils.Const
 

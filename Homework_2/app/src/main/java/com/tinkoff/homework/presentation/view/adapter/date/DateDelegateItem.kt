@@ -1,7 +1,7 @@
 package com.tinkoff.homework.presentation.view.adapter.date
 
 import com.tinkoff.homework.domain.data.DateModel
-import com.tinkoff.homework.navigation.DelegateItem
+import com.tinkoff.homework.presentation.view.DelegateItem
 
 class DateDelegateItem(
     val id: Long,

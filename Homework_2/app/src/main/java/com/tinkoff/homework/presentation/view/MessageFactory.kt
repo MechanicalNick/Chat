@@ -1,5 +1,6 @@
-package com.tinkoff.homework.navigation
+package com.tinkoff.homework.presentation.view
 
+import android.util.Log
 import com.tinkoff.homework.domain.data.DateModel
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.data.MessageResponseWrapper
@@ -7,12 +8,14 @@ import com.tinkoff.homework.domain.data.MessageResponseWrapperStatus
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.MessageResponse
+import com.tinkoff.homework.domain.data.TopicModel
 import com.tinkoff.homework.domain.use_cases.interfaces.AddReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.RemoveReactionUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendMessageUseCase
 import com.tinkoff.homework.presentation.view.adapter.date.DateDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.message.CompanionMessageDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.message.MyMessageDelegateItem
+import com.tinkoff.homework.presentation.view.adapter.message.TopicMessageDelegateItem
 import io.reactivex.Single
 import java.time.LocalDate
 
@@ -28,10 +31,14 @@ class MessageFactory(
 
     fun init(
         messages: List<MessageModel>,
-        myId: Long
+        myId: Long,
+        streamId: Long,
+        streamName: String,
+        needGroupByTopic: Boolean
     ): MutableList<DelegateItem> {
         items = mutableListOf()
         currentMessages = messages.toList()
+        var topicId = 1L
 
         if (messages.isNotEmpty()) {
             lastDate = messages
@@ -45,14 +52,33 @@ class MessageFactory(
                 val dateModel = DateModel(index + 1L, group.key)
                 dates.add(dateModel)
                 items.add(DateDelegateItem(dateModel.id, dateModel))
-                group.value.forEach {
-                    val item = if (it.senderId == myId) MyMessageDelegateItem(it.id, it, it.reactions.count())
-                    else CompanionMessageDelegateItem(it.id, it, it.reactions.count())
-                    items.add(item)
+
+                if(needGroupByTopic){
+                    val topicGroup = group.value.groupBy { m -> m.topic }
+                    topicGroup.forEach{ entry ->
+                        items.add(TopicMessageDelegateItem(topicId++,
+                            TopicModel(entry.key,streamId, streamName)))
+                        entry.value.forEach{ message -> addItem(message, myId) }
+                    }
                 }
+                else {
+                    group.value.forEach { addItem(it, myId) }
+                }
+
             }
         }
         return items
+    }
+
+    private fun addItem(it: MessageModel, myId: Long) {
+        items.add(
+            if (it.senderId == myId) {
+                MyMessageDelegateItem(it.id, it, it.reactions.count())
+            }
+            else {
+                CompanionMessageDelegateItem(it.id, it, it.reactions.count())
+            }
+        )
     }
 
     fun getCount(): Int = items.count()

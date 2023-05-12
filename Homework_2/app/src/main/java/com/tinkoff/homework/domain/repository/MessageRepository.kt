@@ -15,7 +15,14 @@ interface MessageRepository {
         streamId: Long?,
         query: String
     ): Single<List<MessageModel>>
-
+    fun loadResultsFromServer(
+        anchor: String,
+        numBefore: Long,
+        numAfter: Long,
+        topic: String,
+        streamId: Long?,
+        query: String
+    ): Single<List<MessageModel>>
     fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>>
     fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse>
     fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse>

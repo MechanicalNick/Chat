@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation
+package com.tinkoff.homework.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

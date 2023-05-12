@@ -6,7 +6,7 @@ import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
 import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.utils.Const
-import com.tinkoff.homework.navigation.MessageFactory
+import com.tinkoff.homework.presentation.view.MessageFactory
 import io.reactivex.Observable
 import vivid.money.elmslie.rx2.Actor
 

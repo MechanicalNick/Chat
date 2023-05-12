@@ -24,16 +24,20 @@ import com.tinkoff.homework.elm.chat.model.ChatEffect
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.navigation.MessageFactory
-import com.tinkoff.homework.presentation.DelegatesAdapter
+import com.tinkoff.homework.navigation.NavigationScreens
+import com.tinkoff.homework.presentation.view.MessageFactory
+import com.tinkoff.homework.presentation.view.ToChatRouter
+import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
 import com.tinkoff.homework.presentation.view.adapter.date.DateDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.CompanionMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.MyMessageDelegate
+import com.tinkoff.homework.presentation.view.adapter.message.TopicMessageDelegate
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
 
-class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragmentCallback {
+class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
+    ChatFragmentCallback, ToChatRouter  {
     @Inject
     lateinit var credentials: Credentials
     @Inject
@@ -57,6 +61,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
     private val binding get() = _binding!!
     private var streamId: Long? = null
     private var topicName: String = ""
+    private var streamName: String? = null
     // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
     // Паттерн: []()
     private val isUserImageRegex = Regex("\\[(.*?)\\](\\((.*?)\\))")
@@ -77,9 +82,11 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
         topicName = requireArguments().getString(ARG_TOPIC)!!
-        binding.header.text = getString(R.string.sharp, topicName)
 
-        val streamName = requireArguments().getString(ARG_STREAM)
+        binding.topicHeaderLayout.root.isVisible = topicName.isNotBlank()
+        binding.topicHeaderLayout.header.text = getString(R.string.sharp, topicName)
+
+        streamName = requireArguments().getString(ARG_STREAM)!!
         binding.chatToolbar.title = getString(R.string.sharp, streamName)
 
         streamId = requireArguments().getLong(ARG_STREAM_ID)
@@ -129,7 +136,14 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
                     binding.chatData
                 )
                 state.items?.let {
-                    adapter.submitList(messageFactory.init(state.items, credentials.id))
+                    val needGroup = topicName.isBlank()
+                    adapter.submitList(messageFactory.init(
+                        messages = state.items,
+                        myId = credentials.id,
+                        streamId = streamId!!,
+                        streamName = streamName!!,
+                        needGroupByTopic = needGroup
+                    ))
                 }
             }
         }
@@ -138,10 +152,16 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
 
     override fun handleEffect(effect: ChatEffect) {
         return when(effect){
-            ChatEffect.ScrollToLastElement ->
+            is ChatEffect.ScrollToLastElement ->
                 binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
-            ChatEffect.SmoothScrollToLastElement ->
+            is ChatEffect.SmoothScrollToLastElement ->
                 binding.recycler.smoothScrollToPosition(messageFactory.getCount() - 1)
+            is ChatEffect.GoToChat ->  router.navigateTo(
+                NavigationScreens.chat(
+                    effect.topicName,
+                    effect.streamName, effect.streamId
+                )
+            )
         }
     }
 
@@ -155,6 +175,7 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
             addDelegate(MyMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
             addDelegate(CompanionMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
             addDelegate(DateDelegate())
+            addDelegate(TopicMessageDelegate(this@ChatFragment))
         }
         val itemDecoration = MarginItemDecorator(
             space,
@@ -164,7 +185,8 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         binding.recycler.addOnScrollListener(
             ChatScrollListener(
                 binding.recycler.layoutManager as LinearLayoutManager,
-                chatViewModel.store
+                chatViewModel.store,
+                topicName
             )
         )
         binding.recycler.adapter = adapter
@@ -206,6 +228,10 @@ class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(), ChatFragm
         args.putLong(ARG_SENDER_ID, senderId)
         bottomFragment.arguments = args
         return true
+    }
+
+    override fun goToChat(topicName: String, streamName: String, streamId: Long) {
+        store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
     }
 
     companion object {

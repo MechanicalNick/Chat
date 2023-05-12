@@ -20,12 +20,8 @@ import com.tinkoff.homework.domain.use_cases.interfaces.GetPeoplesUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetProfileUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.GetStreamsUseCase
 import com.tinkoff.homework.domain.use_cases.interfaces.SendImageUseCase
-import com.tinkoff.homework.elm.BaseStoreFactory
-import com.tinkoff.homework.elm.channels.model.ChannelsEffect
-import com.tinkoff.homework.elm.channels.model.ChannelsEvent
-import com.tinkoff.homework.elm.channels.model.ChannelsState
-import com.tinkoff.homework.navigation.MessageFactory
-import com.tinkoff.homework.navigation.StreamFactory
+import com.tinkoff.homework.presentation.view.MessageFactory
+import com.tinkoff.homework.presentation.view.StreamFactory
 import com.tinkoff.homework.presentation.view.MainActivity
 import com.tinkoff.homework.presentation.view.fragment.MainFragment
 import dagger.BindsInstance

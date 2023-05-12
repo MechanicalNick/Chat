@@ -1,11 +1,11 @@
-package com.tinkoff.homework.presentation
+package com.tinkoff.homework.presentation.view.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.tinkoff.homework.navigation.DelegateAdapterItemCallback
-import com.tinkoff.homework.navigation.DelegateItem
+import com.tinkoff.homework.presentation.view.DelegateAdapterItemCallback
+import com.tinkoff.homework.presentation.view.DelegateItem
 
 open class DelegatesAdapter :
     ListAdapter<DelegateItem, RecyclerView.ViewHolder>(

@@ -17,7 +17,7 @@ import com.tinkoff.homework.databinding.LayoutCreateChannelBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.presentation.ChannelPagerAdapter
+import com.tinkoff.homework.presentation.view.adapter.ChannelPagerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -77,13 +77,11 @@ class ChannelsFragment: Fragment()  {
 
     private fun getTabs(): List<Fragment> {
         val onlySubscribed = childFragmentManager.findFragmentByTag("f0") ?: ChannelsListFragment.newInstance(
-            onlySubscribed = true,
-            "only subscribed"
+            onlySubscribed = true
         )
 
         val all = childFragmentManager.findFragmentByTag("f1") ?: ChannelsListFragment.newInstance(
-            onlySubscribed = false,
-            "all"
+            onlySubscribed = false
         )
         return listOf(onlySubscribed, all)
     }

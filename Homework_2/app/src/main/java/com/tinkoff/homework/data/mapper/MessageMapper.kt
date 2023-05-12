@@ -13,7 +13,7 @@ import com.tinkoff.homework.data.db.entity.ReactionEntity
 import com.tinkoff.homework.data.db.entity.results.MessageResult
 import java.time.LocalDate
 
-fun MessageModel.toEntity(streamId: Long, topic: String): MessageEntity {
+fun MessageModel.toEntity(streamId: Long): MessageEntity {
     return MessageEntity(
         id = this.id,
         senderId = this.senderId,
@@ -22,7 +22,7 @@ fun MessageModel.toEntity(streamId: Long, topic: String): MessageEntity {
         date = this.date,
         avatarUrl = this.avatarUrl,
         streamId = streamId,
-        topicName = topic
+        topicName = this.topic
     )
 }
 
