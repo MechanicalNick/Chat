@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import com.tinkoff.homework.R
+import com.tinkoff.homework.utils.dp
 
 class MessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -17,7 +18,7 @@ class MessageLayout @JvmOverloads constructor(
     internal val userImage: ImageView by lazy { findViewById(R.id.myUserImage) }
 
     private val cardView: View by lazy { findViewById(R.id.myCardView) }
-    private val marginBetweenCardAndFlexbox = 7
+    private val marginBetweenCardAndFlexbox = 7.dp(context)
 
     init {
         inflate(context, R.layout.message_layout_content, this)

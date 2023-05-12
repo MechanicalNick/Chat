@@ -60,8 +60,9 @@ interface FlexboxAssertions : BaseAssertions {
                 return (view as FlexboxLayout)
                     .children
                     .filterIsInstance<ReactionView>()
-                    .any{it.getText() == text}
+                    .any { it.getText() == text }
             }
+
             override fun describeTo(description: Description) {
                 description.appendText("reaction must be $text")
             }

@@ -13,13 +13,15 @@ import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 
 class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
 
-    private val backgrounds = listOf(R.color.background_topic_color_1,
+    private val backgrounds = listOf(
+        R.color.background_topic_color_1,
         R.color.background_topic_color_2,
         R.color.background_topic_color_3,
         R.color.background_topic_color_4,
         R.color.background_topic_color_5,
         R.color.background_topic_color_6,
-        R.color.background_topic_color_7)
+        R.color.background_topic_color_7
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         ViewHolder(
@@ -37,7 +39,7 @@ class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
         item: DelegateItem,
         position: Int
     ) {
-        (holder as ViewHolder).bind(item.content() as Topic, position)
+        (holder as ViewHolder).bind(item.content() as Topic)
     }
 
     override fun isOfViewType(item: DelegateItem): Boolean = item is TopicDelegateItem
@@ -48,12 +50,12 @@ class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
         private val router: ToChatRouter
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(model: Topic, position: Int) {
+        fun bind(model: Topic) {
             with(binding) {
                 topicName.text = model.name
                 val messages = binding.root.context.resources.getString(R.string.messages)
                 messageCount.text = "${model.messageCount} $messages"
-                val color = backgrounds[position % backgrounds.size]
+                val color = backgrounds[model.position % backgrounds.size]
                 topicItemLayout.background = ResourcesCompat
                     .getDrawable(binding.root.context.resources, color, null)
                 binding.root.setOnClickListener{

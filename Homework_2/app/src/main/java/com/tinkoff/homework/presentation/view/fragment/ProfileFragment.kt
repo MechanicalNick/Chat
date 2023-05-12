@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
-import com.facebook.shimmer.ShimmerFrameLayout
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
@@ -25,6 +27,7 @@ import com.tinkoff.homework.elm.profile.model.ProfileState
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.utils.dp
 import javax.inject.Inject
+
 
 class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>() {
     @Inject
@@ -117,6 +120,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
         binding.profileImage.let {
             Glide.with(binding.root)
                 .load(profile.avatarUrl)
+                .transform(RoundedCorners(15.dp(binding.root.context)))
                 .placeholder(R.mipmap.ic_launcher_round)
                 .error(R.drawable.error_placeholder)
                 .into(it)

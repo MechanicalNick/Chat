@@ -19,17 +19,18 @@
     <color name="edit_text_background_color">#282828</color>
     <color name="date_background_color">#070707</color>
     <color name="date_text_color">#999999</color>
-    <color name="background_topic_color_1">#856ae9</color>
+    <color name="background_topic_color_1">#2A9D8F</color>
     <color name="background_topic_color_2">#E9C46A</color>
-    <color name="background_topic_color_3">#6acfe9</color>
-    <color name="background_topic_color_4">#cfe96a</color>
-    <color name="background_topic_color_5">#e9856a</color>
-    <color name="background_topic_color_6">#6ae9c4</color>
-    <color name="background_topic_color_7">#e96a8f</color>
+    <color name="background_topic_color_3">#239E4A</color>
+    <color name="background_topic_color_4">#9E691B</color>
+    <color name="background_topic_color_5">#33719E</color>
+    <color name="background_topic_color_6">#9E3C3A</color>
+    <color name="background_topic_color_7">#80D2E8</color>
     <color name="description_color_text">#A1A1A1</color>
     <color name="green">#4AB54D</color>
     <color name="red">#FF0000</color>
     <color name="orange">#FFA500</color>
     <color name="tab_indicator">#219653</color>
     <color name="custom_search_tint">#323232</color>
+    <color name="rect_background">#555555</color>
 </resources>

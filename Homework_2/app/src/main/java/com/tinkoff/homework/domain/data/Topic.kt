@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Topic(
+    val position: Int,
     val name: String,
     val messageCount: Long,
     val streamName: String,

@@ -5,12 +5,12 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.tinkoff.homework.data.db.LocalDateConverter
-import com.tinkoff.homework.screen.ChatScreen
 import com.tinkoff.homework.presentation.ReactionHelper
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_STREAM
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_STREAM_ID
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_TOPIC
+import com.tinkoff.homework.screen.ChatScreen
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -227,7 +227,7 @@ class ChatTest : TestCase() {
 
                     myFlexbox.clickToReaction(oldOtherReaction)
 
-                    myFlexbox.hasSize( otherReactionCount + plusViewCount)
+                    myFlexbox.hasSize(otherReactionCount + plusViewCount)
                     myFlexbox.hasReaction(newOtherReaction)
                 }
             }
@@ -253,7 +253,7 @@ class ChatTest : TestCase() {
                     longClick()
                     bottomRecyclerView.isDisplayed()
 
-                    bottomRecyclerView.childAt<ChatScreen.ReactionItem>(9){
+                    bottomRecyclerView.childAt<ChatScreen.ReactionItem>(9) {
                         click()
                     }
                     val myNewReactionCount = 1
@@ -282,16 +282,16 @@ class ChatTest : TestCase() {
                 setBody(loadFromAssets("messages_request.json"))
                     .setBodyDelay(300, TimeUnit.MILLISECONDS)
             }
-            returnsForPath("/messages/352588452/reactions?emoji_name=octopus"){
-                 setBody(loadFromAssets("reaction_request.json"))
-            }
-            returnsForPath("/messages/352588452/reactions?emoji_name=smiley_cat"){
+            returnsForPath("/messages/352588452/reactions?emoji_name=octopus") {
                 setBody(loadFromAssets("reaction_request.json"))
             }
-            returnsForPath("/messages/352588452/reactions?emoji_name=grinning_face_with_smiling_eyes"){
+            returnsForPath("/messages/352588452/reactions?emoji_name=smiley_cat") {
                 setBody(loadFromAssets("reaction_request.json"))
             }
-            returnsForPath("/messages/352588452/reactions?emoji_name=smile"){
+            returnsForPath("/messages/352588452/reactions?emoji_name=grinning_face_with_smiling_eyes") {
+                setBody(loadFromAssets("reaction_request.json"))
+            }
+            returnsForPath("/messages/352588452/reactions?emoji_name=smile") {
                 setBody(loadFromAssets("reaction_request.json"))
             }
         }

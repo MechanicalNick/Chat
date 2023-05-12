@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import com.tinkoff.homework.R
+import com.tinkoff.homework.utils.dp
 import java.lang.Integer.max
 
 class CompanionMessageLayout @JvmOverloads constructor(
@@ -21,8 +22,8 @@ class CompanionMessageLayout @JvmOverloads constructor(
 
     private val cardView: View by lazy { findViewById(R.id.companionCardView) }
 
-    private val marginBetweenImageAndFlexbox = 9
-    private val marginBetweenCardAndFlexbox = 7
+    private val marginBetweenImageAndFlexbox = 9.dp(context)
+    private val marginBetweenCardAndFlexbox = 7.dp(context)
 
     init {
         inflate(context, R.layout.companion_message_layout_content, this)

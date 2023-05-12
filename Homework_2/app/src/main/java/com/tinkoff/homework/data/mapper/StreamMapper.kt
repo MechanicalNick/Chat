@@ -30,16 +30,17 @@ fun StreamResult.toDomain(): Stream {
     return Stream(
         id = this.streamEntity.streamId,
         name = this.streamEntity.name,
-        topics = this.topics.map { topic ->
-            topic.toDomain(this.streamEntity)
+        topics = this.topics.mapIndexed{ index, topic ->
+            topic.toDomain(index, this.streamEntity)
         }
             .toMutableList(),
         isExpanded = false
     )
 }
 
-fun TopicEntity.toDomain(streamEntity: StreamEntity): Topic {
+fun TopicEntity.toDomain(index: Int, streamEntity: StreamEntity): Topic {
     return Topic(
+        position = index,
         name = this.name,
         messageCount = this.messageCount,
         streamName = streamEntity.name,

@@ -4,7 +4,7 @@
        tools:parentTag="com.tinkoff.homework.presentation.view.viewgroup.ContentEditorViewGroup">
 
     <EditText android:layout_width="match_parent"
-              android:layout_height="62dp"
+              android:layout_height="51dp"
               style="@style/Theme.Homework.EditText"
               android:id="@+id/editTextView"/>
 

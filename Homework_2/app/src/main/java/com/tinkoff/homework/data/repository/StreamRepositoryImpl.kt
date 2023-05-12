@@ -116,8 +116,9 @@ class StreamRepositoryImpl @Inject constructor(
         messages: List<MessageModel>,
         curStream: Stream
     ): List<Topic> {
-        return topics.topics.map { topicDto ->
+        return topics.topics.mapIndexed { index, topicDto ->
             Topic(
+                index,
                 topicDto.name,
                 getMessageCount(messages, topicDto, curStream),
                 curStream.name,

@@ -3,8 +3,8 @@ package com.tinkoff.homework.screen
 import android.view.View
 import com.kaspersky.kaspresso.screens.KScreen
 import com.tinkoff.homework.R
-import com.tinkoff.homework.view.KFlexbox
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
+import com.tinkoff.homework.view.KFlexbox
 import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
@@ -28,13 +28,14 @@ class ChatScreen : KScreen<ChatScreen>() {
 
     class MyMessageItem(parent: Matcher<View>) : KRecyclerItem<MyMessageItem>(parent) {
         val myMessage = KTextView(parent) { withId(R.id.myTextMessage) }
-        val myFlexbox = KFlexbox (parent) { withId(R.id.myFlexbox) }
+        val myFlexbox = KFlexbox(parent) { withId(R.id.myFlexbox) }
         val bottomRecyclerView = KRecyclerView({ withId(R.id.bottomRecyclerView) }, {
             itemType(::ReactionItem)
         })
     }
 
-    class CompanionMessageItem(parent: Matcher<View>) : KRecyclerItem<CompanionMessageItem>(parent) {
+    class CompanionMessageItem(parent: Matcher<View>) :
+        KRecyclerItem<CompanionMessageItem>(parent) {
         val companionAvatar = KImageView(parent) { withId(R.id.companionAvatarView) }
         val companionMessage = KTextView(parent) { withId(R.id.companionTextMessage) }
         val companionFlexbox = KFlexbox(parent) { withId(R.id.companionFlexbox) }
@@ -45,6 +46,6 @@ class ChatScreen : KScreen<ChatScreen>() {
     }
 
     class ReactionItem(parent: Matcher<View>) : KRecyclerItem<ReactionItem>(parent) {
-        val reaction = KTextView (parent) { withId(R.id.emojiId) }
+        val reaction = KTextView(parent) { withId(R.id.emojiId) }
     }
 }

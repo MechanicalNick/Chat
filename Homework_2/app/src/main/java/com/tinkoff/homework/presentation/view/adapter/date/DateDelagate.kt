@@ -8,10 +8,12 @@ import com.tinkoff.homework.domain.data.DateModel
 import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class DateDelegate : AdapterDelegate {
     companion object{
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        private val locale = Locale("ru")
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM", locale)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =

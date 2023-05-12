@@ -2,6 +2,7 @@
 <com.tinkoff.homework.presentation.view.viewgroup.CompanionMessageLayout
     android:id="@+id/companionMessageLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginStart="12dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 </com.tinkoff.homework.presentation.view.viewgroup.CompanionMessageLayout>
