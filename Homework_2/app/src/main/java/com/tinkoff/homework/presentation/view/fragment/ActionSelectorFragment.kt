@@ -111,9 +111,9 @@ class ActionSelectorFragment : BottomSheetDialogFragment() {
         if (clipboard != null && message != null) {
             val clip = ClipData.newPlainText("", message.text)
             clipboard.setPrimaryClip(clip)
-            viewModel.store.accept(ChatEvent.Ui.ShowToast(getString(R.string.copy_message_success)))
+            viewModel.store.accept(ChatEvent.Ui.ShowSnackbar(getString(R.string.copy_message_success)))
         } else {
-            viewModel.store.accept(ChatEvent.Ui.ShowToast(getString(R.string.copy_message_unsuccess)))
+            viewModel.store.accept(ChatEvent.Ui.ShowSnackbar(getString(R.string.copy_message_unsuccess)))
         }
     }
 

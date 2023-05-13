@@ -30,8 +30,8 @@ class ChatReducer(private val credentials: Credentials) :
                 }
             }
 
-            is ChatEvent.Ui.ShowToast -> {
-                effects { +ChatEffect.ShowToast(event.message) }
+            is ChatEvent.Ui.ShowSnackbar -> {
+                effects { +ChatEffect.ShowSnackbar(event.message) }
             }
 
             is ChatEvent.Ui.Init -> {
@@ -196,7 +196,7 @@ class ChatReducer(private val credentials: Credentials) :
             }
 
             is ChatEvent.Internal.TimeLimitError -> {
-                effects { +ChatEffect.ShowTimeLimitToast }
+                effects { +ChatEffect.ShowTimeLimitSnackbar }
             }
         }
     }

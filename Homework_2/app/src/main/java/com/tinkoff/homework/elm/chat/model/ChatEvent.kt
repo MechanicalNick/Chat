@@ -12,7 +12,7 @@ sealed class ChatEvent {
         data class ChangeTopic(val messageId: Long, val newTopic: String) : Ui()
         data class EditMessage(val messageId: Long, val newText: String) : Ui()
         data class RemoveMessage(val messageId: Long) : Ui()
-        data class ShowToast(val message: String) : Ui()
+        data class ShowSnackbar(val message: String) : Ui()
         data class LoadData(val topicName: String, val streamId: Long) : Ui()
         data class LoadImage(val uri: Uri, val topicName: String, val streamId: Long) : Ui()
         data class LoadNextPage(val topicName: String) : Ui()

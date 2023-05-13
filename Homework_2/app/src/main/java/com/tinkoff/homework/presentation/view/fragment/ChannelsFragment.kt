@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import com.tinkoff.homework.databinding.LayoutAlertDialogBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.getAppComponent
+import com.tinkoff.homework.presentation.view.CustomSnackbar
 import com.tinkoff.homework.presentation.view.adapter.ChannelPagerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -114,16 +114,14 @@ class ChannelsFragment: Fragment()  {
                 )
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-                        Toast.makeText(
-                            context,
-                            getString(R.string.create_stream_success),
-                            Toast.LENGTH_LONG
+                        CustomSnackbar.makeLongText(
+                            binding.root,
+                            getString(R.string.create_stream_success)
                         ).show()
                     }, {
-                        Toast.makeText(
-                            context,
-                            getString(R.string.create_stream_unsuccess),
-                            Toast.LENGTH_LONG
+                        CustomSnackbar.makeLongText(
+                            binding.root,
+                            getString(R.string.create_stream_unsuccess)
                         ).show()
                     })
             )

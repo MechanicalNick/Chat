@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -28,6 +27,7 @@ import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.presentation.view.ChatFragmentCallback
 import com.tinkoff.homework.presentation.view.ChatScrollListener
+import com.tinkoff.homework.presentation.view.CustomSnackbar
 import com.tinkoff.homework.presentation.view.MessageFactory
 import com.tinkoff.homework.presentation.view.ToChatRouter
 import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
@@ -173,17 +173,16 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
                 )
             )
 
-            is ChatEffect.ShowToast ->
+            is ChatEffect.ShowSnackbar ->
                 context?.let {
-                    Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
+                    CustomSnackbar.makeLongText(binding.root, effect.message).show()
                 } ?: Unit
 
-            is ChatEffect.ShowTimeLimitToast ->
+            is ChatEffect.ShowTimeLimitSnackbar ->
                 context?.let {
-                    Toast.makeText(
-                        it,
-                        it.getString(R.string.time_limit_message_error),
-                        Toast.LENGTH_LONG
+                    CustomSnackbar.makeLongText(
+                        binding.root,
+                        it.getString(R.string.time_limit_message_error)
                     ).show()
                 } ?: Unit
         }
