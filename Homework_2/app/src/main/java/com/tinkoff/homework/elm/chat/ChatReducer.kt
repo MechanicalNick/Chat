@@ -288,14 +288,15 @@ private fun applyReaction(
     value: Reaction,
     old: MessageModel,
     applicableId: Long,
-    condition: (Reaction) -> Boolean,
+    findCondition: (Reaction) -> Boolean,
+    equalsCondition: (Reaction?) -> Boolean,
     action: (MutableList<Reaction>, Reaction) -> Boolean
 ): MessageModel {
     if (old.id != applicableId)
         return old
     val sameReaction =
-        old.reactions.firstOrNull { r -> condition(r) }
-    if (sameReaction != null)
+        old.reactions.firstOrNull { r -> findCondition(r) }
+    if (equalsCondition(sameReaction))
         action(old.reactions, value)
     return old
 }
@@ -306,15 +307,17 @@ private fun addReaction(
     old: MessageModel,
     applicableId: Long
 ): MessageModel {
-    val condition: (Reaction) -> Boolean =
+    val findCondition: (Reaction) -> Boolean =
         { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
+    val equalsCondition: (Reaction?) -> Boolean =  {r -> r == null }
     val add: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.add(reaction)}
-    return applyReaction(value, old, applicableId, condition, add)
+    return applyReaction(value, old, applicableId, findCondition, equalsCondition, add)
 }
 
 private fun removeReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
-    val condition: (Reaction) -> Boolean =
+    val findCondition: (Reaction) -> Boolean =
         { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
+    val equalsCondition: (Reaction?) -> Boolean =  {r -> r != null }
     val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.remove(reaction)}
-    return applyReaction(value, old, applicableId, condition, remove)
+    return applyReaction(value, old, applicableId, findCondition, equalsCondition, remove)
 }

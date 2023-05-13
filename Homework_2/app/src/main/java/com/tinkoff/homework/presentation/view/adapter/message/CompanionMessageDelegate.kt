@@ -81,13 +81,13 @@ class CompanionMessageDelegate(
                 }
 
                 root.setOnLongClickListener {
-                    callback.showBottomSheetDialog(model.id, model.senderId)
+                    callback.showActionSelectorDialog(model.id, model.senderId)
                 }
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
                     { callback.reactionChange(it, model, model.senderId) },
-                    { callback.showBottomSheetDialog(model.id, model.senderId) }
+                    { callback.showActionSelectorDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)
                 }

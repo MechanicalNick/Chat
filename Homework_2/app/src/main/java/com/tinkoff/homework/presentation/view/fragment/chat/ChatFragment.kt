@@ -37,6 +37,7 @@ import com.tinkoff.homework.presentation.view.adapter.message.MyMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.TopicMessageDelegate
 import com.tinkoff.homework.presentation.view.fragment.ActionSelectorFragment
 import com.tinkoff.homework.presentation.view.fragment.BaseFragment
+import com.tinkoff.homework.presentation.view.fragment.ReactionFragment
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
@@ -64,6 +65,7 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     override val initEvent = ChatEvent.Ui.Init
 
     private val actionSelectorFragment by lazy { ActionSelectorFragment() }
+    private val reactionFragment by lazy { ReactionFragment() }
 
     private var _binding: FragmentChatBinding? = null
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
@@ -249,17 +251,26 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         this.store.accept(ChatEvent.Ui.ChangeReaction(message, reaction))
     }
 
-    override fun showBottomSheetDialog(id: Long, senderId: Long): Boolean {
-        val args = Bundle()
-        args.putLong(ARG_MODEL_ID, id)
-        args.putLong(ARG_SENDER_ID, senderId)
-        actionSelectorFragment.arguments = args
+    override fun showReactionDialog(id: Long, senderId: Long): Boolean {
+        reactionFragment.arguments = createBundle(id, senderId)
+        reactionFragment.show(childFragmentManager, null)
+        return true
+    }
+    override fun showActionSelectorDialog(id: Long, senderId: Long): Boolean {
+        actionSelectorFragment.arguments = createBundle(id, senderId)
         actionSelectorFragment.show(childFragmentManager, null)
         return true
     }
 
     override fun goToChat(topicName: String, streamName: String, streamId: Long) {
         store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
+    }
+
+    private fun createBundle(id: Long, senderId: Long): Bundle {
+        val args = Bundle()
+        args.putLong(ARG_MODEL_ID, id)
+        args.putLong(ARG_SENDER_ID, senderId)
+        return args
     }
 
     companion object {

@@ -40,7 +40,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
 
     lateinit var binding: FragmentProfileBinding
     private val topPortraitMargin = 113
-    private val topLandscapeMargin = 30
+    private val topLandscapeMargin = 15
 
     override fun onAttach(context: Context) {
         DaggerProfileComponent.factory()

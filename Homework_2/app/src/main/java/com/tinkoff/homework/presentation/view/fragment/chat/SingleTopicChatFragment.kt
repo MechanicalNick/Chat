@@ -12,7 +12,7 @@ class SingleTopicChatFragment : ChatFragment() {
         binding.topicHeaderLayout.root.isVisible = true
         binding.topicHeaderLayout.header.text = getString(R.string.sharp, topicName)
 
-        binding.topicSelectorLayout.root.isVisible = true
+        binding.topicSelectorLayout.root.isVisible = false
     }
 
     override fun sendMessage(message: String) {
