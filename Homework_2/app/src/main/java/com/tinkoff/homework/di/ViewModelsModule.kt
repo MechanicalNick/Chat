@@ -1,5 +1,6 @@
 package com.tinkoff.homework.di
 
+import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import com.tinkoff.homework.presentation.viewmodel.MainViewModel
 import dagger.Module
 import dagger.Provides
@@ -10,6 +11,12 @@ class ViewModelsModule {
     @Provides
     @Singleton
     fun provideMainViewModel(): MainViewModel {
-        return  MainViewModel()
+        return MainViewModel()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChatViewModel(): ChatViewModel {
+        return ChatViewModel()
     }
 }

@@ -4,19 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/chips_background"
     android:padding="16dp">
 
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create_channel"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
+        android:textColor="@color/white"
+        android:backgroundTint="@color/tab_indicator"
+        android:textColorHint="@color/white"
         android:id="@+id/userInputDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/channel_name_hint"
         android:inputType="text" />
 </LinearLayout>

@@ -20,10 +20,8 @@ import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
 import com.tinkoff.homework.elm.channels.model.ChannelsState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.presentation.view.Expander
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.presentation.view.StreamFactory
-import com.tinkoff.homework.presentation.view.ToChatRouter
 import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegate
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegateItem

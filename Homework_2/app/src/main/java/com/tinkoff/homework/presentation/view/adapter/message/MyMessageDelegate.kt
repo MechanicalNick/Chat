@@ -10,10 +10,10 @@ import com.bumptech.glide.load.model.LazyHeaders
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.MessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.presentation.view.ChatFragmentCallback
 import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.FlexboxFactory
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
-import com.tinkoff.homework.presentation.view.fragment.ChatFragmentCallback
 import com.tinkoff.homework.utils.Const
 
 
@@ -76,7 +76,7 @@ class MyMessageDelegate(
 
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context).create(
-                    { callback.reactionChange(it, model.id, model.senderId) },
+                    { callback.reactionChange(it, model, model.senderId) },
                     { callback.showBottomSheetDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)

@@ -61,6 +61,23 @@ interface ZulipChatApi {
         @Query("type") type: String = "stream"
     ): Single<MessageResponse>
 
+    @DELETE("messages/{messageId}")
+    fun removeMessage(
+        @Path("messageId") messageId: Long
+    ): Single<MessageResponse>
+
+    @PATCH("messages/{messageId}")
+    fun editMessage(
+        @Path("messageId") messageId: Long,
+        @Query("content") content: String
+    ): Single<MessageResponse>
+
+    @PATCH("messages/{messageId}")
+    fun changeTopic(
+        @Path("messageId") messageId: Long,
+        @Query("topic") topic: String
+    ): Single<MessageResponse>
+
     @Multipart
     @POST("user_uploads")
     fun uploadFile(

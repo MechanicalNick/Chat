@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation.view.fragment
+package com.tinkoff.homework.presentation.view
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

@@ -1,7 +1,5 @@
 package com.tinkoff.homework.presentation.view.fragment.chat
 
-import android.R
-import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.chat.model.ChatEvent

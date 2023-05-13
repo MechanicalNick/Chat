@@ -1,9 +1,9 @@
 package com.tinkoff.homework.elm.chat
 
-import com.tinkoff.homework.domain.data.MessageModel
-import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.chat.model.ChatCommand
 import com.tinkoff.homework.elm.chat.model.ChatEffect
@@ -18,6 +18,22 @@ class ChatReducer(private val credentials: Credentials) :
     DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() {
     override fun Result.reduce(event: ChatEvent): Any {
         return when (event) {
+            is ChatEvent.Ui.RemoveMessage -> {
+                commands { +ChatCommand.RemoveMessage(event.messageId) }
+            }
+
+            is ChatEvent.Internal.MessageRemoved -> {
+                state {
+                    copy(
+                        items = items?.let { removeMessage(event.messageId, it) }
+                    )
+                }
+            }
+
+            is ChatEvent.Ui.ShowToast -> {
+                effects { +ChatEffect.ShowToast(event.message) }
+            }
+
             is ChatEvent.Ui.Init -> {
                 state {
                     copy(
@@ -66,7 +82,7 @@ class ChatReducer(private val credentials: Credentials) :
             }
 
             is ChatEvent.Ui.ChangeReaction -> {
-                commands { +ChatCommand.ChangeReaction(event.messageId, event.reaction) }
+                commands { +ChatCommand.ChangeReaction(event.message, event.reaction) }
             }
 
             is ChatEvent.Ui.RemoveReaction -> {
@@ -143,18 +159,108 @@ class ChatReducer(private val credentials: Credentials) :
                     isShowProgress = false
                 )
             }
+
             is ChatEvent.Internal.ImageLoaded ->
-                commands { +ChatCommand.SendMessage(event.streamId,
-                    event.topicName, buildMessage(event.response))
-            }
+                commands {
+                    +ChatCommand.SendMessage(
+                        event.streamId,
+                        event.topicName, buildMessage(event.response)
+                    )
+                }
+
             is ChatEvent.Ui.GoToChat ->
                 effects { +ChatEffect.GoToChat(event.topicName, event.streamName, event.streamId) }
+
+            is ChatEvent.Ui.ChangeTopic -> {
+                commands { +ChatCommand.ChangeTopic(event.messageId, event.newTopic) }
+            }
+
+            is ChatEvent.Internal.TopicChanged -> {
+                state {
+                    copy(
+                        items = items?.let { changeTopic(event.messageId, event.newTopic, it) }
+                    )
+                }
+            }
+
+            is ChatEvent.Ui.EditMessage -> {
+                commands { +ChatCommand.EditMessage(event.messageId, event.newText) }
+            }
+
+            is ChatEvent.Internal.MessageEdited -> {
+                state {
+                    copy(
+                        items = items?.let { replaceMessage(event.messageId, event.newText, it) }
+                    )
+                }
+            }
+
+            is ChatEvent.Internal.TimeLimitError -> {
+                effects { +ChatEffect.ShowTimeLimitToast }
+            }
         }
     }
 }
 
-private fun buildMessage(response: ImageResponse): String{
+private fun buildMessage(response: ImageResponse): String {
     return "${Const.IMAGE_PREFIX}(${response.uri})"
+}
+
+private fun changeTopic(
+    idToReplace: Long,
+    newTopic: String,
+    messages: List<MessageModel>
+): List<MessageModel> {
+    val message = messages.first { it.id == idToReplace }
+    val newList = messages.toMutableList()
+    newList.remove(message)
+    val newMessage = MessageModel(
+        message.id,
+        message.senderId,
+        message.senderFullName,
+        newTopic,
+        message.streamId,
+        message.text,
+        message.date,
+        message.avatarUrl,
+        message.reactions
+    )
+    newList.add(newMessage)
+    return newList
+}
+
+private fun replaceMessage(
+    idToReplace: Long,
+    newText: String,
+    messages: List<MessageModel>
+): List<MessageModel> {
+    val message = messages.first { it.id == idToReplace }
+    val newList = messages.toMutableList()
+    newList.remove(message)
+    val newMessage = MessageModel(
+        message.id,
+        message.senderId,
+        message.senderFullName,
+        message.topic,
+        message.streamId,
+        newText,
+        message.date,
+        message.avatarUrl,
+        message.reactions
+    )
+    newList.add(newMessage)
+    return newList
+}
+
+
+private fun removeMessage(
+    idToRemove: Long,
+    messages: List<MessageModel>
+): List<MessageModel> {
+    val message = messages.first { it.id == idToRemove }
+    val newList = messages.toMutableList()
+    newList.remove(message)
+    return newList
 }
 
 private fun concatenate(

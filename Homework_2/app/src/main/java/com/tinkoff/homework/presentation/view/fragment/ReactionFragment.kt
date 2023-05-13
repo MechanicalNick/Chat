@@ -1,30 +1,39 @@
 package com.tinkoff.homework.presentation.view.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
-import com.tinkoff.homework.databinding.BottomSheetDialogLayoutBinding
+import com.tinkoff.homework.databinding.BottomSheetReactionsLayoutBinding
 import com.tinkoff.homework.domain.data.EmojiResources
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.chat.model.ChatEvent
+import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.presentation.view.adapter.BottomSheetDialogAdapter
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_MODEL_ID
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment.Companion.ARG_SENDER_ID
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
+import javax.inject.Inject
 
-class BottomFragment : BottomSheetDialogFragment() {
-    private val viewModel: ChatViewModel by viewModels(
-        ownerProducer = { this.requireParentFragment() }
-    )
+class ReactionFragment : BottomSheetDialogFragment() {
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
 
-    private lateinit var binding: BottomSheetDialogLayoutBinding
+    private lateinit var binding: BottomSheetReactionsLayoutBinding
     private var messageId: Long = -1L
     private var senderId: Long = -1L
     private val emojiCount = 100
+
+    override fun onAttach(context: Context) {
+        context
+            .getAppComponent()
+            .inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +43,9 @@ class BottomFragment : BottomSheetDialogFragment() {
         messageId = requireArguments().getLong(ARG_MODEL_ID)
         senderId = requireArguments().getLong(ARG_SENDER_ID)
 
-        binding = BottomSheetDialogLayoutBinding.bind(
+        binding = BottomSheetReactionsLayoutBinding.bind(
             inflater.inflate(
-                R.layout.bottom_sheet_dialog_layout,
+                R.layout.bottom_sheet_reactions_layout,
                 container
             )
         )
@@ -51,12 +60,20 @@ class BottomFragment : BottomSheetDialogFragment() {
     override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 
     private fun applyEmoji(emojiCode: String, emojiName: String) {
-        viewModel.store.accept(
+        chatViewModel.store.accept(
             ChatEvent.Ui.AddReaction(
                 messageId,
                 Reaction(emojiCode, emojiName, senderId)
             )
         )
+        parentFragmentManager.setFragmentResult(
+            ARG_REACTION_RESULT,
+            bundleOf(ARG_REACTION_RESULT to true)
+        )
         dismiss()
+    }
+
+    companion object {
+        const val ARG_REACTION_RESULT = "reaction"
     }
 }

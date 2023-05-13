@@ -3,9 +3,9 @@ package com.tinkoff.homework.presentation.view
 import android.content.Context
 import android.view.View
 import com.tinkoff.homework.domain.data.Reaction
+import com.tinkoff.homework.presentation.ReactionHelper
 import com.tinkoff.homework.presentation.view.customview.PlusView
 import com.tinkoff.homework.presentation.view.customview.ReactionView
-import com.tinkoff.homework.presentation.ReactionHelper
 
 class FlexboxFactory(private val reactions: List<Reaction>, private val context: Context) {
 

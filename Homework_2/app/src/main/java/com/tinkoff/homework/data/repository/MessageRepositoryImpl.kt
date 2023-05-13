@@ -57,18 +57,20 @@ class MessageRepositoryImpl @Inject constructor(
 
     override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {
         return loadLocalResults(streamId, topic)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
     }
 
     override fun addReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.addReaction(messageId, emojiName)
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
     }
 
     override fun removeReaction(messageId: Long, emojiName: String): Single<MessageResponse> {
         return api.removeReaction(messageId, emojiName)
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
     }
 
     override fun sendMessage(
@@ -78,7 +80,7 @@ class MessageRepositoryImpl @Inject constructor(
     ): Single<MessageResponse> {
         return api.sendMessage(streamId, topic, message)
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .doOnSuccess {
                 messageDao.insert(it.toMyMessageEntity(credentials, streamId, topic))
             }
@@ -96,7 +98,38 @@ class MessageRepositoryImpl @Inject constructor(
 
         return api.uploadFile(part)
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+    }
+
+    override fun removeMessage(messageId: Long): Single<MessageResponse> {
+        return api.removeMessage(messageId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .doOnSuccess {
+                messageDao.deleteMessage(messageId)
+            }
+    }
+
+    override fun editMessage(messageId: Long, newText: String): Single<MessageResponse> {
+        return api.editMessage(messageId, newText)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .doOnSuccess {
+                val oldEntity = messageDao.get(messageId)
+                val newEntity = oldEntity.copy(text = newText)
+                messageDao.insert(newEntity)
+            }
+    }
+
+    override fun changeTopic(messageId: Long, newTopic: String): Single<MessageResponse> {
+        return api.changeTopic(messageId, newTopic)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .doOnSuccess {
+                val oldEntity = messageDao.get(messageId)
+                val newEntity = oldEntity.copy(text = newTopic)
+                messageDao.insert(newEntity)
+            }
     }
 
     override fun loadResultsFromServer(
@@ -114,7 +147,7 @@ class MessageRepositoryImpl @Inject constructor(
             toNarrow(moshi, topic, streamId, query)
         )
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .map { message ->
                 message.messages
                     .filter { m -> m.streamId != null && m.subject != null }
@@ -137,7 +170,7 @@ class MessageRepositoryImpl @Inject constructor(
             )
         return collection
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
             .map { list -> list.map { result -> result.toDomain() } }
     }
 

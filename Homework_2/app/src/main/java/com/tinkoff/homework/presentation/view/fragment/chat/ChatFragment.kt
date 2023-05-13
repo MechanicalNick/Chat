@@ -6,10 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.model.LazyHeaders
 import com.github.terrakok.cicerone.Router
@@ -17,6 +17,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.FragmentChatBinding
 import com.tinkoff.homework.di.component.DaggerChatComponent
+import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.BaseStoreFactory
 import com.tinkoff.homework.elm.ViewState
@@ -25,6 +26,8 @@ import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
+import com.tinkoff.homework.presentation.view.ChatFragmentCallback
+import com.tinkoff.homework.presentation.view.ChatScrollListener
 import com.tinkoff.homework.presentation.view.MessageFactory
 import com.tinkoff.homework.presentation.view.ToChatRouter
 import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
@@ -32,10 +35,8 @@ import com.tinkoff.homework.presentation.view.adapter.date.DateDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.CompanionMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.MyMessageDelegate
 import com.tinkoff.homework.presentation.view.adapter.message.TopicMessageDelegate
+import com.tinkoff.homework.presentation.view.fragment.ActionSelectorFragment
 import com.tinkoff.homework.presentation.view.fragment.BaseFragment
-import com.tinkoff.homework.presentation.view.fragment.BottomFragment
-import com.tinkoff.homework.presentation.view.fragment.ChatFragmentCallback
-import com.tinkoff.homework.presentation.view.fragment.ChatScrollListener
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
@@ -44,21 +45,27 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     ChatFragmentCallback, ToChatRouter  {
     @Inject
     lateinit var credentials: Credentials
+
     @Inject
     lateinit var router: Router
+
     @Inject
     override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
+
     @Inject
     lateinit var messageFactory: MessageFactory
+
     @Inject
     lateinit var lazyHeaders: LazyHeaders
 
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
+
     override val initEvent = ChatEvent.Ui.Init
 
-    private lateinit var bottomFragment: BottomFragment
+    private val actionSelectorFragment by lazy { ActionSelectorFragment() }
 
     private var _binding: FragmentChatBinding? = null
-    private val chatViewModel: ChatViewModel by viewModels()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val space = 32
     protected val binding get() = _binding!!
@@ -81,7 +88,6 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bottomFragment = BottomFragment()
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
         streamName = requireArguments().getString(ARG_STREAM)!!
@@ -151,17 +157,33 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     }
 
     override fun handleEffect(effect: ChatEffect) {
-        return when(effect){
+        return when (effect) {
             is ChatEffect.ScrollToLastElement ->
                 binding.recycler.scrollToPosition(messageFactory.getCount() - 1)
+
             is ChatEffect.SmoothScrollToLastElement ->
                 binding.recycler.smoothScrollToPosition(messageFactory.getCount() - 1)
-            is ChatEffect.GoToChat ->  router.navigateTo(
+
+            is ChatEffect.GoToChat -> router.navigateTo(
                 NavigationScreens.chat(
                     effect.topicName,
                     effect.streamName, effect.streamId
                 )
             )
+
+            is ChatEffect.ShowToast ->
+                context?.let {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
+                } ?: Unit
+
+            is ChatEffect.ShowTimeLimitToast ->
+                context?.let {
+                    Toast.makeText(
+                        it,
+                        it.getString(R.string.time_limit_message_error),
+                        Toast.LENGTH_LONG
+                    ).show()
+                } ?: Unit
         }
     }
 
@@ -223,16 +245,16 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         }
     }
 
-    override fun reactionChange(reaction: Reaction, messageId: Long, senderId: Long) {
-        this.store.accept(ChatEvent.Ui.ChangeReaction(messageId, reaction))
+    override fun reactionChange(reaction: Reaction, message: MessageModel, senderId: Long) {
+        this.store.accept(ChatEvent.Ui.ChangeReaction(message, reaction))
     }
 
     override fun showBottomSheetDialog(id: Long, senderId: Long): Boolean {
-        bottomFragment.show(childFragmentManager, null)
         val args = Bundle()
         args.putLong(ARG_MODEL_ID, id)
         args.putLong(ARG_SENDER_ID, senderId)
-        bottomFragment.arguments = args
+        actionSelectorFragment.arguments = args
+        actionSelectorFragment.show(childFragmentManager, null)
         return true
     }
 

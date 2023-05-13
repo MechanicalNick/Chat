@@ -1,0 +1,9 @@
+package com.tinkoff.homework.presentation.view
+
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Reaction
+
+interface ChatFragmentCallback {
+    fun reactionChange(reaction: Reaction, message: MessageModel, senderId: Long)
+    fun showBottomSheetDialog(id: Long, senderId: Long): Boolean
+}

@@ -1,6 +1,5 @@
 package com.tinkoff.homework.presentation.view.fragment
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.FragmentChannelBinding
-import com.tinkoff.homework.databinding.LayoutCreateChannelBinding
+import com.tinkoff.homework.databinding.LayoutAlertDialogBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.getAppComponent
@@ -99,28 +98,36 @@ class ChannelsFragment: Fragment()  {
             outState.putInt(SELECTED_TAB_POSITION_TAG, binding.layoutChannel.tabLayout.selectedTabPosition)
     }
 
-    private fun showAlertDialog(){
-        val currentBinding = LayoutCreateChannelBinding.inflate(layoutInflater)
-        val alertDialogBuilderUserInput = AlertDialog.Builder(context)
-        alertDialogBuilderUserInput.setView(currentBinding.root)
+    private fun showAlertDialog() {
+        val currentBinding = LayoutAlertDialogBinding.inflate(layoutInflater)
+        with(currentBinding) {
+            dialogTitle.text = getString(R.string.create_channel)
+            userInputDialog.hint = getString(R.string.channel_name_hint)
+        }
 
-        alertDialogBuilderUserInput
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.ok)) {
-                    _, _ -> compositeDisposable.add(createStreamUseCase.execute(currentBinding.userInputDialog.text.toString())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                       Toast.makeText(context, getString(R.string.create_stream_success), Toast.LENGTH_LONG).show()
-                },{
-                    Toast.makeText(context, getString(R.string.create_stream_unsuccess), Toast.LENGTH_LONG).show()
-                }))
-            }
-            .setNegativeButton(getString(R.string.cancel)) {
-                    dialogBox, _ -> dialogBox.cancel()
-            }
-
-        val alertDialogAndroid: AlertDialog = alertDialogBuilderUserInput.create()
-        alertDialogAndroid.show()
+        AlertDialogFactory().create(
+            currentBinding.root
+        ) {
+            compositeDisposable.add(
+                createStreamUseCase.execute(
+                    currentBinding.userInputDialog.text.toString()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Toast.makeText(
+                            context,
+                            getString(R.string.create_stream_success),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }, {
+                        Toast.makeText(
+                            context,
+                            getString(R.string.create_stream_unsuccess),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    })
+            )
+        }.show()
     }
 
     override fun onDestroyView() {
