@@ -1,6 +1,6 @@
 package com.tinkoff.homework.domain.data
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 class MessageModel(
     val id: Long,
@@ -9,7 +9,7 @@ class MessageModel(
     val topic: String,
     val streamId: Long,
     val text: String,
-    val date: LocalDate,
+    val dateTime: LocalDateTime,
     val avatarUrl: String,
     val reactions: MutableList<Reaction>
 )

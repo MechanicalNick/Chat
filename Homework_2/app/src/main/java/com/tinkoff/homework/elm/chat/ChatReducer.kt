@@ -12,7 +12,7 @@ import com.tinkoff.homework.elm.chat.model.ChatState
 import com.tinkoff.homework.utils.Const
 import kotlinx.parcelize.RawValue
 import vivid.money.elmslie.core.store.dsl_reducer.DslReducer
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 class ChatReducer(private val credentials: Credentials) :
     DslReducer<ChatEvent, ChatState, ChatEffect, ChatCommand>() {
@@ -221,7 +221,7 @@ private fun changeTopic(
         newTopic,
         message.streamId,
         message.text,
-        message.date,
+        message.dateTime,
         message.avatarUrl,
         message.reactions
     )
@@ -244,7 +244,7 @@ private fun replaceMessage(
         message.topic,
         message.streamId,
         newText,
-        message.date,
+        message.dateTime,
         message.avatarUrl,
         message.reactions
     )
@@ -275,7 +275,7 @@ private fun concatenate(
         topic = event.topic,
         streamId = event.streamId,
         text = event.message,
-        date = LocalDate.now(),
+        dateTime = LocalDateTime.now(),
         avatarUrl = credentials.avatar,
         reactions = mutableListOf()
     )

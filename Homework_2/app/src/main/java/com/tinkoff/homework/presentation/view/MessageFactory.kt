@@ -11,7 +11,8 @@ import java.time.LocalDate
 
 class MessageFactory {
     private var items: MutableList<DelegateItem> = mutableListOf()
-    private var lastDate: LocalDate = LocalDate.now()
+    private var lastDate: LocalDate? = null
+    private var lastTopic: String? = null
     private var currentMessages: List<MessageModel> = listOf()
 
     fun init(
@@ -23,33 +24,32 @@ class MessageFactory {
     ): MutableList<DelegateItem> {
         items = mutableListOf()
         currentMessages = messages.toList()
-        var topicId = 1L
+        if (messages.isNotEmpty()){
+            messages.sortedBy { message -> message.dateTime }.forEachIndexed { index, message ->
 
-        if (messages.isNotEmpty()) {
-            lastDate = messages
-                .minOf { message -> message.date }
-            val groups = messages
-                .sortedBy { message -> message.date }
-                .groupBy { message -> message.date }
-            val dates = mutableListOf<DateModel>()
-
-            groups.entries.forEachIndexed { index, group ->
-                val dateModel = DateModel(index + 1L, group.key)
-                dates.add(dateModel)
-                items.add(DateDelegateItem(dateModel.id, dateModel))
-
-                if(needGroupByTopic){
-                    val topicGroup = group.value.groupBy { m -> m.topic }
-                    topicGroup.forEach{ entry ->
-                        items.add(TopicMessageDelegateItem(topicId++,
-                            TopicModel(entry.key,streamId, streamName)))
-                        entry.value.forEach{ message -> addItem(message, myId) }
+                val messageDate = message.dateTime.toLocalDate()
+                if(lastDate == null || messageDate != lastDate) {
+                    lastDate = message.dateTime.toLocalDate()
+                    lastDate?.let {
+                        val dateModel = DateModel(index + 1L, it)
+                        items.add(DateDelegateItem(dateModel.id, dateModel))
                     }
                 }
-                else {
-                    group.value.forEach { addItem(it, myId) }
+
+                if(needGroupByTopic) {
+                    val group = message.topic
+                    if (lastTopic == null || group != lastTopic) {
+                        lastTopic = group
+                        items.add(
+                            TopicMessageDelegateItem(
+                                index + 1L,
+                                TopicModel(group, streamId, streamName)
+                            )
+                        )
+                    }
                 }
 
+                addItem(message, myId)
             }
         }
         return items

@@ -55,7 +55,7 @@ class GetMessagesUseCaseTest(
                 topic = topic,
                 streamId = streamId,
                 text = "text",
-                date = LocalDate.MIN,
+                dateTime = LocalDate.MIN,
                 avatarUrl = "avatarUrl",
                 reactions = mutableListOf(
                     Reaction("emojiCode", "emojiName", 1)

@@ -3,7 +3,7 @@ package com.tinkoff.homework.data.db.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity(tableName = "message")
 data class MessageEntity(
@@ -13,6 +13,6 @@ data class MessageEntity(
     @ColumnInfo(name = "senderId") val senderId: Long,
     @ColumnInfo(name = "senderFullName") val senderFullName: String,
     @ColumnInfo(name = "text") val text: String,
-    @ColumnInfo(name = "date") val date: LocalDate,
+    @ColumnInfo(name = "dateTime") val dateTime: LocalDateTime,
     @ColumnInfo(name = "avatarUrl") val avatarUrl: String
 )

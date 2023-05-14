@@ -11,7 +11,7 @@ import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.data.db.entity.MessageEntity
 import com.tinkoff.homework.data.db.entity.ReactionEntity
 import com.tinkoff.homework.data.db.entity.results.MessageResult
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 fun MessageModel.toEntity(streamId: Long): MessageEntity {
     return MessageEntity(
@@ -19,7 +19,7 @@ fun MessageModel.toEntity(streamId: Long): MessageEntity {
         senderId = this.senderId,
         senderFullName = this.senderFullName,
         text = this.text,
-        date = this.date,
+        dateTime = this.dateTime,
         avatarUrl = this.avatarUrl,
         streamId = streamId,
         topicName = this.topic
@@ -44,7 +44,7 @@ fun MessageDto.toDomain(): MessageModel {
         this.subject ?: "",
         this.streamId ?: 0,
         this.content,
-        toLocalDate(this.timestamp),
+        toLocalDateTime(this.timestamp),
         this.avatarUrl,
         this.reactions.map { r ->
             Reaction(
@@ -64,7 +64,7 @@ fun MessageResult.toDomain(): MessageModel {
         topic = this.messageEntity.topicName,
         streamId = this.messageEntity.streamId,
         text = this.messageEntity.text,
-        date = this.messageEntity.date,
+        dateTime = this.messageEntity.dateTime,
         avatarUrl = this.messageEntity.avatarUrl,
         reactions = this.reactions.map { it.toDomain() }.toMutableList()
     )
@@ -90,7 +90,7 @@ fun MessageResponse.toMyMessageEntity(
         senderId = credentials.id,
         senderFullName = credentials.fullName,
         text = this.msg,
-        date = LocalDate.now(),
+        dateTime = LocalDateTime.now(),
         avatarUrl = credentials.avatar
     )
 }
