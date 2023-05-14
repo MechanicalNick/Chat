@@ -13,8 +13,9 @@
 
         <ImageView
             android:id="@+id/myUserImage"
-            android:layout_width="150dp"
-            android:layout_height="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:layout_marginTop="29dp"
             android:layout_marginStart="13dp"
             android:layout_marginBottom="8dp" />

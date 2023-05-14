@@ -15,6 +15,7 @@ import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.FlexboxFactory
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.utils.dp
 
 
 class MyMessageDelegate(
@@ -60,6 +61,7 @@ class MyMessageDelegate(
                     root.userImage.let {
                         Glide.with(root.userImage)
                             .load(glideUrl)
+                            .override(200.dp(root.context), 200.dp(root.context))
                             .placeholder(R.mipmap.ic_launcher_round)
                             .error(R.drawable.error_placeholder)
                             .into(it)

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.request.RequestOptions
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
@@ -15,6 +16,7 @@ import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.FlexboxFactory
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import com.tinkoff.homework.utils.Const
+import com.tinkoff.homework.utils.dp
 
 class CompanionMessageDelegate(
     private val callback: ChatFragmentCallback,
@@ -70,6 +72,7 @@ class CompanionMessageDelegate(
                     root.userImage.let {
                         Glide.with(root.userImage)
                             .load(glideUrl)
+                            .override(200.dp(root.context), 200.dp(root.context))
                             .placeholder(R.mipmap.ic_launcher_round)
                             .error(R.drawable.error_placeholder)
                             .into(it)
