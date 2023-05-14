@@ -6,7 +6,6 @@ class EmojiResources {
         Emoji("Popular", "+1", "1f44d"),
         Emoji("Popular", "tada", "1f389"),
         Emoji("Popular", "smile", "1f642"),
-        Emoji("Popular", "heart", "2764"),
         Emoji("Popular", "working_on_it", "1f6e0"),
         Emoji("Popular", "octopus", "1f419"),
 
@@ -63,7 +62,6 @@ class EmojiResources {
         Emoji("Smileys & Emotion", "oh_no", "1f615"),
         Emoji("Smileys & Emotion", "worried", "1f61f"),
         Emoji("Smileys & Emotion", "frown", "1f641"),
-        Emoji("Smileys & Emotion", "sad", "2639"),
         Emoji("Smileys & Emotion", "open_mouth", "1f62e"),
         Emoji("Smileys & Emotion", "hushed", "1f62f"),
         Emoji("Smileys & Emotion", "astonished", "1f632"),
@@ -88,7 +86,6 @@ class EmojiResources {
         Emoji("Smileys & Emotion", "smiling_devil", "1f608"),
         Emoji("Smileys & Emotion", "devil", "1f47f"),
         Emoji("Smileys & Emotion", "skull", "1f480"),
-        Emoji("Smileys & Emotion", "skull_and_crossbones", "2620"),
         Emoji("Smileys & Emotion", "poop", "1f4a9"),
         Emoji("Smileys & Emotion", "clown", "1f921"),
         Emoji("Smileys & Emotion", "ogre", "1f479"),

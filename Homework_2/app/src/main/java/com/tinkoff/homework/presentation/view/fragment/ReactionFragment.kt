@@ -26,7 +26,7 @@ class ReactionFragment : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetReactionsLayoutBinding
     private var messageId: Long = -1L
     private var senderId: Long = -1L
-    private val emojiCount = 100
+    private val emojiCount = 7 * 12 // 7 to one row
 
     override fun onAttach(context: Context) {
         context
