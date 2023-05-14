@@ -13,6 +13,7 @@ class ChatScrollListener(
     private val store: Store<ChatEvent, ChatEffect, ChatState>,
     private val topicName: String
 ) : RecyclerView.OnScrollListener() {
+    private var lastVisibleItemPosition: Int? = null
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
@@ -20,8 +21,12 @@ class ChatScrollListener(
         val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
         if (!isLoading()) {
-            if (dy != 0 && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
+            val needLoad = lastVisibleItemPosition == null ||
+                    lastVisibleItemPosition!! < firstVisibleItemPosition
+
+            if (needLoad && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
                 loadMoreItems()
+                lastVisibleItemPosition = firstVisibleItemPosition
             }
         }
     }
