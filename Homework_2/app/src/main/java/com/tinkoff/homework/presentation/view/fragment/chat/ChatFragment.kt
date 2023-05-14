@@ -1,6 +1,7 @@
 package com.tinkoff.homework.presentation.view.fragment.chat
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -220,6 +221,7 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
     abstract val needGroupByTopic: Boolean
     abstract fun sendMessage(message: String)
+    abstract fun loadImage(uri: Uri)
     abstract fun renderAdditionalViews()
 
     private fun subscribeToSendMessage(){
@@ -234,10 +236,11 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     private fun createMediaPicker(){
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                this.store.accept(ChatEvent.Ui.LoadImage(uri, topicName, streamId!!))
+                loadImage(uri)
                 Log.d("PhotoPicker", "Selected URI: $uri")
             } else {
                 Log.d("PhotoPicker", "No media selected")
+                this.store.accept(ChatEvent.Ui.ShowSnackbar(getString(R.string.image_selection_cancel)))
             }
         }
 

@@ -1,5 +1,6 @@
 package com.tinkoff.homework.presentation.view.fragment.chat
 
+import android.net.Uri
 import androidx.core.view.isVisible
 import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.chat.model.ChatEvent
@@ -28,5 +29,10 @@ class AllTopicsChatFragment : ChatFragment() {
     override fun sendMessage(message: String) {
         val topic = binding.topicSelectorLayout.topicSelectorEditText.text.toString()
         streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topic, message)) }
+    }
+
+    override fun loadImage(uri: Uri) {
+        val topic = binding.topicSelectorLayout.topicSelectorEditText.text.toString()
+        streamId?.let { this.store.accept(ChatEvent.Ui.LoadImage(uri, topic, it)) }
     }
 }

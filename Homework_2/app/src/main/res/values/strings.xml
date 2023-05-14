@@ -35,4 +35,5 @@
     <string name="copy_message_success">Сообщение скопировано в буффер</string>
     <string name="copy_message_unsuccess">Не удалось скопировать сообщение в буффер</string>
     <string name="time_limit_message_error">Время на редактирование этого сообщения истекло</string>
+    <string name="image_selection_cancel">Изображение не выбрано</string>
 </resources>

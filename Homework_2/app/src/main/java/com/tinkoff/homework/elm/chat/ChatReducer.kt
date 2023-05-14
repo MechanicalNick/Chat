@@ -61,7 +61,7 @@ class ChatReducer(private val credentials: Credentials) :
                 commands { +ChatCommand.LoadData(state.topicName, state.streamId) }
             }
             is ChatEvent.Ui.LoadImage -> {
-                commands { +ChatCommand.LoadImage(event.uri, state.topicName, state.streamId) }
+                commands { +ChatCommand.LoadImage(event.uri, event.topicName, state.streamId) }
             }
             is ChatEvent.Ui.LoadNextPage -> {
                 state {

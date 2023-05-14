@@ -1,5 +1,6 @@
 package com.tinkoff.homework.presentation.view.fragment.chat
 
+import android.net.Uri
 import androidx.core.view.isVisible
 import com.tinkoff.homework.R
 import com.tinkoff.homework.elm.chat.model.ChatEvent
@@ -17,5 +18,9 @@ class SingleTopicChatFragment : ChatFragment() {
 
     override fun sendMessage(message: String) {
         streamId?.let { this.store.accept(ChatEvent.Ui.SendMessage(it, topicName, message)) }
+    }
+
+    override fun loadImage(uri: Uri) {
+        this.store.accept(ChatEvent.Ui.LoadImage(uri, topicName, streamId!!))
     }
 }
