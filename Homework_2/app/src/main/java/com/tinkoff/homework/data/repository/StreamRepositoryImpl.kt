@@ -18,6 +18,7 @@ import com.tinkoff.homework.domain.repository.MessageRepository
 import com.tinkoff.homework.domain.repository.StreamRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.zipSingles
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -69,21 +70,16 @@ class StreamRepositoryImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun fetchResults(isSubscribed: Boolean, query: String): Single<List<Stream>> {
-        return loadResultsFromServer(isSubscribed)
-            .flattenAsObservable { it }
-            .filter { stream ->
-                if (query.isBlank()) {
-                    true
-                } else {
-                    stream.name.contains(query, ignoreCase = true)
-                }
-            }
-            .toList()
-    }
-
-    override fun fetchCashedResults(isSubscribed: Boolean): Single<List<Stream>> {
+    override fun fetchResults(isSubscribed: Boolean, query: String): Observable<List<Stream>> {
         return loadLocalResults(isSubscribed)
+            .mergeWith(loadResultsFromServer(isSubscribed))
+            .map {list ->
+                if (query.isBlank()) {
+                    list
+                } else {
+                    list.filter { it.name.contains(query, ignoreCase = true) }
+                }
+            }.toObservable()
     }
 
     private fun loadResultsFromServer(isSubscribed: Boolean): Single<List<Stream>> {

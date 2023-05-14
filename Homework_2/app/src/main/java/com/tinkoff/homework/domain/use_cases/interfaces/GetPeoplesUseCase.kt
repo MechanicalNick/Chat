@@ -4,5 +4,5 @@ import com.tinkoff.homework.domain.data.People
 import io.reactivex.Single
 
 interface GetPeoplesUseCase {
-    fun execute(): Single<List<People>>
+    fun execute(query: String): Single<List<People>>
 }

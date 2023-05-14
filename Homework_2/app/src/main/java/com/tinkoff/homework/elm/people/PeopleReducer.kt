@@ -14,7 +14,8 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
                 copy(
                     state = ViewState.ShowData,
                     item = event.peoples,
-                    error = null
+                    error = null,
+                    isShowProgress = false
                 )
             }
 
@@ -39,6 +40,17 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
                     )
                 }
                 commands { +PeopleCommand.LoadData }
+            }
+            is PeopleEvent.Ui.Search -> {
+                state {
+                    copy(
+                        state = ViewState.ShowData,
+                        item = null,
+                        error = null,
+                        isShowProgress = true
+                    )
+                }
+                commands { +PeopleCommand.Search(event.query) }
             }
         }
     }

@@ -2,6 +2,7 @@ package com.tinkoff.homework.presentation.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,8 @@ import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegate
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.topic.TopicDelegate
 import com.tinkoff.homework.presentation.view.viewgroup.StreamView
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -123,6 +126,7 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
             .distinctUntilChanged()
             .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
             .subscribeBy { searchQuery ->
+                Log.e("QUERY", searchQuery)
                 this.store.accept(ChannelsEvent.Ui.Search(searchQuery))
             }
             .addTo(compositeDisposable)
@@ -201,7 +205,6 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
     }
 
     private fun loadData() {
-        this.store.accept(ChannelsEvent.Ui.LoadCashedData)
         this.store.accept(ChannelsEvent.Ui.LoadData)
     }
 

@@ -35,9 +35,6 @@ class ChannelsReducer :
                     )
                 }
             }
-            is ChannelsEvent.Ui.LoadCashedData -> {
-                commands { +ChannelsCommand.LoadCashedData(state.onlySubscribed) }
-            }
             is ChannelsEvent.Ui.LoadData -> {
                 commands { +ChannelsCommand.LoadData(state.onlySubscribed) }
             }

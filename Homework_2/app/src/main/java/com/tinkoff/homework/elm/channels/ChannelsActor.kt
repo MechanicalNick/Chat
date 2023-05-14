@@ -13,7 +13,6 @@ class ChannelsActor(
         return when (command) {
             is ChannelsCommand.LoadData -> getStreamsUseCase.execute(
                 isSubscribed = command.isSubscribed,
-                isCashed = false,
                 query = ""
 
             ).mapEvents(
@@ -22,7 +21,6 @@ class ChannelsActor(
             )
             is ChannelsCommand.Search -> getStreamsUseCase.execute(
                 isSubscribed = command.isSubscribed,
-                isCashed = false,
                 query = command.query
             ).mapEvents(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
@@ -30,7 +28,6 @@ class ChannelsActor(
             )
             is ChannelsCommand.LoadCashedData -> getStreamsUseCase.execute(
                 isSubscribed = command.isSubscribed,
-                isCashed = true,
                 query = ""
             ).mapEvents(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },

@@ -5,7 +5,6 @@ import com.tinkoff.homework.domain.data.Stream
 sealed class ChannelsEvent {
 
     sealed class Ui : ChannelsEvent() {
-        object LoadCashedData : Ui()
         object LoadData : Ui()
         object Wait : Ui()
 

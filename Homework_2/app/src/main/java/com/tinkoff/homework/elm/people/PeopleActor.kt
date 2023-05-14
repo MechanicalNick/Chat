@@ -10,7 +10,12 @@ class PeopleActor(private val peopleUseCase: GetPeoplesUseCase) :
     Actor<PeopleCommand, PeopleEvent> {
     override fun execute(command: PeopleCommand): Observable<PeopleEvent> {
         return when (command) {
-            is PeopleCommand.LoadData -> peopleUseCase.execute()
+            is PeopleCommand.LoadData -> peopleUseCase.execute("")
+                .mapEvents(
+                    { peopleDto -> PeopleEvent.Internal.DataLoaded(peopleDto) },
+                    { error -> PeopleEvent.Internal.ErrorLoading(error) }
+                )
+            is PeopleCommand.Search -> peopleUseCase.execute(command.query)
                 .mapEvents(
                     { peopleDto -> PeopleEvent.Internal.DataLoaded(peopleDto) },
                     { error -> PeopleEvent.Internal.ErrorLoading(error) }

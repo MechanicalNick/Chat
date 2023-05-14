@@ -2,10 +2,13 @@ package com.tinkoff.homework.presentation.view.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
@@ -19,9 +22,17 @@ import com.tinkoff.homework.elm.people.model.PeopleState
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
 import com.tinkoff.homework.presentation.view.ToProfileRouter
-import com.tinkoff.homework.presentation.view.adapter.PeopleAdapter
+import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
+import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegate
+import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegateItem
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
 import com.tinkoff.homework.utils.dp
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), ToProfileRouter {
@@ -34,7 +45,9 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
 
     lateinit var binding: FragmentPeopleBinding
 
-    private val adapter: PeopleAdapter by lazy { PeopleAdapter(this) }
+    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val spaceSize = 16
 
     override fun onAttach(context: Context) {
@@ -55,6 +68,7 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
             LinearLayout.VERTICAL
         ))
 
+        adapter.addDelegate(PeopleDelegate(this))
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.peopleRecyclerView.adapter = adapter
 
@@ -62,7 +76,25 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
             this.store.accept(PeopleEvent.Ui.LoadData)
         }
 
+        searchQueryPublisher
+            .distinctUntilChanged()
+            .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
+            .subscribeBy { searchQuery ->
+                Log.e("QUERY", searchQuery)
+                this.store.accept(PeopleEvent.Ui.Search(searchQuery))
+            }
+            .addTo(compositeDisposable)
+
+        binding.peopleSearch.searchText.addTextChangedListener{
+            searchQueryPublisher.onNext(it.toString())
+        }
+
         return binding.root
+    }
+    
+    override fun onDestroy() {
+        compositeDisposable.dispose()
+        super.onDestroy()
     }
 
     override fun render(state: PeopleState) {
@@ -71,14 +103,14 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
                 renderLoadingState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.peopleData
+                    data = binding.peopleRecyclerView
                 )
             }
             ViewState.Error -> {
                 renderErrorState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.peopleData
+                    data = binding.peopleRecyclerView
                 )
                 state.error?.let { throwable ->
                     binding.errorStateContainer.errorText.text = throwable.message
@@ -88,15 +120,16 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
                 renderDataState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.peopleData
+                    data = binding.peopleRecyclerView
                 )
-                state.item?.let {
-                    adapter.peoples.clear()
-                    adapter.peoples.addAll(it)
-                    adapter.notifyItemRangeChanged(0, it.count())
+                state.item?.let { peoples ->
+                    adapter.submitList(peoples.map { people ->
+                        PeopleDelegateItem(people.userId, people)
+                    })
                 }
             }
         }
+        binding.peopleProgressBar.isVisible = state.isShowProgress
     }
 
     override fun goToProfile(userId: Long) {

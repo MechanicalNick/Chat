@@ -10,5 +10,6 @@ import kotlinx.parcelize.RawValue
 data class PeopleState(
     val item: @RawValue List<People>? = null,
     val error: Throwable? = null,
-    val state: ViewState = ViewState.Loading
+    val state: ViewState = ViewState.Loading,
+    val isShowProgress: Boolean = false,
 ) : Parcelable
