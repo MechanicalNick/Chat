@@ -38,7 +38,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <ImageView
-            android:layout_marginTop="113dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/profileImage"
             android:layout_width="185dp"
             android:layout_height="185dp"

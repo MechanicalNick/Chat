@@ -39,8 +39,6 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     override val initEvent: ProfileEvent = ProfileEvent.Ui.Wait
 
     lateinit var binding: FragmentProfileBinding
-    private val topPortraitMargin = 113
-    private val topLandscapeMargin = 15
 
     override fun onAttach(context: Context) {
         DaggerProfileComponent.factory()
@@ -55,10 +53,10 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     ): View {
         binding = FragmentProfileBinding.inflate(inflater)
 
-        setTopMarginLayoutParams(
-            topPortraitMargin, topLandscapeMargin, binding.profileImage,
-            requireContext()
-        )
+       //setTopMarginLayoutParams(
+       //    topPortraitMargin, topLandscapeMargin, binding.profileImage,
+       //    requireContext()
+       //)
 
         val userId = arguments?.getLong(ARG_MESSAGE, credentials.id) ?: run {
             credentials.id
