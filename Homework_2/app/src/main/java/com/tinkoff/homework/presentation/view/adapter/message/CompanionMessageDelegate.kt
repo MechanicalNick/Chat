@@ -9,6 +9,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.request.RequestOptions
 import com.tinkoff.homework.R
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.presentation.view.ChatFragmentCallback
@@ -88,7 +89,7 @@ class CompanionMessageDelegate(
                 }
 
                 root.flexbox.removeAllViews()
-                FlexboxFactory(model.reactions, binding.root.context).create(
+                FlexboxFactory(model.reactions, binding.root.context, callback.getMyCredentials()).create(
                     { callback.reactionChange(it, model, model.senderId) },
                     { callback.showActionSelectorDialog(model.id, model.senderId) }
                 ).forEach {

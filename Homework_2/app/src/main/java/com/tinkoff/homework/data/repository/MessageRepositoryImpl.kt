@@ -16,6 +16,7 @@ import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.repository.MessageRepository
 import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.FileUtils
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,27 +37,12 @@ class MessageRepositoryImpl @Inject constructor(
         numBefore: Long,
         numAfter: Long,
         topic: String,
-        streamId: Long?,
+        streamId: Long,
         query: String
-    ): Single<List<MessageModel>> {
-        return streamId?.let {
-            Single.zip(
-                loadLocalResults(it, topic),
-                loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query)
-            ){
-            local, server ->
-                val list = mutableListOf<MessageModel>()
-                list.addAll(server)
-                list.addAll(local)
-                list.distinctBy{m -> m.id}
-            }
-        } ?: run {
-            loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId = null, query)
-        }
-    }
-
-    override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {
+    ): Observable<List<MessageModel>> {
         return loadLocalResults(streamId, topic)
+            .mergeWith(loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query))
+            .toObservable()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
     }

@@ -179,18 +179,27 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
                 } ?: Unit
 
             is ChatEffect.ShowTimeLimitSnackbar ->
-                context?.let {
-                    CustomSnackbar.makeLongText(
-                        binding.root,
-                        it.getString(R.string.time_limit_message_error)
-                    ).show()
-                } ?: Unit
+                showSnackbar(R.string.time_limit_message_error)
+            is ChatEffect.LoadImageErrorSnackbar ->
+                showSnackbar(R.string.load_image_error)
+            is ChatEffect.ReactionErrorSnackbar ->
+                showSnackbar(R.string.reaction_error)
+            is ChatEffect.SendMessageErrorSnackbar ->
+                showSnackbar(R.string.send_message_error)
         }
+    }
+
+    private fun showSnackbar(resId: Int) {
+        context?.let {
+            CustomSnackbar.makeLongText(
+               binding.root,
+                it.getString(resId)
+            ).show()
+        } ?: Unit
     }
 
     private fun loadData() {
         streamId?.let {
-            this.store.accept(ChatEvent.Ui.LoadCashedData(topicName, it))
             this.store.accept(ChatEvent.Ui.LoadData(topicName, it))
         }
     }
@@ -207,13 +216,16 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
             binding.chatData.orientation
         )
         binding.recycler.addItemDecoration(itemDecoration)
-        binding.recycler.addOnScrollListener(
-            ChatScrollListener(
-                binding.recycler.layoutManager as LinearLayoutManager,
-                chatViewModel.store,
-                topicName
+        streamId?.let {
+            binding.recycler.addOnScrollListener(
+                ChatScrollListener(
+                    binding.recycler.layoutManager as LinearLayoutManager,
+                    chatViewModel.store,
+                    it,
+                    topicName
+                )
             )
-        )
+        }
         binding.recycler.adapter = adapter
     }
 
@@ -265,6 +277,10 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
     override fun goToChat(topicName: String, streamName: String, streamId: Long) {
         store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
+    }
+
+    override fun getMyCredentials(): Credentials {
+        return credentials
     }
 
     override fun onDestroyView() {

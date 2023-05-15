@@ -6,7 +6,6 @@ import com.tinkoff.homework.domain.data.Reaction
 
 sealed class ChatCommand {
     data class ChangeTopic(val messageId: Long, val topicName: String) : ChatCommand()
-    data class LoadCashedData(val topicName: String, val streamId: Long) : ChatCommand()
     data class LoadData(val topicName: String, val streamId: Long) : ChatCommand()
     data class LoadImage(val uri: Uri, val topicName: String, val streamId: Long) : ChatCommand()
     data class LoadNextPage(val messageId: Long, val topicName: String, val streamId: Long) :

@@ -11,6 +11,7 @@ import vivid.money.elmslie.core.store.Store
 class ChatScrollListener(
     private val layoutManager: LinearLayoutManager,
     private val store: Store<ChatEvent, ChatEffect, ChatState>,
+    private val streamId: Long,
     private val topicName: String
 ) : RecyclerView.OnScrollListener() {
     private var lastVisibleItemPosition: Int? = null
@@ -32,7 +33,7 @@ class ChatScrollListener(
     }
 
     private fun loadMoreItems() {
-        store.accept(ChatEvent.Ui.LoadNextPage(topicName = topicName))
+        store.accept(ChatEvent.Ui.LoadNextPage(streamId = streamId, topicName = topicName))
     }
 
     private fun isLoading(): Boolean{

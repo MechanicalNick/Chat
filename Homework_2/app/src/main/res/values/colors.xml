@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="custom_background_secondary">#1C1C1C</color>
     <color name="bottom_background">#3A3A3A</color>
+    <color name="bottom_background_transparent">#663A3A3A</color>
     <color name="message_text">#FAFAFA</color>
     <color name="main_text">#EAEAEA</color>
     <color name="secondary_text">#FFFFFFFF</color>

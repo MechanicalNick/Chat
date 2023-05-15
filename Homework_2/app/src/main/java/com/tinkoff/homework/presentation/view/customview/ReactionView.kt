@@ -16,13 +16,11 @@ class ReactionView @JvmOverloads constructor(
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
 ) : View(context, attrs, R.attr.reactionViewStyle, defStyleRes) {
-
     var textToDraw = ""
         set(value) {
             field = value
             invalidate()
         }
-
 
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 14f.sp(context)
@@ -30,7 +28,6 @@ class ReactionView @JvmOverloads constructor(
     private var textBounds = Rect()
 
     init {
-
         context.withStyledAttributes(attrs, R.styleable.ReactionView) {
             val reaction = this.getString(R.styleable.ReactionView_reaction)
             val count = this.getInt(R.styleable.ReactionView_count, 0)

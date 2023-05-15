@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.tinkoff.homework.R
+import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.MessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.presentation.view.ChatFragmentCallback
@@ -21,7 +22,7 @@ import com.tinkoff.homework.utils.dp
 class MyMessageDelegate(
     private val callback: ChatFragmentCallback,
     private val header: LazyHeaders,
-    private val isUserImageRegex: Regex
+    private val isUserImageRegex: Regex,
 ) : AdapterDelegate {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val messageLayoutBinding = MessageLayoutBinding.inflate(
@@ -77,7 +78,7 @@ class MyMessageDelegate(
                 }
 
                 root.flexbox.removeAllViews()
-                FlexboxFactory(model.reactions, binding.root.context).create(
+                FlexboxFactory(model.reactions, binding.root.context, callback.getMyCredentials()).create(
                     { callback.reactionChange(it, model, model.senderId) },
                     { callback.showReactionDialog(model.id, model.senderId) }
                 ).forEach {

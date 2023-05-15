@@ -15,8 +15,7 @@ sealed class ChatEvent {
         data class ShowSnackbar(val message: String) : Ui()
         data class LoadData(val topicName: String, val streamId: Long) : Ui()
         data class LoadImage(val uri: Uri, val topicName: String, val streamId: Long) : Ui()
-        data class LoadNextPage(val topicName: String) : Ui()
-        data class LoadCashedData(val topicName: String, val streamId: Long) : Ui()
+        data class LoadNextPage(val streamId: Long, val topicName: String) : Ui()
         data class AddReaction(val messageId: Long, val reaction: Reaction) : Ui()
         data class RemoveReaction(val messageId: Long, val reaction: Reaction) : Ui()
         data class ChangeReaction(val message: MessageModel, val reaction: Reaction) : Ui()
@@ -32,6 +31,9 @@ sealed class ChatEvent {
         data class DataLoaded(val messages: List<MessageModel>) : Internal()
         data class ErrorLoading(val error: Throwable) : Internal()
         data class TimeLimitError(val error: Throwable) : Internal()
+        data class LoadImageError(val error: Throwable) : ChatEvent()
+        data class ReactionError(val error: Throwable) : ChatEvent()
+        data class SendMessageError(val error: Throwable) : ChatEvent()
         data class ReactionAdded(val messageId: Long, val reaction: Reaction) : Internal()
         data class ReactionRemoved(val messageId: Long, val reaction: Reaction) : Internal()
         data class MessageRemoved(val messageId: Long) : Ui()
@@ -49,5 +51,6 @@ sealed class ChatEvent {
             val streamId: Long,
             val topicName: String
         ) : Internal()
+
     }
 }

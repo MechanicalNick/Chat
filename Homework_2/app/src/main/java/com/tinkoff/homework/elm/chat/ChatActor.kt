@@ -38,19 +38,8 @@ class ChatActor(
                     { error -> ChatEvent.Internal.ErrorLoading(error) }
                 )
 
-            is ChatCommand.LoadCashedData -> getMessagesUseCase.execute(
-                isCashed = true,
-                anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT_IN_DB,
-                numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
-            )
-                .mapEvents(
-                    { messages -> ChatEvent.Internal.DataLoaded(messages) },
-                    { error -> ChatEvent.Internal.ErrorLoading(error) }
-                )
-
             is ChatCommand.LoadData ->
                 getMessagesUseCase.execute(
-                    isCashed = false,
                     anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT_IN_DB,
                     numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )
@@ -64,12 +53,11 @@ class ChatActor(
                     .mapEvents(
                         { response -> ChatEvent.Internal.ImageLoaded(response,
                             command.streamId, command.topicName) },
-                        { error -> ChatEvent.Internal.ErrorLoading(error) }
+                        { error -> ChatEvent.Internal.LoadImageError(error) }
                     )
 
             is ChatCommand.LoadNextPage ->
                 getMessagesUseCase.execute(
-                    isCashed = false,
                     anchor = command.messageId.toString(), numBefore = Const.MAX_MESSAGE_ON_PAGE,
                     numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )
@@ -84,7 +72,7 @@ class ChatActor(
             )
                 .mapEvents(
                     { ChatEvent.Internal.ReactionAdded(command.messageId, command.reaction) },
-                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                    { error -> ChatEvent.Internal.ReactionError(error) }
                 )
 
             is ChatCommand.ChangeReaction -> changeReactionUseCase.execute(
@@ -98,7 +86,7 @@ class ChatActor(
                         else
                             ChatEvent.Internal.ReactionRemoved(command.message.id, command.reaction)
                     },
-                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                    { error -> ChatEvent.Internal.ReactionError(error) }
                 )
 
             is ChatCommand.RemoveReaction -> removeReactionUseCase.execute(
@@ -107,7 +95,7 @@ class ChatActor(
             )
                 .mapEvents(
                     { ChatEvent.Internal.ReactionRemoved(command.messageId, command.reaction) },
-                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                    { error -> ChatEvent.Internal.ReactionError(error) }
                 )
 
             is ChatCommand.SendMessage -> sendMessageUseCase.execute(
@@ -124,7 +112,7 @@ class ChatActor(
                             command.message
                         )
                     },
-                    { error -> ChatEvent.Internal.ErrorLoading(error) }
+                    { error -> ChatEvent.Internal.SendMessageError(error) }
                 )
 
             is ChatCommand.EditMessage -> editMessageUseCase.execute(

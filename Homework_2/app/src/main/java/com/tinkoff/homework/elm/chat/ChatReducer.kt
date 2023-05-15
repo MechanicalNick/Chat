@@ -44,24 +44,11 @@ class ChatReducer(private val credentials: Credentials) :
                     )
                 }
             }
-            is ChatEvent.Ui.LoadCashedData -> {
-                state {
-                    copy(
-                        isLoading = true,
-                        state = ViewState.Loading,
-                        items = null,
-                        error = null,
-                        topicName = event.topicName,
-                        streamId = event.streamId
-                    )
-                }
-                commands { +ChatCommand.LoadCashedData(state.topicName, state.streamId) }
-            }
             is ChatEvent.Ui.LoadData -> {
-                commands { +ChatCommand.LoadData(state.topicName, state.streamId) }
+                commands { +ChatCommand.LoadData(event.topicName, event.streamId) }
             }
             is ChatEvent.Ui.LoadImage -> {
-                commands { +ChatCommand.LoadImage(event.uri, event.topicName, state.streamId) }
+                commands { +ChatCommand.LoadImage(event.uri, event.topicName, event.streamId) }
             }
             is ChatEvent.Ui.LoadNextPage -> {
                 state {
@@ -72,7 +59,7 @@ class ChatReducer(private val credentials: Credentials) :
                 commands {
                     +ChatCommand.LoadNextPage(
                         state.items?.firstOrNull()?.id ?: 0,
-                        event.topicName, state.streamId
+                        event.topicName, event.streamId
                     )
                 }
             }
@@ -110,6 +97,7 @@ class ChatReducer(private val credentials: Credentials) :
                 copy(
                     items = items?.map { message ->
                         removeReaction(
+                            credentials,
                             event.reaction,
                             message,
                             event.messageId
@@ -198,6 +186,16 @@ class ChatReducer(private val credentials: Credentials) :
             is ChatEvent.Internal.TimeLimitError -> {
                 effects { +ChatEffect.ShowTimeLimitSnackbar }
             }
+            is ChatEvent.Internal.LoadImageError -> {
+                effects { +ChatEffect.LoadImageErrorSnackbar }
+            }
+            is ChatEvent.Internal.ReactionError -> {
+                effects { +ChatEffect.ReactionErrorSnackbar }
+            }
+            is ChatEvent.Internal.SendMessageError -> {
+                effects { +ChatEffect.SendMessageErrorSnackbar }
+            }
+
         }
     }
 }
@@ -288,16 +286,20 @@ private fun applyReaction(
     value: Reaction,
     old: MessageModel,
     applicableId: Long,
-    findCondition: (Reaction) -> Boolean,
+    credentials: Credentials,
     equalsCondition: (Reaction?) -> Boolean,
     action: (MutableList<Reaction>, Reaction) -> Boolean
 ): MessageModel {
     if (old.id != applicableId)
         return old
     val sameReaction =
-        old.reactions.firstOrNull { r -> findCondition(r) }
+        old.reactions.firstOrNull {
+          // userId свой, в реакции прихоид старый
+          r -> r.userId == credentials.id && r.emojiCode == value.emojiCode
+        }
+    val myValueFromOther = Reaction(value.emojiCode, value.emojiName, credentials.id)
     if (equalsCondition(sameReaction))
-        action(old.reactions, value)
+        action(old.reactions, myValueFromOther)
     return old
 }
 
@@ -307,17 +309,22 @@ private fun addReaction(
     old: MessageModel,
     applicableId: Long
 ): MessageModel {
-    val findCondition: (Reaction) -> Boolean =
-        { r -> r.userId == credentials.id && r.emojiCode == value.emojiCode }
     val equalsCondition: (Reaction?) -> Boolean =  {r -> r == null }
     val add: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.add(reaction)}
-    return applyReaction(value, old, applicableId, findCondition, equalsCondition, add)
+    return applyReaction(value, old, applicableId, credentials, equalsCondition, add)
 }
 
-private fun removeReaction(value: Reaction, old: MessageModel, applicableId: Long): MessageModel {
-    val findCondition: (Reaction) -> Boolean =
-        { r -> r.userId == value.userId && r.emojiCode == value.emojiCode }
+private fun removeReaction(
+    credentials: Credentials,
+    value: Reaction,
+    old: MessageModel,
+    applicableId: Long
+): MessageModel {
     val equalsCondition: (Reaction?) -> Boolean =  {r -> r != null }
-    val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction -> list.remove(reaction)}
-    return applyReaction(value, old, applicableId, findCondition, equalsCondition, remove)
+    val remove: (MutableList<Reaction>, Reaction) -> Boolean = { list, reaction ->
+        val r = list.find { r -> r.userId == reaction.userId && r.emojiCode == reaction.emojiCode}
+        r?.let{list.remove(r) }
+        true
+    }
+    return applyReaction(value, old, applicableId, credentials, equalsCondition, remove)
 }
