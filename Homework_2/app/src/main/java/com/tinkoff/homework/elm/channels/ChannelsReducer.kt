@@ -17,11 +17,13 @@ class ChannelsReducer :
                     items = event.streams.toList(),
                     state = ViewState.ShowData,
                     flagForUpdateUi = !flagForUpdateUi,
-                    error = null
+                    error = null,
+                    isShowProgress = false
                 )
             }
             is ChannelsEvent.Internal.ErrorLoading -> state {
                 copy(
+                    isShowProgress = false,
                     error = event.error,
                     state = ViewState.Error
                 )
@@ -36,9 +38,19 @@ class ChannelsReducer :
                 }
             }
             is ChannelsEvent.Ui.LoadData -> {
+                state{
+                    copy(
+                        isShowProgress = true
+                    )
+                }
                 commands { +ChannelsCommand.LoadData(state.onlySubscribed) }
             }
             is ChannelsEvent.Ui.Search -> {
+                state{
+                    copy(
+                        isShowProgress = true
+                    )
+                }
                 commands { +ChannelsCommand.Search(state.onlySubscribed, event.query) }
             }
             is ChannelsEvent.Ui.CollapseStream -> {

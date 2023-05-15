@@ -170,6 +170,7 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
               }
             }
         }
+        binding.progressBar.isVisible = state.isShowProgress
     }
 
     override fun expand(item: StreamDelegateItem) {

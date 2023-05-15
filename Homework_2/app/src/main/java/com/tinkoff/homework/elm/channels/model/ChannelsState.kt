@@ -11,6 +11,7 @@ data class ChannelsState(
     val items: @RawValue List<Stream>? = null,
     val error: Throwable? = null,
     val state: ViewState = ViewState.Loading,
+    val isShowProgress: Boolean = false,
     val onlySubscribed: Boolean = false,
     // Библиотека не вызывает render(state: ChannelsState) при обновлении списка
     val flagForUpdateUi: Boolean = false
