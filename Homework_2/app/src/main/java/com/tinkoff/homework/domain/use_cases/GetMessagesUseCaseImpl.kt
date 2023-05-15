@@ -8,6 +8,7 @@ import io.reactivex.Observable
 
 class GetMessagesUseCaseImpl(val repository: MessageRepository) : GetMessagesUseCase {
     override fun execute(
+        needClearOld: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -16,6 +17,7 @@ class GetMessagesUseCaseImpl(val repository: MessageRepository) : GetMessagesUse
         query: String
     ): Observable<List<MessageModel>> {
         return repository.fetchMessages(
+            needClearOld,
             anchor,
             numBefore,
             numAfter,

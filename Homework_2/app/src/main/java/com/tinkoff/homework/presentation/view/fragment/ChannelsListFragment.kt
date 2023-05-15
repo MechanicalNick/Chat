@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.github.terrakok.cicerone.Router
@@ -165,6 +166,8 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
               state.items?.let {
                   val delegates = streamFactory.updateDelegateItems(it)
                   adapter.submitList(delegates)
+                  binding.channelRecyclerView.isVisible = state.items.isNotEmpty()
+                  binding.emptyLayout.root.isVisible = state.items.isEmpty()
               }
             }
         }

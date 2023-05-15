@@ -14,7 +14,6 @@ import com.tinkoff.homework.data.mapper.toMyMessageEntity
 import com.tinkoff.homework.data.mapper.toNarrow
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.repository.MessageRepository
-import com.tinkoff.homework.utils.Const
 import com.tinkoff.homework.utils.FileUtils
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -33,6 +32,7 @@ class MessageRepositoryImpl @Inject constructor(
 ) : MessageRepository {
 
     override fun fetchMessages(
+        needClearOld: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -41,7 +41,15 @@ class MessageRepositoryImpl @Inject constructor(
         query: String
     ): Observable<List<MessageModel>> {
         return loadLocalResults(streamId, topic)
-            .mergeWith(loadResultsFromServer(anchor, numBefore, numAfter, topic, streamId, query))
+            .mergeWith(loadResultsFromServer(
+                needClearOld,
+                anchor,
+                numBefore,
+                numAfter,
+                topic,
+                streamId,
+                query
+            ))
             .toObservable()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -119,6 +127,7 @@ class MessageRepositoryImpl @Inject constructor(
     }
 
     override fun loadResultsFromServer(
+        needClearOld: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -140,10 +149,7 @@ class MessageRepositoryImpl @Inject constructor(
                     .map { m -> m.toDomain() }
             }
             .doOnSuccess { list ->
-                streamId?.let {id ->
-                    val needDelete = numBefore == Const.MAX_MESSAGE_COUNT_IN_DB
-                    refreshLocalDataSource(list, id, topic, needDelete)
-                }
+                refreshLocalDataSource(list, topic, needClearOld)
             }
         return result
     }
@@ -162,21 +168,25 @@ class MessageRepositoryImpl @Inject constructor(
 
     private fun refreshLocalDataSource(
         messages: List<MessageModel>,
-        streamId: Long,
         topic: String,
-        needDelete: Boolean
+        needClearOld: Boolean
     ) {
-        if(needDelete) {
-            if(topic.isBlank())
-                messageDao.deleteMessages(streamId)
-            else
-                messageDao.deleteMessagesByTopic(streamId, topic)
-        }
-        messages.map { message ->
-            messageDao.insertMessage(
-                message.toEntity(streamId),
-                message.reactions.map { reaction -> reaction.toEntity(message.id) }
-            )
+        val groupsByStream = messages.groupBy { m -> m.streamId }
+        groupsByStream.forEach{ steamGroup ->
+
+            if(needClearOld) {
+                if (topic.isBlank())
+                    messageDao.deleteMessages(steamGroup.key)
+                else
+                    messageDao.deleteMessagesByTopic(steamGroup.key, topic)
+            }
+
+            steamGroup.value.map { message ->
+                messageDao.insertMessage(
+                    message.toEntity(steamGroup.key),
+                    message.reactions.map { reaction -> reaction.toEntity(message.id) }
+                )
+            }
         }
     }
 }

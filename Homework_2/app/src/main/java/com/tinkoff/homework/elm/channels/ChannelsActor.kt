@@ -26,13 +26,6 @@ class ChannelsActor(
                 { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
                 { error -> ChannelsEvent.Internal.ErrorLoading(error) }
             )
-            is ChannelsCommand.LoadCashedData -> getStreamsUseCase.execute(
-                isSubscribed = command.isSubscribed,
-                query = ""
-            ).mapEvents(
-                { streams -> ChannelsEvent.Internal.DataLoaded(streams) },
-                { error -> ChannelsEvent.Internal.ErrorLoading(error) }
-            )
         }
     }
 }

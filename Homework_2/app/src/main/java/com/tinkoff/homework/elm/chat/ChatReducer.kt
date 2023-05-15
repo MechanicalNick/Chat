@@ -132,7 +132,7 @@ class ChatReducer(private val credentials: Credentials) :
                     copy(
                         isLoading = false,
                         state = ViewState.ShowData,
-                        items = event.messages,
+                        items = concatenate(items, event.messages),
                         error = null,
                         isShowProgress = false
                     )
@@ -259,6 +259,15 @@ private fun removeMessage(
     val newList = messages.toMutableList()
     newList.remove(message)
     return newList
+}
+
+private fun concatenate(
+    messages: @RawValue List<MessageModel>?,
+    newMessages: @RawValue List<MessageModel>,
+): List<MessageModel> {
+    val list = newMessages.toMutableList()
+    messages?.let { list.addAll(it) }
+    return list.distinctBy { m-> m.id }
 }
 
 private fun concatenate(

@@ -14,7 +14,7 @@ class ChannelsReducer :
         return when (event) {
             is ChannelsEvent.Internal.DataLoaded -> state {
                 copy(
-                    items = event.streams,
+                    items = event.streams.toList(),
                     state = ViewState.ShowData,
                     flagForUpdateUi = !flagForUpdateUi,
                     error = null

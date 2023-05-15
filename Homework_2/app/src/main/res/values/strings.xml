@@ -39,4 +39,5 @@
     <string name="load_image_error">Не удалось отправить изображение</string>
     <string name="reaction_error">Не удалось применить реакцию</string>
     <string name="send_message_error">Не удалось отправить сообщение</string>
+    <string name="no_message">Сообщений нет</string>
 </resources>

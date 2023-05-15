@@ -39,7 +39,7 @@ class ChatActor(
                 )
 
             is ChatCommand.LoadData ->
-                getMessagesUseCase.execute(
+                getMessagesUseCase.execute(needClearOld = true,
                     anchor = "newest", numBefore = Const.MAX_MESSAGE_COUNT_IN_DB,
                     numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )
@@ -57,7 +57,7 @@ class ChatActor(
                     )
 
             is ChatCommand.LoadNextPage ->
-                getMessagesUseCase.execute(
+                getMessagesUseCase.execute(needClearOld = false,
                     anchor = command.messageId.toString(), numBefore = Const.MAX_MESSAGE_ON_PAGE,
                     numAfter = 0, topic = command.topicName, streamId = command.streamId, query = ""
                 )

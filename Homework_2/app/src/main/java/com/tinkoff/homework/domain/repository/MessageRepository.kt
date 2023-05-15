@@ -9,6 +9,7 @@ import io.reactivex.Single
 
 interface MessageRepository {
     fun fetchMessages(
+        needClearOld: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,
@@ -17,6 +18,7 @@ interface MessageRepository {
         query: String
     ): Observable<List<MessageModel>>
     fun loadResultsFromServer(
+        needClearOld: Boolean,
         anchor: String,
         numBefore: Long,
         numAfter: Long,

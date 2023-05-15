@@ -7,6 +7,11 @@
         android:id="@+id/shimmer"
         layout="@layout/shimmer_layout"/>
 
+    <include
+        android:id="@+id/emptyLayout"
+        layout="@layout/empty_layout"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelRecyclerView"
         android:background="@color/default_background"

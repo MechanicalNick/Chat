@@ -85,9 +85,9 @@ class StreamRepositoryImpl @Inject constructor(
     private fun loadResultsFromServer(isSubscribed: Boolean): Single<List<Stream>> {
         val collection = if (isSubscribed) getSubscriptions() else getAll()
 
-        val result = Single.zip(collection, loadMessagesFromServer()) { list, messages ->
-            Pair(list, messages)
-        }   .subscribeOn(Schedulers.io())
+        val result = Single.zip(collection, loadAllMessagesFromServer()) {
+            list, messages -> Pair(list, messages)
+        }.subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .flatMap { pair ->
                 pair.first.map { stream ->
@@ -139,8 +139,9 @@ class StreamRepositoryImpl @Inject constructor(
             .map { list -> list.map { streamResult -> streamResult.toDomain() } }
     }
 
-    private fun loadMessagesFromServer(): Single<List<MessageModel>> {
+    private fun loadAllMessagesFromServer(): Single<List<MessageModel>> {
         return messageRepository.loadResultsFromServer(
+            needClearOld = false,
             anchor = "newest",
             numBefore = Const.MAX_MESSAGE_COUNT,
             numAfter = 0,
