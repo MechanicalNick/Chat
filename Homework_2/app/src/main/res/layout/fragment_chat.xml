@@ -26,10 +26,10 @@
             android:id="@+id/chatToolbar"
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:background="@color/default_color_text_header"
+            android:background="@color/default_text_header"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/arrow_back"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/secondary_text" />
 
         <include android:id="@+id/topic_header_layout"
             layout="@layout/topic_header_layout" />

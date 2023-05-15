@@ -19,7 +19,7 @@
     <TextView
         android:text="Darrell Steward"
         android:layout_marginStart="89dp"
-        android:textColor="@color/default_color_text"
+        android:textColor="@color/message_text"
         android:textSize="22sp"
         android:id="@+id/userName"
         android:ellipsize="end"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:id="@+id/userEmail"
-        android:textColor="@color/description_color_text"
+        android:textColor="@color/description_text"
         android:textSize="16sp"
         android:layout_width="wrap_content"
         android:maxLines="1" />

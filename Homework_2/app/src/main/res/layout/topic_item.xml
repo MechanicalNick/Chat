@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="18sp"
-        android:textColor="@color/default_color_text"
+        android:textColor="@color/message_text"
         android:layout_marginLeft="41dp"
         android:id="@+id/topicName"/>
     <TextView
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/default_color_text"
+        android:textColor="@color/message_text"
         android:layout_marginLeft="25dp"
         android:id="@+id/messageCount"/>
 </LinearLayout>

@@ -8,8 +8,8 @@ import com.tinkoff.homework.R
 object CustomSnackbar {
     fun makeLongText(view : View, text: CharSequence): Snackbar {
         val snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
-        snackbar.setTextColor(view.context.getColor(R.color.white))
-        snackbar.setBackgroundTint(view.context.getColor(R.color.chips_background))
+        snackbar.setTextColor(view.context.getColor(R.color.secondary_text))
+        snackbar.setBackgroundTint(view.context.getColor(R.color.custom_background_secondary))
         return snackbar
     }
 }

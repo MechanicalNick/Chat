@@ -9,6 +9,6 @@
         android:layout_height="70dp"
         android:fontFamily="@font/inter"
         android:textAlignment="center"
-        android:textColor="@color/chips_background"
+        android:textColor="@color/custom_background_secondary"
         android:textSize="24sp" />
 </FrameLayout>

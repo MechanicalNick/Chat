@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,14 +17,14 @@
         android:id="@+id/profileData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/date_background_color"
+        android:background="@color/date_background"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/profileToolbar"
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:background="@color/content_editor_background_color"
+            android:background="@color/content_editor_background"
             app:buttonGravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/profile"
-                android:textColor="@color/white"
+                android:textColor="@color/secondary_text"
                 android:textSize="24sp" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -57,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Darrell Steward"
-            android:textColor="@color/white"
+            android:textColor="@color/secondary_text"
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/profileStatus"

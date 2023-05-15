@@ -2,7 +2,6 @@ package com.tinkoff.homework.data.db
 
 import androidx.room.TypeConverter
 import com.tinkoff.homework.utils.Const
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

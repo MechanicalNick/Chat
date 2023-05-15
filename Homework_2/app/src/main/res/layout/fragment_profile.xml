@@ -17,14 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/profileData"
-        android:background="@color/date_background_color"
+        android:background="@color/date_background"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/profileToolbar"
             android:layout_width="match_parent"
             android:layout_height="66dp"
-            android:background="@color/content_editor_background_color"
+            android:background="@color/content_editor_background"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/arrow_back">
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/profile"
-                android:textColor="@color/white"
+                android:textColor="@color/secondary_text"
                 android:textSize="24sp" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -51,7 +51,7 @@
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:text="Darrell Steward"
-            android:textColor="@color/white"
+            android:textColor="@color/secondary_text"
             android:textSize="32sp" />
 
         <TextView

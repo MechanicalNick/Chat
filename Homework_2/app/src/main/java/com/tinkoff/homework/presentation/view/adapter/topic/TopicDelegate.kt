@@ -14,13 +14,13 @@ import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 class TopicDelegate(private val router: ToChatRouter) : AdapterDelegate {
 
     private val backgrounds = listOf(
-        R.color.background_topic_color_1,
-        R.color.background_topic_color_2,
-        R.color.background_topic_color_3,
-        R.color.background_topic_color_4,
-        R.color.background_topic_color_5,
-        R.color.background_topic_color_6,
-        R.color.background_topic_color_7
+        R.color.background_topic_1,
+        R.color.background_topic_2,
+        R.color.background_topic_3,
+        R.color.background_topic_4,
+        R.color.background_topic_5,
+        R.color.background_topic_6,
+        R.color.background_topic_7
     )
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =

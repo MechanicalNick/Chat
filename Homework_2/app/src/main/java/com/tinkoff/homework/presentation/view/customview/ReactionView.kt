@@ -39,7 +39,7 @@ class ReactionView @JvmOverloads constructor(
                 it.isSelected = !it.isSelected
             }
         }
-        textPaint.color = context.getColor(R.color.chips_text_color)
+        textPaint.color = context.getColor(R.color.main_text)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

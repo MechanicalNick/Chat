@@ -4,20 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/chips_background"
+    android:background="@color/custom_background_secondary"
     android:padding="16dp">
 
     <TextView
-        android:textColor="@color/white"
+        android:textColor="@color/secondary_text"
         android:id="@+id/dialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:textColor="@color/white"
+        android:textColor="@color/secondary_text"
         android:backgroundTint="@color/tab_indicator"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/secondary_text"
         android:id="@+id/userInputDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

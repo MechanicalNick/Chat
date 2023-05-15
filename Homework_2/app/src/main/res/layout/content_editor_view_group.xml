@@ -14,9 +14,10 @@
                  style="@style/Theme.Homework.ImageButton"
                  android:src="@drawable/arrow_button"/>
 
-    <ImageButton android:layout_width="39dp"
-                 android:layout_height="39dp"
-                 android:id="@+id/plusButton"
-                 style="@style/Theme.Homework.ImageButton"
-                 android:src="@drawable/plus_button"/>
+    <ImageButton
+        android:id="@+id/plusButton"
+        style="@style/Theme.Homework.ImageButton"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:src="@drawable/bg_plus_button" />
 </merge>
