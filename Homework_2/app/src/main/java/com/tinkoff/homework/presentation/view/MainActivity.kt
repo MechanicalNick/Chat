@@ -16,15 +16,16 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
+
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+    private val navigator = AppNavigator(this, R.id.main_container)
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
+
     @Inject
     lateinit var router: Router
-
-    private val navigator = AppNavigator(this, R.id.main_container)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         this.applicationContext

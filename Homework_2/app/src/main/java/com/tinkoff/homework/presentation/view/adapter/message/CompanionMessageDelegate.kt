@@ -7,17 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.request.RequestOptions
 import com.tinkoff.homework.R
-import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.databinding.CompanionMessageLayoutBinding
 import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.presentation.dp
 import com.tinkoff.homework.presentation.view.ChatFragmentCallback
 import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.FlexboxFactory
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
 import com.tinkoff.homework.utils.Const
-import com.tinkoff.homework.utils.dp
 
 class CompanionMessageDelegate(
     private val callback: ChatFragmentCallback,

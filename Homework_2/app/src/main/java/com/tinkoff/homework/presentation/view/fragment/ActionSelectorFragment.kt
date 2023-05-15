@@ -13,15 +13,18 @@ import com.tinkoff.homework.databinding.BottomSheetActionSelectorLayoutBinding
 import com.tinkoff.homework.databinding.LayoutAlertDialogBinding
 import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.getAppComponent
+import com.tinkoff.homework.presentation.view.AlertDialogFactory
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
 
 class ActionSelectorFragment : BottomSheetDialogFragment() {
+
+    private val reactionFragment by lazy { ReactionFragment() }
+    private lateinit var binding: BottomSheetActionSelectorLayoutBinding
+
     @Inject
     lateinit var viewModel: ChatViewModel
-    private lateinit var binding: BottomSheetActionSelectorLayoutBinding
-    private val reactionFragment by lazy { ReactionFragment() }
 
     override fun onAttach(context: Context) {
         context
@@ -64,6 +67,8 @@ class ActionSelectorFragment : BottomSheetDialogFragment() {
 
         return binding.root
     }
+
+    override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 
     private fun editMessage(messageId: Long) {
         val currentBinding = LayoutAlertDialogBinding.inflate(layoutInflater)
@@ -116,6 +121,4 @@ class ActionSelectorFragment : BottomSheetDialogFragment() {
             viewModel.store.accept(ChatEvent.Ui.ShowSnackbar(getString(R.string.copy_message_unsuccess)))
         }
     }
-
-    override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 }

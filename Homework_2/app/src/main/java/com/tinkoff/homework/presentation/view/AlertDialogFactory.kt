@@ -1,4 +1,4 @@
-package com.tinkoff.homework.presentation.view.fragment
+package com.tinkoff.homework.presentation.view
 
 import android.app.AlertDialog
 import android.view.View

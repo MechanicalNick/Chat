@@ -1,7 +1,6 @@
 package com.tinkoff.homework.presentation.view.fragment
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.dto.Credentials
-import com.tinkoff.homework.databinding.FragmentPeopleBinding
 import com.tinkoff.homework.databinding.FragmentProfileBinding
 import com.tinkoff.homework.di.component.DaggerProfileComponent
 import com.tinkoff.homework.domain.data.Profile
@@ -24,11 +22,17 @@ import com.tinkoff.homework.elm.profile.model.ProfileEffect
 import com.tinkoff.homework.elm.profile.model.ProfileEvent
 import com.tinkoff.homework.elm.profile.model.ProfileState
 import com.tinkoff.homework.getAppComponent
-import com.tinkoff.homework.utils.dp
+import com.tinkoff.homework.presentation.dp
 import javax.inject.Inject
 
 
 class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>() {
+
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
+    override val initEvent: ProfileEvent = ProfileEvent.Ui.Wait
+
     @Inject
     override lateinit var factory: BaseStoreFactory<ProfileEvent, ProfileEffect, ProfileState>
 
@@ -37,10 +41,6 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
 
     @Inject
     lateinit var router: Router
-    override val initEvent: ProfileEvent = ProfileEvent.Ui.Wait
-
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         DaggerProfileComponent.factory()
@@ -100,13 +100,18 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
         }
     }
 
-    override fun handleEffect(effect: ProfileEffect){
+    override fun handleEffect(effect: ProfileEffect) {
         when (effect) {
             is ProfileEffect.LoadError -> Snackbar.make(
                 binding.root, effect.error.toString(),
                 Snackbar.LENGTH_LONG
             ).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun renderProfile(profile: Profile) {
@@ -131,11 +136,6 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
 
         binding.profileStatus.text = requireContext().resources.getText(pair.first)
         binding.profileStatus.setTextColor(requireContext().resources.getColor(pair.second, null))
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

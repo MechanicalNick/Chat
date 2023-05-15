@@ -12,8 +12,9 @@ import com.tinkoff.homework.R
 class SearchViewGroup @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, R.attr.searchViewGroupStyle) {
-    val searchText: EditText by lazy { findViewById(R.id.search_text) }
     private val searchView: View by lazy { findViewById(R.id.search_icon) }
+
+    val searchText: EditText by lazy { findViewById(R.id.search_text) }
 
     init {
         inflate(context, R.layout.search_viewgroup, this)

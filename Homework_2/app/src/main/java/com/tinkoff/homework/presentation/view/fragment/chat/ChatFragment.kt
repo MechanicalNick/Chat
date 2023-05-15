@@ -45,25 +45,6 @@ import javax.inject.Inject
 
 abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     ChatFragmentCallback, ToChatRouter  {
-    @Inject
-    lateinit var credentials: Credentials
-
-    @Inject
-    lateinit var router: Router
-
-    @Inject
-    override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
-
-    @Inject
-    lateinit var messageFactory: MessageFactory
-
-    @Inject
-    lateinit var lazyHeaders: LazyHeaders
-
-    @Inject
-    lateinit var chatViewModel: ChatViewModel
-
-    override val initEvent = ChatEvent.Ui.Init
 
     private val actionSelectorFragment by lazy { ActionSelectorFragment() }
     private val reactionFragment by lazy { ReactionFragment() }
@@ -74,9 +55,30 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     protected var streamId: Long? = null
     protected var topicName: String = ""
     private var streamName: String? = null
+
     // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
     // Паттерн: []()
     private val isUserImageRegex = Regex("\\[(.*?)\\](\\((.*?)\\))")
+
+    override val initEvent = ChatEvent.Ui.Init
+
+    @Inject
+    override lateinit var factory: BaseStoreFactory<ChatEvent, ChatEffect, ChatState>
+
+    @Inject
+    lateinit var credentials: Credentials
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var messageFactory: MessageFactory
+
+    @Inject
+    lateinit var lazyHeaders: LazyHeaders
+
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
 
     override fun onAttach(context: Context) {
         DaggerChatComponent.factory()
@@ -180,19 +182,56 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
             is ChatEffect.ShowTimeLimitSnackbar ->
                 showSnackbar(R.string.time_limit_message_error)
+
             is ChatEffect.LoadImageErrorSnackbar ->
                 showSnackbar(R.string.load_image_error)
+
             is ChatEffect.ReactionErrorSnackbar ->
                 showSnackbar(R.string.reaction_error)
+
             is ChatEffect.SendMessageErrorSnackbar ->
                 showSnackbar(R.string.send_message_error)
         }
     }
 
+    override fun reactionChange(reaction: Reaction, message: MessageModel, senderId: Long) {
+        this.store.accept(ChatEvent.Ui.ChangeReaction(message, reaction))
+    }
+
+    override fun showReactionDialog(id: Long, senderId: Long): Boolean {
+        reactionFragment.arguments = createBundle(id, senderId)
+        reactionFragment.show(childFragmentManager, null)
+        return true
+    }
+
+    override fun showActionSelectorDialog(id: Long, senderId: Long): Boolean {
+        actionSelectorFragment.arguments = createBundle(id, senderId)
+        actionSelectorFragment.show(childFragmentManager, null)
+        return true
+    }
+
+    override fun goToChat(topicName: String, streamName: String, streamId: Long) {
+        store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
+    }
+
+    override fun getMyCredentials(): Credentials {
+        return credentials
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    abstract val needGroupByTopic: Boolean
+    abstract fun sendMessage(message: String)
+    abstract fun loadImage(uri: Uri)
+    abstract fun renderAdditionalViews()
+
     private fun showSnackbar(resId: Int) {
         context?.let {
             CustomSnackbar.makeLongText(
-               binding.root,
+                binding.root,
                 it.getString(resId)
             ).show()
         } ?: Unit
@@ -229,12 +268,6 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         binding.recycler.adapter = adapter
     }
 
-
-    abstract val needGroupByTopic: Boolean
-    abstract fun sendMessage(message: String)
-    abstract fun loadImage(uri: Uri)
-    abstract fun renderAdditionalViews()
-
     private fun subscribeToSendMessage(){
         binding.contentEditor.arrowButton.setOnClickListener {
             val message = binding.contentEditor.editText.text.toString()
@@ -258,34 +291,6 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
         binding.contentEditor.plusButton.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-    }
-
-    override fun reactionChange(reaction: Reaction, message: MessageModel, senderId: Long) {
-        this.store.accept(ChatEvent.Ui.ChangeReaction(message, reaction))
-    }
-
-    override fun showReactionDialog(id: Long, senderId: Long): Boolean {
-        reactionFragment.arguments = createBundle(id, senderId)
-        reactionFragment.show(childFragmentManager, null)
-        return true
-    }
-    override fun showActionSelectorDialog(id: Long, senderId: Long): Boolean {
-        actionSelectorFragment.arguments = createBundle(id, senderId)
-        actionSelectorFragment.show(childFragmentManager, null)
-        return true
-    }
-
-    override fun goToChat(topicName: String, streamName: String, streamId: Long) {
-        store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
-    }
-
-    override fun getMyCredentials(): Credentials {
-        return credentials
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun createBundle(id: Long, senderId: Long): Bundle {

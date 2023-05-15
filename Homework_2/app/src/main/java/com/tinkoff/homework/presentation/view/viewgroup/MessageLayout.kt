@@ -8,17 +8,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import com.tinkoff.homework.R
-import com.tinkoff.homework.utils.dp
+import com.tinkoff.homework.presentation.dp
 
 class MessageLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
+    private val cardView: View by lazy { findViewById(R.id.myCardView) }
+    private val marginBetweenCardAndFlexbox = 7.dp(context)
+
     internal val textView: TextView by lazy { findViewById(R.id.myTextMessage) }
     internal val flexbox: FlexboxLayout by lazy { findViewById(R.id.myFlexbox) }
     internal val userImage: ImageView by lazy { findViewById(R.id.myUserImage) }
-
-    private val cardView: View by lazy { findViewById(R.id.myCardView) }
-    private val marginBetweenCardAndFlexbox = 7.dp(context)
 
     init {
         inflate(context, R.layout.message_layout_content, this)
@@ -50,15 +50,6 @@ class MessageLayout @JvmOverloads constructor(
         )
     }
 
-    private fun measureChild(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        this.children.forEach { child ->
-            measureChildWithMargins(
-                child, widthMeasureSpec, 0,
-                heightMeasureSpec, 0
-            )
-        }
-    }
-
     override fun generateLayoutParams(p: LayoutParams): LayoutParams {
         return MarginLayoutParams(p)
     }
@@ -71,4 +62,12 @@ class MessageLayout @JvmOverloads constructor(
         return p is MarginLayoutParams
     }
 
+    private fun measureChild(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        this.children.forEach { child ->
+            measureChildWithMargins(
+                child, widthMeasureSpec, 0,
+                heightMeasureSpec, 0
+            )
+        }
+    }
 }

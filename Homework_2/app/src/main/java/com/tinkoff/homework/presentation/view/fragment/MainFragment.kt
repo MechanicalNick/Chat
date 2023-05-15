@@ -19,20 +19,21 @@ import com.tinkoff.homework.presentation.viewmodel.MainViewModel
 import javax.inject.Inject
 
 class MainFragment: Fragment() {
-    @Inject
-    lateinit var ciceroneHolder: LocalCiceroneHolder
+
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var mainViewModel: MainViewModel
-
     private val navigator: Navigator by lazy {
         AppNavigator(requireActivity(), R.id.fragment_container_view, childFragmentManager)
     }
     private val containerName = "MainFragment"
     private val cicerone: Cicerone<Router>
         get() = ciceroneHolder.getCicerone(containerName)
+
+    @Inject
+    lateinit var ciceroneHolder: LocalCiceroneHolder
+
+    @Inject
+    lateinit var mainViewModel: MainViewModel
 
     override fun onAttach(context: Context) {
         context

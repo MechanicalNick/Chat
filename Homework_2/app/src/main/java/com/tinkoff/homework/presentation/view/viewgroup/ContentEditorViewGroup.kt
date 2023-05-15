@@ -8,20 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import com.tinkoff.homework.R
-import com.tinkoff.homework.utils.dp
+import com.tinkoff.homework.presentation.dp
 import kotlin.math.max
 
 class ContentEditorViewGroup @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, R.attr.contentEditorStyle) {
-    val arrowButton: View by lazy { findViewById(R.id.arrowButton) }
-    val editText: EditText by lazy { findViewById(R.id.editTextView) }
-    val plusButton: View by lazy { findViewById(R.id.plusButton) }
-
     private val textViewLeftMargin = 10.dp(context)
     private val textViewTopMargin = 6.dp(context)
     private val textViewRightMargin = 12.dp(context)
     private val buttonRightMargin = 16.dp(context)
+
+    val arrowButton: View by lazy { findViewById(R.id.arrowButton) }
+    val editText: EditText by lazy { findViewById(R.id.editTextView) }
+    val plusButton: View by lazy { findViewById(R.id.plusButton) }
 
     init {
         inflate(context, R.layout.content_editor_view_group, this)

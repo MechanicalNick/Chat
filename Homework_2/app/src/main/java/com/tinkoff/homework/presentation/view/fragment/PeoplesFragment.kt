@@ -21,13 +21,12 @@ import com.tinkoff.homework.elm.people.model.PeopleEvent
 import com.tinkoff.homework.elm.people.model.PeopleState
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
+import com.tinkoff.homework.presentation.dp
 import com.tinkoff.homework.presentation.view.ToProfileRouter
 import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
 import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegate
 import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegateItem
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
-import com.tinkoff.homework.utils.dp
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -36,19 +35,20 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), ToProfileRouter {
+
+    private var _binding: FragmentPeopleBinding? = null
+    private val binding get() = _binding!!
+    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
+    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
+    private val spaceSize = 16
+
+    override val initEvent: PeopleEvent = PeopleEvent.Ui.LoadData
+
     @Inject
     override lateinit var factory: BaseStoreFactory<PeopleEvent, PeopleEffect, PeopleState>
 
     @Inject
     lateinit var router: Router
-    override val initEvent: PeopleEvent = PeopleEvent.Ui.LoadData
-
-    private var _binding: FragmentPeopleBinding? = null
-    private val binding get() = _binding!!
-
-    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
-    private val spaceSize = 16
 
     override fun onAttach(context: Context) {
         DaggerPeoplesComponent.factory()

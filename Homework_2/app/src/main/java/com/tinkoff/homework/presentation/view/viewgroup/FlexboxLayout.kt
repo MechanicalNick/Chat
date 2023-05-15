@@ -58,15 +58,6 @@ class FlexboxLayout @JvmOverloads constructor(
         setMeasuredDimension(totalWidth, totalHeight)
     }
 
-    private fun measureChild(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        this.children.forEach { child ->
-            measureChildWithMargins(
-                child, widthMeasureSpec, 0,
-                heightMeasureSpec, 0
-            )
-        }
-    }
-
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         var offsetX = 0
         var offsetY = 0
@@ -104,5 +95,14 @@ class FlexboxLayout @JvmOverloads constructor(
 
     override fun checkLayoutParams(p: LayoutParams): Boolean {
         return p is MarginLayoutParams
+    }
+
+    private fun measureChild(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        this.children.forEach { child ->
+            measureChildWithMargins(
+                child, widthMeasureSpec, 0,
+                heightMeasureSpec, 0
+            )
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.tinkoff.homework.databinding.LayoutAlertDialogBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.use_cases.interfaces.CreateStreamUseCase
 import com.tinkoff.homework.getAppComponent
+import com.tinkoff.homework.presentation.view.AlertDialogFactory
 import com.tinkoff.homework.presentation.view.CustomSnackbar
 import com.tinkoff.homework.presentation.view.adapter.ChannelPagerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,13 +23,15 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
-class ChannelsFragment: Fragment()  {
-    @Inject
-    lateinit var createStreamUseCase: CreateStreamUseCase
+class ChannelsFragment : Fragment() {
+
     private var _binding: FragmentChannelBinding? = null
     private val binding get() = _binding!!
     private var ignoreRotation: Boolean = true
     private val compositeDisposable = CompositeDisposable()
+
+    @Inject
+    lateinit var createStreamUseCase: CreateStreamUseCase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +40,8 @@ class ChannelsFragment: Fragment()  {
         _binding = FragmentChannelBinding.inflate(layoutInflater)
         ignoreRotation = true
 
-        val tabNames: List<String> = listOf(getString(R.string.subscribed), getString(R.string.all_stream))
+        val tabNames: List<String> =
+            listOf(getString(R.string.subscribed), getString(R.string.all_stream))
         val pagerAdapter = ChannelPagerAdapter(this, getTabs())
 
         with(binding.layoutChannel) {
@@ -69,22 +73,11 @@ class ChannelsFragment: Fragment()  {
             }
         }
 
-        binding.channelFloatingButton.setOnClickListener{
+        binding.channelFloatingButton.setOnClickListener {
             showAlertDialog()
         }
 
         return binding.root
-    }
-
-    private fun getTabs(): List<Fragment> {
-        val onlySubscribed = childFragmentManager.findFragmentByTag("f0") ?: ChannelsListFragment.newInstance(
-            onlySubscribed = true
-        )
-
-        val all = childFragmentManager.findFragmentByTag("f1") ?: ChannelsListFragment.newInstance(
-            onlySubscribed = false
-        )
-        return listOf(onlySubscribed, all)
     }
 
     override fun onAttach(context: Context) {
@@ -96,8 +89,29 @@ class ChannelsFragment: Fragment()  {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(_binding != null)
-            outState.putInt(SELECTED_TAB_POSITION_TAG, binding.layoutChannel.tabLayout.selectedTabPosition)
+        if (_binding != null)
+            outState.putInt(
+                SELECTED_TAB_POSITION_TAG,
+                binding.layoutChannel.tabLayout.selectedTabPosition
+            )
+    }
+
+    override fun onDestroyView() {
+        compositeDisposable.dispose()
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun getTabs(): List<Fragment> {
+        val onlySubscribed =
+            childFragmentManager.findFragmentByTag("f0") ?: ChannelsListFragment.newInstance(
+                onlySubscribed = true
+            )
+
+        val all = childFragmentManager.findFragmentByTag("f1") ?: ChannelsListFragment.newInstance(
+            onlySubscribed = false
+        )
+        return listOf(onlySubscribed, all)
     }
 
     private fun showAlertDialog() {
@@ -128,12 +142,6 @@ class ChannelsFragment: Fragment()  {
                     })
             )
         }.show()
-    }
-
-    override fun onDestroyView() {
-        compositeDisposable.dispose()
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

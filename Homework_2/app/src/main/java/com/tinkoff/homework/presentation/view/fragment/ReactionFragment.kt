@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.BottomSheetReactionsLayoutBinding
-import com.tinkoff.homework.databinding.FragmentPeopleBinding
 import com.tinkoff.homework.domain.data.EmojiResources
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.chat.model.ChatEvent
@@ -21,14 +20,15 @@ import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
 import javax.inject.Inject
 
 class ReactionFragment : BottomSheetDialogFragment() {
-    @Inject
-    lateinit var chatViewModel: ChatViewModel
 
     private var _binding: BottomSheetReactionsLayoutBinding? = null
     private val binding get() = _binding!!
     private var messageId: Long = -1L
     private var senderId: Long = -1L
     private val emojiCount = 7 * 12 // 7 to one row
+
+    @Inject
+    lateinit var chatViewModel: ChatViewModel
 
     override fun onAttach(context: Context) {
         context
@@ -61,6 +61,11 @@ class ReactionFragment : BottomSheetDialogFragment() {
 
     override fun getTheme() = R.style.CustomBottomSheetDialogTheme
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun applyEmoji(emojiCode: String, emojiName: String) {
         chatViewModel.store.accept(
             ChatEvent.Ui.AddReaction(
@@ -73,11 +78,6 @@ class ReactionFragment : BottomSheetDialogFragment() {
             bundleOf(ARG_REACTION_RESULT to true)
         )
         dismiss()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

@@ -14,7 +14,6 @@ import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ChannelsListBinding
-import com.tinkoff.homework.databinding.MainFragmentBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -30,9 +29,6 @@ import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegate
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.topic.TopicDelegate
 import com.tinkoff.homework.presentation.view.viewgroup.StreamView
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -43,24 +39,27 @@ import javax.inject.Inject
 
 class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, ChannelsState>(),
     StreamView {
+
+    private var _binding: ChannelsListBinding? = null
+    private val binding get() = _binding!!
+    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
+    private var query = ""
+    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
+    private lateinit var streamFactory: StreamFactory
+
+    override lateinit var factory: BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>
+    override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
+
     // https://stackoverflow.com/questions/43141740/dagger-2-multibindings-with-kotlin/43149382#43149382
     @Inject
     lateinit var channelsStoreFactories: Map<Boolean,
             @JvmSuppressWildcards BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>>
+
     @Inject
     lateinit var streamFactories: Map<Boolean, StreamFactory>
+
     @Inject
     lateinit var router: Router
-    override lateinit var factory: BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>
-    override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
-
-    private var _binding: ChannelsListBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var streamFactory: StreamFactory
-    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-
-    private var query = ""
-    private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
     override fun onAttach(context: Context) {
         DaggerStreamComponent.factory()
