@@ -76,14 +76,14 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
                 renderLoadingState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.profileData
+                    data = binding.profileData as ViewGroup
                 )
             }
             ViewState.Error -> {
                 renderErrorState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.profileData
+                    data = binding.profileData as ViewGroup
                 )
                 state.error?.let { throwable ->
                     binding.errorStateContainer.errorText.text = throwable.message
@@ -93,7 +93,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
                 renderDataState(
                     shimmerFrameLayout = binding.shimmer.root,
                     errorContainer = binding.errorStateContainer.root,
-                    data = binding.profileData
+                    data = binding.profileData as ViewGroup
                 )
                 state.item?.let { renderProfile(it) }
             }

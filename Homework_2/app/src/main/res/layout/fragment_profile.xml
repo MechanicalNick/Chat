@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <include
+        android:id="@+id/shimmer"
+        layout="@layout/shimmer_layout"/>
+
+    <include
         android:id="@+id/errorStateContainer"
         android:visibility="gone"
         layout="@layout/error_layout" />
-
-    <include
-        android:id="@+id/shimmer"
-        layout="@layout/shimmer_layout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,6 +48,7 @@
             android:id="@+id/profileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
             android:text="Darrell Steward"
             android:textColor="@color/white"

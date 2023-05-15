@@ -39,7 +39,7 @@ abstract class BaseFragment<Event : Any, Effect : Any, State : Any> :
         errorContainer: ViewGroup,
         data: ViewGroup
     ) {
-        shimmerFrameLayout.stopShimmer()
+        shimmerFrameLayout.hideShimmer()
         data.isVisible = false
         errorContainer.isVisible = true
     }
@@ -49,7 +49,7 @@ abstract class BaseFragment<Event : Any, Effect : Any, State : Any> :
         errorContainer: ViewGroup,
         data: ViewGroup
     ) {
-        shimmerFrameLayout.stopShimmer()
+        shimmerFrameLayout.hideShimmer()
         data.isVisible = true
         errorContainer.isVisible = false
     }
