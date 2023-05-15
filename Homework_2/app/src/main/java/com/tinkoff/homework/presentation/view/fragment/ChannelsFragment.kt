@@ -25,14 +25,16 @@ import javax.inject.Inject
 class ChannelsFragment: Fragment()  {
     @Inject
     lateinit var createStreamUseCase: CreateStreamUseCase
-    private lateinit var binding: FragmentChannelBinding
+    private var _binding: FragmentChannelBinding? = null
+    private val binding get() = _binding!!
     private var ignoreRotation: Boolean = true
     private val compositeDisposable = CompositeDisposable()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentChannelBinding.inflate(layoutInflater)
+        _binding = FragmentChannelBinding.inflate(layoutInflater)
         ignoreRotation = true
 
         val tabNames: List<String> = listOf(getString(R.string.subscribed), getString(R.string.all_stream))
@@ -94,7 +96,7 @@ class ChannelsFragment: Fragment()  {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(this::binding.isInitialized)
+        if(_binding != null)
             outState.putInt(SELECTED_TAB_POSITION_TAG, binding.layoutChannel.tabLayout.selectedTabPosition)
     }
 
@@ -131,6 +133,7 @@ class ChannelsFragment: Fragment()  {
     override fun onDestroyView() {
         compositeDisposable.dispose()
         super.onDestroyView()
+        _binding = null
     }
 
     companion object {

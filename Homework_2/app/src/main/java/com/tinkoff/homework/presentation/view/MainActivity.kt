@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
@@ -62,5 +63,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         router.exit()
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 }

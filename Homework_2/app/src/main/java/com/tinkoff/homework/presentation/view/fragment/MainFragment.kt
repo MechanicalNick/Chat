@@ -21,7 +21,8 @@ import javax.inject.Inject
 class MainFragment: Fragment() {
     @Inject
     lateinit var ciceroneHolder: LocalCiceroneHolder
-    lateinit var binding: MainFragmentBinding
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
 
     @Inject
     lateinit var mainViewModel: MainViewModel
@@ -44,7 +45,7 @@ class MainFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainFragmentBinding.inflate(layoutInflater)
+        _binding = MainFragmentBinding.inflate(layoutInflater)
 
         setupNavigationBar()
 
@@ -66,6 +67,10 @@ class MainFragment: Fragment() {
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     private fun setupNavigationBar() {
         binding.navView.setOnItemSelectedListener { item ->

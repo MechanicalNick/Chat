@@ -24,7 +24,7 @@ class ChatScrollListener(
             val needLoad = lastVisibleItemPosition == null ||
                     lastVisibleItemPosition!! < firstVisibleItemPosition
 
-            if (needLoad && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
+            if (dy != 0 && needLoad && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
                 loadMoreItems()
                 lastVisibleItemPosition = firstVisibleItemPosition
             }

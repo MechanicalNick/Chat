@@ -13,6 +13,7 @@ import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ChannelsListBinding
+import com.tinkoff.homework.databinding.MainFragmentBinding
 import com.tinkoff.homework.di.component.DaggerStreamComponent
 import com.tinkoff.homework.domain.data.Stream
 import com.tinkoff.homework.elm.BaseStoreFactory
@@ -51,10 +52,12 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
     lateinit var router: Router
     override lateinit var factory: BaseStoreFactory<ChannelsEvent, ChannelsEffect, ChannelsState>
     override val initEvent: ChannelsEvent = ChannelsEvent.Ui.Wait
-    lateinit var binding: ChannelsListBinding
+
+    private var _binding: ChannelsListBinding? = null
+    private val binding get() = _binding!!
     private lateinit var streamFactory: StreamFactory
     private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     private var query = ""
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
 
@@ -81,7 +84,7 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ChannelsListBinding.inflate(layoutInflater)
+        _binding = ChannelsListBinding.inflate(layoutInflater)
         val dividerItemDecoration = DividerItemDecoration(
             binding.channelRecyclerView.context,
             DividerItemDecoration.VERTICAL
@@ -200,8 +203,8 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
     }
 
     override fun onDestroy() {
-        compositeDisposable.dispose()
         super.onDestroy()
+        _binding = null
     }
 
     private fun loadData() {

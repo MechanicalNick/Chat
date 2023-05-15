@@ -61,7 +61,7 @@ class ChatModule {
         )
     }
 
-
+    @ChatScope
     @Provides
     fun provideChatStoreFactory(
         ChatState: ChatState,

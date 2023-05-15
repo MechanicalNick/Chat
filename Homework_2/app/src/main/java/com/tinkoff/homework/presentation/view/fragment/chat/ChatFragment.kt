@@ -67,10 +67,9 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
     private val actionSelectorFragment by lazy { ActionSelectorFragment() }
     private val reactionFragment by lazy { ReactionFragment() }
-
-    private var _binding: FragmentChatBinding? = null
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val space = 32
+    private var _binding: FragmentChatBinding? = null
     protected val binding get() = _binding!!
     protected var streamId: Long? = null
     protected var topicName: String = ""
@@ -266,6 +265,11 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
     override fun goToChat(topicName: String, streamName: String, streamId: Long) {
         store.accept(ChatEvent.Ui.GoToChat(topicName, streamName, streamId))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun createBundle(id: Long, senderId: Long): Bundle {

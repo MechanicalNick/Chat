@@ -43,10 +43,10 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
     lateinit var router: Router
     override val initEvent: PeopleEvent = PeopleEvent.Ui.LoadData
 
-    lateinit var binding: FragmentPeopleBinding
+    private var _binding: FragmentPeopleBinding? = null
+    private val binding get() = _binding!!
 
     private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val spaceSize = 16
 
@@ -61,7 +61,7 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPeopleBinding.inflate(layoutInflater)
+        _binding = FragmentPeopleBinding.inflate(layoutInflater)
 
         binding.peopleRecyclerView.addItemDecoration(MarginItemDecorator(
             spaceSize.dp(requireContext()),
@@ -91,10 +91,10 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
 
         return binding.root
     }
-    
+
     override fun onDestroy() {
-        compositeDisposable.dispose()
         super.onDestroy()
+        _binding = null
     }
 
     override fun render(state: PeopleState) {

@@ -13,6 +13,7 @@ import com.github.terrakok.cicerone.Router
 import com.google.android.material.snackbar.Snackbar
 import com.tinkoff.homework.R
 import com.tinkoff.homework.data.dto.Credentials
+import com.tinkoff.homework.databinding.FragmentPeopleBinding
 import com.tinkoff.homework.databinding.FragmentProfileBinding
 import com.tinkoff.homework.di.component.DaggerProfileComponent
 import com.tinkoff.homework.domain.data.Profile
@@ -38,7 +39,8 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     lateinit var router: Router
     override val initEvent: ProfileEvent = ProfileEvent.Ui.Wait
 
-    lateinit var binding: FragmentProfileBinding
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
         DaggerProfileComponent.factory()
@@ -51,12 +53,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater)
-
-       //setTopMarginLayoutParams(
-       //    topPortraitMargin, topLandscapeMargin, binding.profileImage,
-       //    requireContext()
-       //)
+        _binding = FragmentProfileBinding.inflate(inflater)
 
         val userId = arguments?.getLong(ARG_MESSAGE, credentials.id) ?: run {
             credentials.id
@@ -136,22 +133,10 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
         binding.profileStatus.setTextColor(requireContext().resources.getColor(pair.second, null))
     }
 
-
-    private fun setTopMarginLayoutParams(
-        topPortrait: Int,
-        topLandscape: Int,
-        view: View,
-        context: Context
-    ) {
-        val orientation = resources.configuration.orientation
-        val topMargin =
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) topPortrait.dp(context)
-            else topLandscape.dp(context)
-        val param = view.layoutParams as ViewGroup.MarginLayoutParams
-        param.setMargins(0, topMargin, 0, 0)
-        view.layoutParams = param
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
-
 
     companion object {
         private const val ARG_MESSAGE = "profile"
