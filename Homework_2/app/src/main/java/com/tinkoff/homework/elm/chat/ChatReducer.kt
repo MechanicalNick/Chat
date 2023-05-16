@@ -111,9 +111,9 @@ class ChatReducer(private val credentials: Credentials) :
                     copy(
                         items = items?.let { concatenate(credentials, it, event) },
                         itemsState = !itemsState,
+                        needScroll = true
                     )
                 }
-                effects { +ChatEffect.SmoothScrollToLastElement }
             }
             is ChatEvent.Internal.DataLoaded -> {
                 state {
@@ -122,10 +122,10 @@ class ChatReducer(private val credentials: Credentials) :
                         state = ViewState.ShowData,
                         items = event.messages,
                         error = null,
-                        isShowProgress = false
+                        isShowProgress = false,
+                        needScroll = true
                     )
                 }
-                effects { +ChatEffect.ScrollToLastElement }
             }
             is ChatEvent.Internal.PageDataLoaded -> {
                 state {
@@ -134,7 +134,8 @@ class ChatReducer(private val credentials: Credentials) :
                         state = ViewState.ShowData,
                         items = concatenate(items, event.messages),
                         error = null,
-                        isShowProgress = false
+                        isShowProgress = false,
+                        needScroll = false
                     )
                 }
             }
@@ -195,7 +196,16 @@ class ChatReducer(private val credentials: Credentials) :
             is ChatEvent.Internal.SendMessageError -> {
                 effects { +ChatEffect.SendMessageErrorSnackbar }
             }
-
+            is ChatEvent.Ui.ScrollToLastElement -> {
+                effects { +ChatEffect.ScrollToLastElement }
+            }
+            is ChatEvent.Internal.DontNeedScroll ->{
+                state{
+                    copy(
+                        needScroll = false
+                    )
+                }
+            }
         }
     }
 }

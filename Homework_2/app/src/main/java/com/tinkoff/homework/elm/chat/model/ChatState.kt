@@ -14,6 +14,7 @@ data class ChatState(
     val error: Throwable? = null,
     val isLoading: Boolean = false,
     val isShowProgress: Boolean = false,
+    val needScroll: Boolean = false,
     val topicName: String = "",
     val streamId: Long = 0
 ) : Parcelable

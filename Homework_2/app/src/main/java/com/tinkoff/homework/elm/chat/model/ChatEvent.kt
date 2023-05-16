@@ -24,6 +24,7 @@ sealed class ChatEvent {
             val topicName: String,
             val streamName: String,
                             val streamId: Long) : Ui()
+        object ScrollToLastElement: Ui()
     }
 
     sealed class Internal : ChatEvent() {
@@ -52,5 +53,6 @@ sealed class ChatEvent {
             val topicName: String
         ) : Internal()
 
+        object DontNeedScroll : Internal()
     }
 }

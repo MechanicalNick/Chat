@@ -153,7 +153,12 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
                         streamId = streamId!!,
                         streamName = streamName!!,
                         needGroupByTopic = needGroupByTopic
-                    ))
+                    )){
+                        if(store.currentState.needScroll) {
+                            store.accept(ChatEvent.Ui.ScrollToLastElement)
+                            store.accept(ChatEvent.Internal.DontNeedScroll)
+                        }
+                    }
                 }
             }
         }
