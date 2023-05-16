@@ -14,21 +14,47 @@ class ChatScrollListener(
     private val streamId: Long,
     private val topicName: String
 ) : RecyclerView.OnScrollListener() {
-    private var lastVisibleItemPosition: Int? = null
+    // The total number of items in the data set after the last load
+    private var previousTotalItemCount = 0
 
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        super.onScrolled(recyclerView, dx, dy)
+    // True if we are still waiting for the last set of data to load.
+    private var loading = true
 
-        val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+    override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(view, dx, dy)
 
-        if (!isLoading()) {
-            val needLoad = lastVisibleItemPosition == null ||
-                    lastVisibleItemPosition!! < firstVisibleItemPosition
+        val totalItemCount = layoutManager.itemCount
+        val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
+        val lastVisibleItemPosition: Int = layoutManager.findLastVisibleItemPosition()
 
-            if (dy != 0 && needLoad && firstVisibleItemPosition < Const.MESSAGE_THRESHOLD) {
-                loadMoreItems()
-                lastVisibleItemPosition = firstVisibleItemPosition
+        // If the total item count is zero and the previous isn't, assume the
+        // list is invalidated and should be reset back to initial state
+        if (totalItemCount < previousTotalItemCount) {
+            previousTotalItemCount = totalItemCount
+            if (totalItemCount == 0) {
+                loading = true
             }
+        }
+
+        // If it’s still loading, we check to see if the data set count has
+        // changed, if so we conclude it has finished loading and update the current page
+        // number and total item count.
+        if (loading && totalItemCount > previousTotalItemCount) {
+            loading = false
+            previousTotalItemCount = totalItemCount
+        }
+
+        // If it isn’t currently loading, we check to see if we have breached
+        // the mVisibleThreshold and need to reload more data.
+        // If we do need to reload some more data, we execute onLoadMore to fetch the data.
+        // threshold should reflect how many total columns there are too
+        if (dy != 0 && !loading && !isLoading() &&
+            firstVisibleItemPosition < Const.MESSAGE_THRESHOLD &&
+            firstVisibleItemPosition >= 0 &&
+            lastVisibleItemPosition < totalItemCount - Const.MESSAGE_THRESHOLD
+        ) {
+            loadMoreItems()
+            loading = true
         }
     }
 
