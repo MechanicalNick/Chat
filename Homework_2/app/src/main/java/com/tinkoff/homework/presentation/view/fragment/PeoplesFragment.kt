@@ -2,7 +2,6 @@ package com.tinkoff.homework.presentation.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,18 +26,14 @@ import com.tinkoff.homework.presentation.view.adapter.DelegatesAdapter
 import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegate
 import com.tinkoff.homework.presentation.view.adapter.people.PeopleDelegateItem
 import com.tinkoff.homework.presentation.view.itemdecorator.MarginItemDecorator
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
+import com.tinkoff.homework.presentation.viewmodel.ChannelsViewModel
+import com.tinkoff.homework.presentation.viewmodel.PeopleViewModel
 import javax.inject.Inject
 
 class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), ToProfileRouter {
 
     private var _binding: FragmentPeopleBinding? = null
     private val binding get() = _binding!!
-    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private val spaceSize = 16
 
@@ -49,6 +44,9 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var peopleViewModel: PeopleViewModel
 
     override fun onAttach(context: Context) {
         DaggerPeoplesComponent.factory()
@@ -76,17 +74,11 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
             this.store.accept(PeopleEvent.Ui.LoadData)
         }
 
-        searchQueryPublisher
-            .distinctUntilChanged()
-            .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
-            .subscribeBy { searchQuery ->
-                Log.e("QUERY", searchQuery)
-                this.store.accept(PeopleEvent.Ui.Search(searchQuery))
-            }
-            .addTo(compositeDisposable)
+        peopleViewModel.store = this.store
 
         binding.peopleSearch.searchText.addTextChangedListener{
-            searchQueryPublisher.onNext(it.toString())
+            val query = it?.toString().orEmpty()
+            peopleViewModel.searchQueryPublisher.onNext(query)
         }
 
         return binding.root

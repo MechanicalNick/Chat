@@ -33,7 +33,10 @@ import com.tinkoff.homework.presentation.view.StreamFactory
 import com.tinkoff.homework.presentation.view.fragment.ActionSelectorFragment
 import com.tinkoff.homework.presentation.view.fragment.MainFragment
 import com.tinkoff.homework.presentation.view.fragment.ReactionFragment
+import com.tinkoff.homework.presentation.viewmodel.ChannelsViewModel
+import com.tinkoff.homework.presentation.viewmodel.SearchViewModel
 import com.tinkoff.homework.presentation.viewmodel.ChatViewModel
+import com.tinkoff.homework.presentation.viewmodel.PeopleViewModel
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -52,6 +55,8 @@ interface AppComponent {
     val credentials: Credentials
     val apiUrlProvider: ApiUrlProvider
     val chatViewModel: ChatViewModel
+    val channelViewModel: ChannelsViewModel
+    val peopleViewModel: PeopleViewModel
 
     val getMessageUseCase: GetMessagesUseCase
     val getPeoplesUseCase: GetPeoplesUseCase

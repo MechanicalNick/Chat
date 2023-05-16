@@ -2,7 +2,6 @@ package com.tinkoff.homework.presentation.view.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,11 +28,7 @@ import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegate
 import com.tinkoff.homework.presentation.view.adapter.stream.StreamDelegateItem
 import com.tinkoff.homework.presentation.view.adapter.topic.TopicDelegate
 import com.tinkoff.homework.presentation.view.viewgroup.StreamView
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import java.util.concurrent.TimeUnit
+import com.tinkoff.homework.presentation.viewmodel.ChannelsViewModel
 import javax.inject.Inject
 
 
@@ -42,8 +37,6 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
 
     private var _binding: ChannelsListBinding? = null
     private val binding get() = _binding!!
-    private val searchQueryPublisher: PublishSubject<String> = PublishSubject.create()
-    private var query = ""
     private val adapter: DelegatesAdapter by lazy { DelegatesAdapter() }
     private lateinit var streamFactory: StreamFactory
 
@@ -60,6 +53,9 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var channelViewModel: ChannelsViewModel
 
     override fun onAttach(context: Context) {
         DaggerStreamComponent.factory()
@@ -102,13 +98,14 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.channelRecyclerView.adapter = adapter
 
+        channelViewModel.store = store
+
         parentFragmentManager.setFragmentResultListener(
             ChannelsFragment.ARG_SEARCH_ACTION,
             this@ChannelsListFragment
         ) { _, bundle ->
-            val result = bundle.getString(ChannelsFragment.ARG_SEARCH_VALUE)
-            query = result.orEmpty()
-            searchQueryPublisher.onNext(query)
+            val query = bundle.getString(ChannelsFragment.ARG_SEARCH_VALUE).orEmpty()
+            channelViewModel.searchQueryPublisher.onNext(query)
         }
 
         val savedState = savedStateRegistry
@@ -124,15 +121,6 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
         binding.errorStateContainer.retryButton.setOnClickListener {
             loadData()
         }
-
-        searchQueryPublisher
-            .distinctUntilChanged()
-            .debounce(500, TimeUnit.MILLISECONDS, Schedulers.io())
-            .subscribeBy { searchQuery ->
-                Log.e("QUERY", searchQuery)
-                this.store.accept(ChannelsEvent.Ui.Search(searchQuery))
-            }
-            .addTo(compositeDisposable)
 
         return binding.root
     }
