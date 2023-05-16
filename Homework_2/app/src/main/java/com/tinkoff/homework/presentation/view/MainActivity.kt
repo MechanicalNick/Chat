@@ -1,5 +1,6 @@
 package com.tinkoff.homework.presentation.view
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.tinkoff.homework.R
 import com.tinkoff.homework.databinding.ActivityMainBinding
 import com.tinkoff.homework.getAppComponent
 import com.tinkoff.homework.navigation.NavigationScreens
+import com.tinkoff.homework.utils.NetworkChecker
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import javax.inject.Inject
@@ -48,8 +50,12 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        if (savedInstanceState == null)
-            router.newRootScreen(NavigationScreens.main())
+        if(NetworkChecker.isNetworkConnected(this)){
+            if (savedInstanceState == null)
+                router.newRootScreen(NavigationScreens.main())
+        } else {
+            router.newRootScreen(NavigationScreens.error())
+        }
     }
 
     override fun onResumeFragments() {
@@ -60,10 +66,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
-    }
-
-    override fun onBackPressed() {
-        router.exit()
     }
 
     override fun onDestroy() {

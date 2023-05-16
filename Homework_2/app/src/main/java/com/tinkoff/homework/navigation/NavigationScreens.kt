@@ -4,6 +4,7 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 import com.tinkoff.homework.presentation.view.fragment.ChannelsFragment
 import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import com.tinkoff.homework.presentation.view.fragment.MainFragment
+import com.tinkoff.homework.presentation.view.fragment.NetworkErrorFragment
 import com.tinkoff.homework.presentation.view.fragment.PeoplesFragment
 import com.tinkoff.homework.presentation.view.fragment.ProfileFragment
 
@@ -17,4 +18,5 @@ object NavigationScreens {
     fun chat(topicName: String, streamName: String, streamId: Long) = FragmentScreen {
         ChatFragment.newInstance(topicName, streamName, streamId)
     }
+    fun error() = FragmentScreen { NetworkErrorFragment.newInstance() }
 }

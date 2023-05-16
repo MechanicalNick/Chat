@@ -32,6 +32,7 @@ import com.tinkoff.homework.presentation.view.MessageFactory
 import com.tinkoff.homework.presentation.view.StreamFactory
 import com.tinkoff.homework.presentation.view.fragment.ActionSelectorFragment
 import com.tinkoff.homework.presentation.view.fragment.MainFragment
+import com.tinkoff.homework.presentation.view.fragment.NetworkErrorFragment
 import com.tinkoff.homework.presentation.view.fragment.ReactionFragment
 import com.tinkoff.homework.presentation.viewmodel.ChannelsViewModel
 import com.tinkoff.homework.presentation.viewmodel.SearchViewModel
@@ -76,6 +77,7 @@ interface AppComponent {
     fun inject(fragment: MainFragment)
     fun inject(fragment: ActionSelectorFragment)
     fun inject(fragment: ReactionFragment)
+    fun inject(fragment: NetworkErrorFragment)
 
     @Component.Factory
     interface Factory {
