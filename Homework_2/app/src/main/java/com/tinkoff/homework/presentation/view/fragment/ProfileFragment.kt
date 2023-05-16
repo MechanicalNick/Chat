@@ -30,6 +30,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private var fromMyProfile = true
 
     override val initEvent: ProfileEvent = ProfileEvent.Ui.Wait
 
@@ -55,9 +56,11 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater)
 
-        val userId = arguments?.getLong(ARG_MESSAGE, credentials.id) ?: run {
+        val userId = arguments?.getLong(ARG_PROFILE_ID, credentials.id) ?: run {
             credentials.id
         }
+        fromMyProfile = arguments?.getBoolean(ARG_FROM_MY_PROFILE)?: run { true }
+
         this.store.accept(ProfileEvent.Ui.LoadData(userId))
 
         binding.errorStateContainer.retryButton.setOnClickListener {
@@ -124,7 +127,7 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
                 .into(it)
         }
 
-        binding.profileToolbar.isVisible = profile.id != credentials.id
+        binding.profileToolbar.isVisible = !fromMyProfile
 
         binding.profileName.text = profile.name
 
@@ -139,14 +142,16 @@ class ProfileFragment : BaseFragment<ProfileEvent, ProfileEffect, ProfileState>(
     }
 
     companion object {
-        private const val ARG_MESSAGE = "profile"
-        fun newInstance(userId: Long?): ProfileFragment {
+        private const val ARG_PROFILE_ID = "profile"
+        private const val ARG_FROM_MY_PROFILE = "from my profile"
+        fun newInstance(userId: Long?, fromMyProfile: Boolean): ProfileFragment {
             val fragment = ProfileFragment()
             val arguments = Bundle()
             if (userId != null) {
-                arguments.putLong(ARG_MESSAGE, userId)
+                arguments.putLong(ARG_PROFILE_ID, userId)
                 fragment.arguments = arguments
             }
+            arguments.putBoolean(ARG_FROM_MY_PROFILE, fromMyProfile)
             return fragment
         }
     }

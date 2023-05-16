@@ -145,7 +145,7 @@ class PeoplesFragment : BaseFragment<PeopleEvent, PeopleEffect, PeopleState>(), 
 
             is PeopleEffect.GoToProfile -> {
                 router.navigateTo(
-                    NavigationScreens.profile(effect.userId)
+                    NavigationScreens.profile(userId = effect.userId, fromMyProfile = false)
                 )
             }
         }
