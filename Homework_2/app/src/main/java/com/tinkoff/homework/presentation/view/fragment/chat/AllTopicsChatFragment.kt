@@ -7,7 +7,7 @@ import com.tinkoff.homework.elm.chat.model.ChatEvent
 import com.tinkoff.homework.elm.chat.model.ChatState
 
 class AllTopicsChatFragment : ChatFragment() {
-    var firstLoadTopic = true
+    private var firstLoadTopic = true
     override val needGroupByTopic = true
 
     override fun renderAdditionalViews() {

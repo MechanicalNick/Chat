@@ -121,7 +121,7 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
             loadData()
         }
 
-        binding.errorStateContainer.retryButton.setOnClickListener(){
+        binding.errorStateContainer.retryButton.setOnClickListener {
             loadData()
         }
 

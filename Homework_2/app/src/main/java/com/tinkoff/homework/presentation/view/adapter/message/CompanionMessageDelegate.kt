@@ -89,7 +89,7 @@ class CompanionMessageDelegate(
                 root.flexbox.removeAllViews()
                 FlexboxFactory(model.reactions, binding.root.context, callback.getMyCredentials()).create(
                     { callback.reactionChange(it, model, model.senderId) },
-                    { callback.showActionSelectorDialog(model.id, model.senderId) }
+                    { callback.showReactionDialog(model.id, model.senderId) }
                 ).forEach {
                     root.flexbox.addView(it)
                 }
