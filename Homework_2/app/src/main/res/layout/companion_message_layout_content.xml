@@ -14,36 +14,44 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/companionCardView"
         style="@style/Theme.Homework.CardView"
-        android:layout_width="217dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/companionTextName"
-            style="@style/Theme.Homework.TextHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:layout_marginTop="8dp"
-            android:text="Darrell Steward" />
-
-        <ImageView
-            android:id="@+id/companionUserImage"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:layout_marginTop="29dp"
-            android:layout_marginStart="13dp"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/companionTextMessage"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/companionTextName"
+                style="@style/Theme.Homework.TextHeader"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
                 android:layout_marginStart="13dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="13dp"
+                android:text="Darrell Steward" />
+
+            <ImageView
+                android:id="@+id/companionUserImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="29dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/companionTextMessage"
                 style="@style/Theme.Homework.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="8dp"
+                android:maxWidth="217dp"
                 android:text="Привет! lorem ipsum test message dalshe zabil" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <com.tinkoff.homework.presentation.view.viewgroup.FlexboxLayout

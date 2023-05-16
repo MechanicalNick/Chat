@@ -43,7 +43,7 @@ class MessageLayout @JvmOverloads constructor(
         )
 
         flexbox.layout(
-            r - cardView.measuredWidth,
+            r - flexbox.measuredWidth,
             cardView.measuredHeight + marginBetweenCardAndFlexbox,
             r,
             cardView.measuredHeight + marginBetweenCardAndFlexbox + flexbox.measuredHeight
