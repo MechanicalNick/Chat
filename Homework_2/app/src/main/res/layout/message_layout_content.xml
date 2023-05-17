@@ -20,6 +20,8 @@
                 android:id="@+id/myUserImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="60dp"
+                android:minHeight="40dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitXY" />
 

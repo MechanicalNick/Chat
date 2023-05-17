@@ -8,6 +8,8 @@
         android:id="@+id/topicSelectorEditText"
         style="@style/Theme.Homework.EditText"
         android:layout_width="match_parent"
+        android:paddingStart="21dp"
+        android:paddingEnd="21dp"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"

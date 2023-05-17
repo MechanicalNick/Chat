@@ -10,6 +10,8 @@
         android:layout_height="63dp"
         android:layout_marginLeft="20dp"
         android:hint="@string/search_tooltip"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
         android:textColor="@color/secondary_text"
         android:textColorHint="@color/secondary_text"
         android:textSize="22sp" />
