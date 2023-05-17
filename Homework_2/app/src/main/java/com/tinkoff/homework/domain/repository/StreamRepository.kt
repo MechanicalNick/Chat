@@ -8,6 +8,6 @@ import io.reactivex.Single
 interface StreamRepository {
     fun getAll(): Single<List<Stream>>
     fun getSubscriptions(): Single<List<Stream>>
-    fun fetchResults(isSubscribed: Boolean, query: String): Observable<List<Stream>>
+    fun fetchResults(isSubscribed: Boolean, query: String, onlyCashed: Boolean): Observable<List<Stream>>
     fun subscribeOnStream(streamName: String): Single<SubscribeOnStreamResponse>
 }

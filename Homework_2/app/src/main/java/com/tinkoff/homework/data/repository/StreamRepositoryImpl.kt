@@ -70,9 +70,14 @@ class StreamRepositoryImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun fetchResults(isSubscribed: Boolean, query: String): Observable<List<Stream>> {
-        return loadLocalResults(isSubscribed)
-            .mergeWith(loadResultsFromServer(isSubscribed))
+    override fun fetchResults(isSubscribed: Boolean, query: String, onlyCashed: Boolean): Observable<List<Stream>> {
+        val collection = if(onlyCashed) {
+            loadLocalResults(isSubscribed).toFlowable()
+        } else {
+            loadLocalResults(isSubscribed)
+                .mergeWith(loadResultsFromServer(isSubscribed))
+        }
+        return collection
             .map {list ->
                 if (query.isBlank()) {
                     list

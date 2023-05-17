@@ -7,6 +7,7 @@ import io.reactivex.Single
 interface GetStreamsUseCase {
     fun execute(
         isSubscribed: Boolean,
-        query: String
+        query: String,
+        onlyCashed: Boolean
     ): Observable<List<Stream>>
 }
