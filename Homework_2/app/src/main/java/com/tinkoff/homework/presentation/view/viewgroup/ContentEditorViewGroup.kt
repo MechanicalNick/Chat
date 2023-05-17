@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import com.tinkoff.homework.R
 import com.tinkoff.homework.presentation.dp
 import kotlin.math.max
@@ -58,16 +59,16 @@ class ContentEditorViewGroup @JvmOverloads constructor(
 
         arrowButton.layout(
             r - (buttonRightMargin + arrowButton.measuredWidth),
-            ((editText.measuredHeight - arrowButton.measuredHeight) * 0.5).toInt(),
+            textViewTopMargin + ((editText.measuredHeight - arrowButton.measuredHeight) * 0.5).toInt(),
             r - (buttonRightMargin),
-            ((editText.measuredHeight - arrowButton.measuredHeight) * 0.5 + arrowButton.measuredHeight).toInt()
+            textViewTopMargin + ((editText.measuredHeight - arrowButton.measuredHeight) * 0.5 + arrowButton.measuredHeight).toInt()
         )
 
         plusButton.layout(
             r - (buttonRightMargin + plusButton.measuredWidth),
-            ((editText.measuredHeight - plusButton.measuredHeight) * 0.5).toInt(),
+            textViewTopMargin + ((editText.measuredHeight - plusButton.measuredHeight) * 0.5).toInt(),
             r - (buttonRightMargin),
-            ((editText.measuredHeight - plusButton.measuredHeight) * 0.5 + plusButton.measuredHeight).toInt()
+            textViewTopMargin + ((editText.measuredHeight - plusButton.measuredHeight) * 0.5 + plusButton.measuredHeight).toInt()
         )
     }
 
@@ -102,7 +103,7 @@ class ContentEditorViewGroup @JvmOverloads constructor(
     }
 
     private fun updateVisibility(length: Int) {
-        arrowButton.visibility = if (length > 0) VISIBLE else GONE
-        plusButton.visibility = if (length == 0) VISIBLE else GONE
+        arrowButton.isVisible = length > 0
+        plusButton.isVisible = length == 0
     }
 }

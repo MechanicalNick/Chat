@@ -7,15 +7,11 @@ import com.tinkoff.homework.databinding.DateItemBinding
 import com.tinkoff.homework.domain.data.DateModel
 import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
+import com.tinkoff.homework.utils.CustomDateFormatter
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class DateDelegate : AdapterDelegate {
-    companion object{
-        private val locale = Locale("ru")
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM", locale)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         ViewHolder(
             DateItemBinding.inflate(
@@ -39,7 +35,7 @@ class DateDelegate : AdapterDelegate {
 
         fun bind(model: DateModel) {
             with(binding) {
-                date.text = model.date.format(formatter)
+                date.text = CustomDateFormatter.formatDate(model.date)
             }
         }
     }
