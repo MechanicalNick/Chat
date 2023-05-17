@@ -56,10 +56,6 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
     protected var topicName: String = ""
     private var streamName: String? = null
 
-    // [my dog](/user_uploads/54137/TFFOPnsTF2C9Z1t2MfBwLh66/image.jpg)
-    // Паттерн: []()
-    private val isUserImageRegex = Regex("\\[(.*?)\\](\\((.*?)\\))")
-
     override val initEvent = ChatEvent.Ui.Init
 
     @Inject
@@ -250,8 +246,8 @@ abstract class ChatFragment : BaseFragment<ChatEvent, ChatEffect, ChatState>(),
 
     private fun createRecyclerView() {
         adapter.apply {
-            addDelegate(MyMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
-            addDelegate(CompanionMessageDelegate(this@ChatFragment, lazyHeaders, isUserImageRegex))
+            addDelegate(MyMessageDelegate(this@ChatFragment, lazyHeaders))
+            addDelegate(CompanionMessageDelegate(this@ChatFragment, lazyHeaders))
             addDelegate(DateDelegate())
             addDelegate(TopicMessageDelegate(this@ChatFragment))
         }

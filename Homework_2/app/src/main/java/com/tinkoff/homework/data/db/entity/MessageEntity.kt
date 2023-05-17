@@ -14,5 +14,6 @@ data class MessageEntity(
     @ColumnInfo(name = "senderFullName") val senderFullName: String,
     @ColumnInfo(name = "text") val text: String,
     @ColumnInfo(name = "dateTime") val dateTime: LocalDateTime,
-    @ColumnInfo(name = "avatarUrl") val avatarUrl: String
+    @ColumnInfo(name = "avatarUrl") val avatarUrl: String,
+    @ColumnInfo(name = "imageUrl") val imageUrl: String?,
 )

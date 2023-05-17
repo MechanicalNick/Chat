@@ -15,13 +15,11 @@ import com.tinkoff.homework.presentation.view.ChatFragmentCallback
 import com.tinkoff.homework.presentation.view.DelegateItem
 import com.tinkoff.homework.presentation.view.FlexboxFactory
 import com.tinkoff.homework.presentation.view.adapter.AdapterDelegate
-import com.tinkoff.homework.utils.Const
 
 
 class MyMessageDelegate(
     private val callback: ChatFragmentCallback,
-    private val header: LazyHeaders,
-    private val isUserImageRegex: Regex,
+    private val header: LazyHeaders
 ) : AdapterDelegate {
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val messageLayoutBinding = MessageLayoutBinding.inflate(
@@ -47,15 +45,9 @@ class MyMessageDelegate(
 
         fun bind(model: MessageModel) {
             with(binding) {
-                val entire = isUserImageRegex.matchEntire(model.text)
-                val match = (entire?.groups?.count() ?: 0) > 0
 
-                if(match){
-                    val result = entire!!.groups[3]!!.value
-                    val glideUrl = GlideUrl(
-                        "${Const.SHORT_SITE}${result}",
-                        header
-                    )
+                if(model.imageUrl != null){
+                    val glideUrl = GlideUrl(model.imageUrl, header)
                     root.textView.isVisible = false
                     root.userImage.isVisible = true
                     root.userImage.let {

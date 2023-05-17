@@ -2,6 +2,7 @@ package com.tinkoff.homework.elm.chat
 
 import com.tinkoff.homework.data.dto.Credentials
 import com.tinkoff.homework.data.dto.ImageResponse
+import com.tinkoff.homework.data.mapper.toImageReference
 import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.elm.ViewState
@@ -231,7 +232,8 @@ private fun changeTopic(
         message.text,
         message.dateTime,
         message.avatarUrl,
-        message.reactions
+        message.reactions,
+        message.imageUrl
     )
     newList.add(newMessage)
     return newList
@@ -246,15 +248,16 @@ private fun replaceMessage(
     val newList = messages.toMutableList()
     newList.remove(message)
     val newMessage = MessageModel(
-        message.id,
-        message.senderId,
-        message.senderFullName,
-        message.topic,
-        message.streamId,
-        newText,
-        message.dateTime,
-        message.avatarUrl,
-        message.reactions
+        id = message.id,
+        senderId = message.senderId,
+        senderFullName = message.senderFullName,
+        topic = message.topic,
+        streamId = message.streamId,
+        text = newText,
+        dateTime = message.dateTime,
+        avatarUrl = message.avatarUrl,
+        reactions = message.reactions,
+        imageUrl = null
     )
     newList.add(newMessage)
     return newList
@@ -294,7 +297,8 @@ private fun concatenate(
         text = event.message,
         dateTime = LocalDateTime.now(),
         avatarUrl = credentials.avatar,
-        reactions = mutableListOf()
+        reactions = mutableListOf(),
+        imageUrl = toImageReference(event.message)
     )
     val list = messages.toMutableList()
     list.add(message)

@@ -13,7 +13,7 @@ import com.tinkoff.homework.data.db.entity.TopicEntity
 
 @Database(
     entities = [StreamEntity::class, TopicEntity::class, MessageEntity::class,
-        ReactionEntity::class], version = 18
+        ReactionEntity::class], version = 19
 )
 @TypeConverters(LocalDateConverter::class)
 abstract class AppDatabase : RoomDatabase() {

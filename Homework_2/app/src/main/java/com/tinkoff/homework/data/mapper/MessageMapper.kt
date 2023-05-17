@@ -11,6 +11,7 @@ import com.tinkoff.homework.data.dto.NarrowDto
 import com.tinkoff.homework.data.db.entity.MessageEntity
 import com.tinkoff.homework.data.db.entity.ReactionEntity
 import com.tinkoff.homework.data.db.entity.results.MessageResult
+import com.tinkoff.homework.utils.Const
 import java.time.LocalDateTime
 
 fun MessageModel.toEntity(streamId: Long): MessageEntity {
@@ -22,7 +23,8 @@ fun MessageModel.toEntity(streamId: Long): MessageEntity {
         dateTime = this.dateTime,
         avatarUrl = this.avatarUrl,
         streamId = streamId,
-        topicName = this.topic
+        topicName = this.topic,
+        imageUrl = toImageReference(this.text)
     )
 }
 
@@ -38,21 +40,22 @@ fun Reaction.toEntity(messageId: Long): ReactionEntity {
 
 fun MessageDto.toDomain(): MessageModel {
     return MessageModel(
-        this.id,
-        this.senderId,
-        this.senderFullName,
-        this.subject ?: "",
-        this.streamId ?: 0,
-        this.content,
-        toLocalDateTime(this.timestamp),
-        this.avatarUrl,
-        this.reactions.map { r ->
+        id = this.id,
+        senderId = this.senderId,
+        senderFullName = this.senderFullName,
+        topic = this.subject ?: "",
+        streamId = this.streamId ?: 0,
+        text = this.content,
+        dateTime = toLocalDateTime(this.timestamp),
+        avatarUrl = this.avatarUrl,
+        reactions = this.reactions.map { r ->
             Reaction(
                 emojiCode = r.emojiCode,
                 emojiName = r.emojiName,
                 userId = r.userId
             )
-        }.toMutableList()
+        }.toMutableList(),
+        imageUrl = toImageReference(this.content)
     )
 }
 
@@ -66,7 +69,8 @@ fun MessageResult.toDomain(): MessageModel {
         text = this.messageEntity.text,
         dateTime = this.messageEntity.dateTime,
         avatarUrl = this.messageEntity.avatarUrl,
-        reactions = this.reactions.map { it.toDomain() }.toMutableList()
+        reactions = this.reactions.map { it.toDomain() }.toMutableList(),
+        imageUrl = this.messageEntity.imageUrl
     )
 }
 
@@ -83,6 +87,7 @@ fun MessageResponse.toMyMessageEntity(
     streamId: Long,
     topic: String
 ): MessageEntity {
+    val imageReference = toImageReference(this.msg)
     return MessageEntity(
         id = this.id,
         streamId = streamId,
@@ -91,8 +96,19 @@ fun MessageResponse.toMyMessageEntity(
         senderFullName = credentials.fullName,
         text = this.msg,
         dateTime = LocalDateTime.now(),
-        avatarUrl = credentials.avatar
+        avatarUrl = credentials.avatar,
+        imageUrl = imageReference
     )
+}
+
+fun toImageReference(message: String): String? {
+    val isUserImageRegex = Regex(Const.IMAGE_PATTERN)
+    val entire = isUserImageRegex.matchEntire(message)
+    val match = (entire?.groups?.count() ?: 0) > 0
+    return if(match)
+        "${Const.SHORT_SITE}${entire!!.groups[3]!!.value}"
+    else
+        null
 }
 
 fun toNarrow(
@@ -116,7 +132,7 @@ fun toNarrow(
         List::class.java,
         NarrowDto::class.java,
     )
-    var adapter = moshi.adapter<List<NarrowDto>>(type)
+    val adapter = moshi.adapter<List<NarrowDto>>(type)
 
     return if (list.isEmpty()) null else adapter.toJson(list)
 }

@@ -11,5 +11,6 @@ class MessageModel(
     val text: String,
     val dateTime: LocalDateTime,
     val avatarUrl: String,
-    val reactions: MutableList<Reaction>
+    val reactions: MutableList<Reaction>,
+    val imageUrl: String?
 )
