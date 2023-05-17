@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -31,7 +30,8 @@
             app:navigationIcon="@drawable/arrow_back"
             app:titleTextColor="@color/secondary_text" />
 
-        <include android:id="@+id/topic_header_layout"
+        <include
+            android:id="@+id/topic_header_layout"
             layout="@layout/topic_header_layout" />
 
         <ProgressBar
@@ -47,7 +47,8 @@
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <include android:id="@+id/topic_selector_layout"
+        <include
+            android:id="@+id/topic_selector_layout"
             layout="@layout/layout_topic_selector" />
 
         <com.tinkoff.homework.presentation.view.viewgroup.ContentEditorViewGroup

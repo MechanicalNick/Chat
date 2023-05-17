@@ -1,121 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/custom_background_secondary"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/custom_background_secondary"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/addReactionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_add"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@android:drawable/ic_menu_add" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_reaction"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@string/add_reaction" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/removeMessageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_delete"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@android:drawable/ic_menu_delete" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/remove_message"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@string/remove_message" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/editMessageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_edit"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@android:drawable/ic_menu_edit" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit_message"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@string/edit_message" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:id="@+id/changeTopicLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_directions"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@android:drawable/ic_menu_directions" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/change_topic"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@string/change_topic" />
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/copyToBufferLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/copyToBufferLayout"
         android:background="?android:attr/selectableItemBackground"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_agenda"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@android:drawable/ic_menu_agenda" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/copy_to_buffer"
             android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:text="@string/copy_to_buffer" />
     </LinearLayout>
 </LinearLayout>

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/content_editor_background"
-    android:layout_height="53dp">
-<EditText
-    android:id="@+id/topicSelectorEditText"
-    style="@style/Theme.Homework.EditText"
-    android:layout_marginStart="10dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="7dp"
-    android:layout_marginBottom="6dp"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"/>
+    android:layout_height="53dp"
+    android:background="@color/content_editor_background">
+
+    <EditText
+        android:id="@+id/topicSelectorEditText"
+        style="@style/Theme.Homework.EditText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="6dp" />
 </FrameLayout>
