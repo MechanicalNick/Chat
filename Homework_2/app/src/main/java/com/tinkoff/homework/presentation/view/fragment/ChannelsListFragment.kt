@@ -98,8 +98,6 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.channelRecyclerView.adapter = adapter
 
-        channelViewModel.store = store
-
         parentFragmentManager.setFragmentResultListener(
             ChannelsFragment.ARG_SEARCH_ACTION,
             this@ChannelsListFragment
@@ -123,6 +121,11 @@ class ChannelsListFragment : BaseFragment<ChannelsEvent, ChannelsEffect, Channel
         }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        channelViewModel.store = store
+        super.onResume()
     }
 
     override fun render(state: ChannelsState) {
