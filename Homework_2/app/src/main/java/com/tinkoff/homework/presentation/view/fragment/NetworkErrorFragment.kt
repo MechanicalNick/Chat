@@ -24,7 +24,7 @@ class NetworkErrorFragment: Fragment() {
     ): View {
         val binding = ErrorLayoutBinding.inflate(layoutInflater)
         binding.retryButton.setOnClickListener {
-            if(NetworkChecker.isNetworkConnected(this.requireActivity())) {
+            if(NetworkChecker.isNetworkAvailable(this.requireActivity())) {
                 router.newRootScreen(NavigationScreens.main())
             }
         }

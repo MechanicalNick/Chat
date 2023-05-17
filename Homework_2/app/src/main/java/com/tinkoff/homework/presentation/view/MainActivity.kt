@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        if(NetworkChecker.isNetworkConnected(this)){
+        if(NetworkChecker.isNetworkAvailable(this)){
             if (savedInstanceState == null)
                 router.newRootScreen(NavigationScreens.main())
         } else {
