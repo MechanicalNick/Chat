@@ -1,8 +1,8 @@
 package com.tinkoff.homework.di.component
 
-import com.tinkoff.homework.di.ChatModule
+import com.tinkoff.homework.di.elm.ChatModule
 import com.tinkoff.homework.di.scope.ChatScope
-import com.tinkoff.homework.view.fragment.ChatFragment
+import com.tinkoff.homework.presentation.view.fragment.chat.ChatFragment
 import dagger.Component
 
 @ChatScope

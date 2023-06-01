@@ -1,12 +1,13 @@
 package com.tinkoff.homework.domain.use_cases.interfaces
 
-import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.domain.data.Stream
+import io.reactivex.Observable
 import io.reactivex.Single
 
 interface GetStreamsUseCase {
     fun execute(
         isSubscribed: Boolean,
-        isCashed: Boolean,
-        query: String
-    ): Single<List<Stream>>
+        query: String,
+        onlyCashed: Boolean
+    ): Observable<List<Stream>>
 }

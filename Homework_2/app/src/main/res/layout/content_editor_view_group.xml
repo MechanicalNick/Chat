@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools"
-       tools:parentTag="com.tinkoff.homework.view.viewgroup.ContentEditorViewGroup">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="com.tinkoff.homework.presentation.view.viewgroup.ContentEditorViewGroup">
 
-    <EditText android:layout_width="match_parent"
-              android:layout_height="62dp"
-              style="@style/Theme.Homework.EditText"
-              android:id="@+id/editTextView"/>
+    <EditText
+        android:id="@+id/editTextView"
+        style="@style/Theme.Homework.EditText"
+        android:paddingStart="21dp"
+        android:paddingEnd="21dp"
+        android:layout_width="match_parent"
+        android:layout_height="51dp" />
 
-    <ImageButton android:layout_width="39dp"
-                 android:layout_height="39dp"
-                 android:id="@+id/arrowButton"
-                 style="@style/Theme.Homework.ImageButton"
-                 android:src="@drawable/arrow_button"/>
+    <ImageButton
+        android:id="@+id/arrowButton"
+        style="@style/Theme.Homework.ImageButton"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:src="@drawable/arrow_button" />
 
-    <ImageButton android:layout_width="39dp"
-                 android:layout_height="39dp"
-                 android:id="@+id/plusButton"
-                 style="@style/Theme.Homework.ImageButton"
-                 android:src="@drawable/plus_button"/>
+    <ImageButton
+        android:id="@+id/plusButton"
+        style="@style/Theme.Homework.ImageButton"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:src="@drawable/bg_plus_button" />
 </merge>

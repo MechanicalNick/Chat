@@ -1,10 +1,10 @@
 package com.tinkoff.homework.data.stub
 
 import android.net.Uri
-import com.tinkoff.homework.data.domain.MessageModel
+import com.tinkoff.homework.domain.data.MessageModel
 import com.tinkoff.homework.data.dto.ImageResponse
 import com.tinkoff.homework.data.dto.MessageResponse
-import com.tinkoff.homework.repository.interfaces.MessageRepository
+import com.tinkoff.homework.domain.repository.MessageRepository
 import io.reactivex.Single
 
 class MessageRepositoryStub : MessageRepository {
@@ -19,7 +19,7 @@ class MessageRepositoryStub : MessageRepository {
         query: String
     ): Single<List<MessageModel>> = messageProvider()
         .map { it.filter { messageModel -> messageModel.streamId == streamId
-                && messageModel.subject == topic }
+                && messageModel.topic == topic }
         }
 
     override fun fetchCashedMessages(streamId: Long, topic: String): Single<List<MessageModel>> {

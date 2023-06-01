@@ -1,13 +1,13 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.repository.MessageRepositoryImpl
-import com.tinkoff.homework.repository.PeopleRepositoryImpl
-import com.tinkoff.homework.repository.ProfileRepositoryImpl
-import com.tinkoff.homework.repository.StreamRepositoryImpl
-import com.tinkoff.homework.repository.interfaces.MessageRepository
-import com.tinkoff.homework.repository.interfaces.PeopleRepository
-import com.tinkoff.homework.repository.interfaces.ProfileRepository
-import com.tinkoff.homework.repository.interfaces.StreamRepository
+import com.tinkoff.homework.data.repository.MessageRepositoryImpl
+import com.tinkoff.homework.data.repository.PeopleRepositoryImpl
+import com.tinkoff.homework.data.repository.ProfileRepositoryImpl
+import com.tinkoff.homework.data.repository.StreamRepositoryImpl
+import com.tinkoff.homework.domain.repository.MessageRepository
+import com.tinkoff.homework.domain.repository.PeopleRepository
+import com.tinkoff.homework.domain.repository.ProfileRepository
+import com.tinkoff.homework.domain.repository.StreamRepository
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton

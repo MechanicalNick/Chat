@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/errorStateContainer"
+        layout="@layout/error_layout"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/shimmer"
+        layout="@layout/shimmer_layout"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/chatData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/chatToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:background="@color/default_text_header"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/arrow_back"
+            app:titleTextColor="@color/secondary_text" />
+
+        <include
+            android:id="@+id/topic_header_layout"
+            layout="@layout/topic_header_layout" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <include
+            android:id="@+id/topic_selector_layout"
+            layout="@layout/layout_topic_selector" />
+
+        <com.tinkoff.homework.presentation.view.viewgroup.ContentEditorViewGroup
+            android:id="@+id/contentEditor"
+            android:layout_width="match_parent"
+            android:layout_height="62dp" />
+    </LinearLayout>
+</FrameLayout>
+
+

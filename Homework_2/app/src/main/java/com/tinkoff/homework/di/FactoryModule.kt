@@ -1,11 +1,7 @@
 package com.tinkoff.homework.di
 
-import com.tinkoff.homework.data.dto.Credentials
-import com.tinkoff.homework.domain.use_cases.interfaces.AddReactionUseCase
-import com.tinkoff.homework.domain.use_cases.interfaces.RemoveReactionUseCase
-import com.tinkoff.homework.domain.use_cases.interfaces.SendMessageUseCase
-import com.tinkoff.homework.utils.MessageFactory
-import com.tinkoff.homework.utils.StreamFactory
+import com.tinkoff.homework.presentation.view.MessageFactory
+import com.tinkoff.homework.presentation.view.StreamFactory
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
@@ -15,18 +11,8 @@ import javax.inject.Singleton
 class FactoryModule {
     @Singleton
     @Provides
-    fun providesMessageFactory(
-        addReactionUseCase: AddReactionUseCase,
-        removeReactionUseCase: RemoveReactionUseCase,
-        sendMessageUseCase: SendMessageUseCase,
-        credentials: Credentials
-    ): MessageFactory {
-        return MessageFactory(
-            addReactionUseCase,
-            removeReactionUseCase,
-            sendMessageUseCase,
-            credentials
-        )
+    fun providesMessageFactory(): MessageFactory {
+        return MessageFactory()
     }
 
     @Singleton

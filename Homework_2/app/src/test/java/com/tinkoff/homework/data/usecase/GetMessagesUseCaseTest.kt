@@ -1,7 +1,7 @@
 package com.tinkoff.homework.data.usecase
 
-import com.tinkoff.homework.data.domain.MessageModel
-import com.tinkoff.homework.data.domain.Reaction
+import com.tinkoff.homework.domain.data.MessageModel
+import com.tinkoff.homework.domain.data.Reaction
 import com.tinkoff.homework.utils.RxRule
 import com.tinkoff.homework.utils.TestObserverFactory
 import io.reactivex.Single
@@ -48,14 +48,14 @@ class GetMessagesUseCaseTest(
             )
         }
 
-        private fun createMessage(id: Long, streamId: Long, topic: String) : MessageModel{
+        private fun createMessage(id: Long, streamId: Long, topic: String) : MessageModel {
             return MessageModel(id,
                 senderId = 1,
                 senderFullName = "FullName",
-                subject = topic,
+                topic = topic,
                 streamId = streamId,
                 text = "text",
-                date = LocalDate.MIN,
+                dateTime = LocalDate.MIN,
                 avatarUrl = "avatarUrl",
                 reactions = mutableListOf(
                     Reaction("emojiCode", "emojiName", 1)

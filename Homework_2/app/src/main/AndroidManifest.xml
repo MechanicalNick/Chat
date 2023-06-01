@@ -14,7 +14,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Homework">
         <activity
-                android:name=".view.MainActivity"
+                android:name=".presentation.view.MainActivity"
                 android:theme="@style/Theme.Homework.NoTitle"
                 android:exported="true">
             <intent-filter>

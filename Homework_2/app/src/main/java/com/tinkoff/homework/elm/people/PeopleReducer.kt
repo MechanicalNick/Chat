@@ -1,5 +1,6 @@
 package com.tinkoff.homework.elm.people
 
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.people.model.PeopleCommand
 import com.tinkoff.homework.elm.people.model.PeopleEffect
 import com.tinkoff.homework.elm.people.model.PeopleEvent
@@ -11,27 +12,45 @@ class PeopleReducer : DslReducer<PeopleEvent, PeopleState, PeopleEffect, PeopleC
         return when (event) {
             is PeopleEvent.Internal.DataLoaded -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.ShowData,
                     item = event.peoples,
-                    error = null
+                    error = null,
+                    isShowProgress = false
                 )
             }
+
             is PeopleEvent.Internal.ErrorLoading -> state {
                 copy(
-                    isLoading = false,
+                    state = ViewState.Error,
                     item = null,
                     error = event.error
                 )
             }
+
+            is PeopleEvent.Ui.GoToProfile -> {
+                effects { +PeopleEffect.GoToProfile(event.userId) }
+            }
+
             is PeopleEvent.Ui.LoadData -> {
                 state {
                     copy(
-                        isLoading = true,
+                        state = ViewState.Loading,
                         item = null,
                         error = null
                     )
                 }
                 commands { +PeopleCommand.LoadData }
+            }
+            is PeopleEvent.Ui.Search -> {
+                state {
+                    copy(
+                        state = ViewState.ShowData,
+                        item = null,
+                        error = null,
+                        isShowProgress = true
+                    )
+                }
+                commands { +PeopleCommand.Search(event.query) }
             }
         }
     }

@@ -1,11 +1,12 @@
 package com.tinkoff.homework.elm.profile.model
 
-import com.tinkoff.homework.data.domain.Profile
+import com.tinkoff.homework.domain.data.Profile
 
 sealed class ProfileEvent {
 
     sealed class Ui : ProfileEvent() {
-        object LoadData : Ui()
+        object Wait : Ui()
+        data class LoadData(val profileId: Long) : Ui()
     }
 
     sealed class Internal : ProfileEvent() {

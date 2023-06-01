@@ -1,6 +1,7 @@
 package com.tinkoff.homework.elm.channels
 
-import com.tinkoff.homework.data.domain.Stream
+import com.tinkoff.homework.domain.data.Stream
+import com.tinkoff.homework.elm.ViewState
 import com.tinkoff.homework.elm.channels.model.ChannelsCommand
 import com.tinkoff.homework.elm.channels.model.ChannelsEffect
 import com.tinkoff.homework.elm.channels.model.ChannelsEvent
@@ -13,31 +14,43 @@ class ChannelsReducer :
         return when (event) {
             is ChannelsEvent.Internal.DataLoaded -> state {
                 copy(
-                    items = event.streams,
+                    items = event.streams.toList(),
+                    state = ViewState.ShowData,
                     flagForUpdateUi = !flagForUpdateUi,
-                    error = null
+                    error = null,
+                    isShowProgress = false
                 )
             }
             is ChannelsEvent.Internal.ErrorLoading -> state {
                 copy(
-                    error = event.error
+                    isShowProgress = false,
+                    error = event.error,
+                    state = ViewState.Error
                 )
             }
             is ChannelsEvent.Ui.Wait -> {
                 state {
                     copy(
                         items = null,
-                        error = null
+                        error = null,
+                        state = ViewState.Loading
                     )
                 }
             }
-            is ChannelsEvent.Ui.LoadCashedData -> {
-                commands { +ChannelsCommand.LoadCashedData(state.onlySubscribed) }
-            }
             is ChannelsEvent.Ui.LoadData -> {
+                state{
+                    copy(
+                        isShowProgress = true
+                    )
+                }
                 commands { +ChannelsCommand.LoadData(state.onlySubscribed) }
             }
             is ChannelsEvent.Ui.Search -> {
+                state{
+                    copy(
+                        isShowProgress = true
+                    )
+                }
                 commands { +ChannelsCommand.Search(state.onlySubscribed, event.query) }
             }
             is ChannelsEvent.Ui.CollapseStream -> {
@@ -63,7 +76,7 @@ class ChannelsReducer :
     }
 
     private fun applyExpanded(value: Boolean, old: Stream, applicable: Stream): Stream {
-        if (applicable != old)
+        if (applicable.id != old.id)
             return old
         applicable.isExpanded = value
         return applicable

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.tinkoff.homework.view.viewgroup.CompanionMessageLayout
+<com.tinkoff.homework.presentation.view.viewgroup.CompanionMessageLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/companionMessageLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-</com.tinkoff.homework.view.viewgroup.CompanionMessageLayout>
+    android:layout_height="match_parent"
+    android:layout_marginStart="12dp"></com.tinkoff.homework.presentation.view.viewgroup.CompanionMessageLayout>
